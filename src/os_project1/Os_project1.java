@@ -3,21 +3,27 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package os_project1;
+
 import Interfaz.InterfazPrincipal;
+import Aux.Process;
 
 /**
  *
  * @author manch
  */
 public class Os_project1 {
-    
 
     /**
      * @param args the command line arguments
      */
+    
+    
     public static void main(String[] args) {
-        // TODO code application logic here
         
-                new InterfazPrincipal().setVisible(true);
-            }
+
+      new InterfazPrincipal().setVisible(true);
+
+        
+
     }
+}
