@@ -1,4 +1,4 @@
-package Aux;
+package DTT;
 
 import java.util.concurrent.Semaphore;
 
@@ -34,7 +34,7 @@ public class Process extends Thread {
 @Override
 public void run() {
     try {
-        while (programCounter < totalInstructions) {
+        while (programCounter < totalInstructions && status != ProcessStatus.BLOCKED) {
             cpuSemaphore.acquire();  // Adquirir el semáforo para acceder al CPU
 
             System.out.println("Proceso " + name + " ejecutando instrucción " + programCounter);
@@ -46,32 +46,38 @@ public void run() {
             if (ioBound && programCounter % ciclosExcepcion == 0) {
                 status = ProcessStatus.BLOCKED;
                 System.out.println("Proceso " + name + " en espera de E/S");
+
                 // Mover el proceso a la lista de bloqueados
                 listaProcesos.removerProceso(this);
                 listaBloqueados.agregarProceso(this);
-                cpuSemaphore.release();  // Liberar el semáforo después de ejecutar una instrucción
 
+                cpuSemaphore.release();  // Liberar el semáforo antes de bloquearse
 
-
+                // Simular la operación de E/S (bloqueo)
                 Thread.sleep(1000);  // Simular tiempo de espera de E/S
+
+                // Volver a la lista de procesos listos después de la E/S
                 listaBloqueados.removerProceso(this);
                 listaProcesos.agregarProceso(this);
+                status = ProcessStatus.READY;  // Cambiar el estado a READY
+
+                continue;  // Continuar con la siguiente iteración del bucle
             }
+
             cpuSemaphore.release();  // Liberar el semáforo después de ejecutar una instrucción
             Thread.sleep(100);  // Pequeña pausa para simular el tiempo de ejecución
         }
-        
-
 
         // Si el proceso terminó todas sus instrucciones
-        status = ProcessStatus.FINISHED;
-        listaProcesos.removerProceso(this);
-        System.out.println("Proceso " + name + " finalizado.");
+        if (programCounter >= totalInstructions) {
+            status = ProcessStatus.FINISHED;
+            listaProcesos.removerProceso(this);
+            System.out.println("Proceso " + name + " finalizado.");
+        }
     } catch (InterruptedException e) {
         e.printStackTrace();
     }
 }
-
     // Getters y Setters
     public int getIdProcess() {
         return id;

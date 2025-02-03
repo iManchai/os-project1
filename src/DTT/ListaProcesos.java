@@ -1,4 +1,4 @@
-package Aux;
+package DTT;
 
 public class ListaProcesos {
 

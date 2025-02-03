@@ -1,8 +1,8 @@
 
-import Aux.Cpu;
-import Aux.ListaBloqueados;
-import Aux.ListaProcesos;
-import Aux.Process;
+import DTT.Cpu;
+import DTT.ListaBloqueados;
+import DTT.ListaProcesos;
+import DTT.Process;
 import java.util.concurrent.Semaphore;
 
 public class Os_project1 {
