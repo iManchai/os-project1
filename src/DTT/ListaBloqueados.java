@@ -20,11 +20,10 @@ public class ListaBloqueados {
         }
         return null; // Si no hay procesos READY, devolver null
     }
-    
-    public boolean isEmpty(){
-        return listaBloqueados.EsVacia(); 
+
+    public boolean isEmpty() {
+        return listaBloqueados.EsVacia();
     }
- 
 
     public ListaBloqueados() {
         this.listaBloqueados = new ListaSimple();
@@ -41,4 +40,21 @@ public class ListaBloqueados {
     public ListaSimple getListaBloqueados() {
         return listaBloqueados;
     }
+
+    // Método para imprimir la lista
+    public void imprimirLista() {
+        if (listaBloqueados.EsVacia()) {
+            System.out.println("La lista de procesos bloqueados está vacía.");
+            return;
+        }
+        
+        Nodo actual = listaBloqueados.getpFirst();
+        while (actual != null) {
+            Process proceso = (Process) actual.getInfo();
+            System.out.print(proceso.getNameProcess()+ " -> "); // Imprime el nombre del proceso
+            actual = actual.getpNext();
+        }
+        System.out.println("null");
+    }
+
 }

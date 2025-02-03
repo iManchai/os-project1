@@ -1,6 +1,5 @@
 package DTT;
 
-
 public class ListaSimple {
 
     private Nodo pFirst;
@@ -68,7 +67,6 @@ public class ListaSimple {
             prev = current;
             current = current.getpNext();
         }
-
     }
 
     public void vaciar() {
@@ -100,5 +98,6 @@ public class ListaSimple {
     public void setSize(int size) {
         this.size = size;
     }
+
 
 }
