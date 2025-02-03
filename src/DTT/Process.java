@@ -14,9 +14,10 @@ public class Process extends Thread {
     private int ciclosExcepcion;
     private ListaProcesos listaProcesos;
     private ListaBloqueados listaBloqueados;
-    private Semaphore cpuSemaphore; // Referencia al semáforo del CPU
+    private Semaphore semaphore; // Referencia al semáforo del CPU
+    public Cpu cpu;
 
-    public Process(int id, String name, int totalInstructions, boolean cpuBound, boolean ioBound, int ciclosExcepcion, ListaProcesos listaProcesos, ListaBloqueados listaBloqueados, Semaphore cpuSemaphore) {
+    public Process(int id, String name, int totalInstructions, boolean cpuBound, boolean ioBound, int ciclosExcepcion, ListaProcesos listaProcesos, ListaBloqueados listaBloqueados, Semaphore semaphore, Cpu cpu) {
         this.id = id;
         this.name = name;
         this.programCounter = 0;
@@ -28,56 +29,61 @@ public class Process extends Thread {
         this.listaProcesos = listaProcesos;
         this.listaBloqueados = listaBloqueados;
         /// faltan las prioridades para las politicas de planificacion
-        this.cpuSemaphore = cpuSemaphore; // Asignamos el semáforo
+        this.semaphore = semaphore; // Asignamos el semáforo
+        this.cpu = cpu;
+
     }
 
-@Override
-public void run() {
-    try {
-        while (programCounter < totalInstructions && status != ProcessStatus.BLOCKED) {
-            cpuSemaphore.acquire();  // Adquirir el semáforo para acceder al CPU
+    /// extender la clase a dos mas
+    
+    
 
-            System.out.println("Proceso " + name + " ejecutando instrucción " + programCounter);
-            status = ProcessStatus.RUNNING;
+    @Override
+    public void run() {
+        try {
+            semaphore.acquire();     
+            
+            
+            while (programCounter < totalInstructions && status != ProcessStatus.BLOCKED) {
 
-            programCounter++;
+                System.out.println("Proceso " + name + " ejecutando instrucción " + programCounter);
 
-            // Verificar si el proceso debe bloquearse por E/S
-            if (ioBound && programCounter % ciclosExcepcion == 0) {
-                status = ProcessStatus.BLOCKED;
-                System.out.println("Proceso " + name + " en espera de E/S");
+                programCounter++;
 
-                // Mover el proceso a la lista de bloqueados
-                listaProcesos.removerProceso(this);
-                listaBloqueados.agregarProceso(this);
+                // Verificar si el proceso debe bloquearse por E/S
+                if (ioBound && programCounter % ciclosExcepcion == 0) {
+                    status = ProcessStatus.BLOCKED;
+                    System.out.println("Proceso " + name + " en espera de E/S");
 
-                cpuSemaphore.release();  // Liberar el semáforo antes de bloquearse
+                    // Mover el proceso a la lista de bloqueados
+                    listaBloqueados.agregarProceso(this);
 
-                // Simular la operación de E/S (bloqueo)
-                Thread.sleep(1000);  // Simular tiempo de espera de E/S
+                    Thread.sleep(1000);  // Simular tiempo de espera de E/S
 
-                // Volver a la lista de procesos listos después de la E/S
-                listaBloqueados.removerProceso(this);
-                listaProcesos.agregarProceso(this);
-                status = ProcessStatus.READY;  // Cambiar el estado a READY
+                    // Volver a la lista de procesos listos después de la E/S
+                    listaBloqueados.removerProceso(this);
+                    listaProcesos.agregarProceso(this);
+                    status = ProcessStatus.READY;  // Cambiar el estado a READY
 
-                continue;  // Continuar con la siguiente iteración del bucle
+                    semaphore.release();  // Liberar el semáforo antes de bloquearse
+
+                    continue;  // Continuar con la siguiente iteración del bucle
+                }
+                semaphore.release();  // Liberar el semáforo antes de bloquearse
+
             }
 
-            cpuSemaphore.release();  // Liberar el semáforo después de ejecutar una instrucción
-            Thread.sleep(100);  // Pequeña pausa para simular el tiempo de ejecución
+            // Si el proceso terminó todas sus instrucciones
+            if (programCounter == totalInstructions) {
+                status = ProcessStatus.FINISHED;
+                listaProcesos.removerProceso(this);
+                System.out.println("Proceso " + name + " finalizado.");
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-
-        // Si el proceso terminó todas sus instrucciones
-        if (programCounter >= totalInstructions) {
-            status = ProcessStatus.FINISHED;
-            listaProcesos.removerProceso(this);
-            System.out.println("Proceso " + name + " finalizado.");
-        }
-    } catch (InterruptedException e) {
-        e.printStackTrace();
     }
-}
+
     // Getters y Setters
     public int getIdProcess() {
         return id;
@@ -160,11 +166,11 @@ public void run() {
     }
 
     public Semaphore getCpuSemaphore() {
-        return cpuSemaphore;
+        return semaphore;
     }
 
     public void setCpuSemaphore(Semaphore cpuSemaphore) {
-        this.cpuSemaphore = cpuSemaphore;
+        this.semaphore = cpuSemaphore;
     }
 
     public enum ProcessStatus {

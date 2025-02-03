@@ -1,26 +1,26 @@
 package DTT;
 
-import java.util.concurrent.Semaphore;
 
-public class Cpu extends Thread {
+/// el cpu debe ser un thread para manaejar semaforos para el manejo de la lista de listos ????
+
+public class Cpu {
 
     private int id;
     private ListaProcesos listaProcesos;
     private ListaBloqueados listaBloqueados;
-    private Semaphore cpuSemaphore;
 
     public Cpu(int id, ListaProcesos listaProcesos, ListaBloqueados listaBloqueados) {
         this.id = id;
         this.listaProcesos = listaProcesos;
         this.listaBloqueados = listaBloqueados;
-        this.cpuSemaphore = cpuSemaphore;
     }
 
-@Override
-public void run() {
+
+public void StartCPU() {s
     while (true) {
         if (!listaProcesos.isEmpty()) {
             Process proceso = listaProcesos.obtenerSiguienteProceso();
+            listaProcesos.removerProceso(proceso);
             
             if (proceso != null && proceso.getStatus() == Process.ProcessStatus.READY) {
                 proceso.setStatus(Process.ProcessStatus.RUNNING);
