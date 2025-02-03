@@ -38,10 +38,6 @@ public class Cpu extends Thread {  // Extiende Thread para manejar concurrencia
                         // Volver a adquirir el semáforo para actualizar la lista
                         listaSemaphore.acquire();
 
-                        // Si el proceso no ha terminado, volver a agregarlo a la lista de listos
-                        if (proceso.getStatus() != Process.ProcessStatus.FINISHED) {
-                            listaProcesos.agregarProceso(proceso);
-                        }
                     } else {
                         listaSemaphore.release();  // Liberar el semáforo si no hay procesos listos
                     }
