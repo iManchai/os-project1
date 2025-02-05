@@ -68,7 +68,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("DURACIÓN DE CADA CICLO (En nanosegundos)");
+        jLabel1.setText("DURACIÓN DE CADA CICLO (En milisegundos)");
 
         jLabel2.setText("CANTIDAD DE CPUS");
 
