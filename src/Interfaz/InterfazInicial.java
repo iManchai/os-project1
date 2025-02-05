@@ -4,6 +4,8 @@
  */
 package Interfaz;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author manch
@@ -33,7 +35,7 @@ public class InterfazInicial extends javax.swing.JFrame {
         CantidadCpuSelect = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        CicloTextField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -72,10 +74,10 @@ public class InterfazInicial extends javax.swing.JFrame {
 
         jLabel2.setText("CANTIDAD DE CPUS");
 
-        jTextField1.setToolTipText("E.g: 1000");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        CicloTextField.setToolTipText("E.g: 1000");
+        CicloTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                CicloTextFieldActionPerformed(evt);
             }
         });
 
@@ -91,7 +93,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addComponent(CantidadCpuSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(CicloTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(86, 86, 86)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(CargarBoton, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -117,7 +119,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(IniciarBoton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(CicloTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(97, Short.MAX_VALUE))
         );
 
@@ -137,11 +139,11 @@ public class InterfazInicial extends javax.swing.JFrame {
 
     private void IniciarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IniciarBotonActionPerformed
         // TODO add your handling code here:
-        try {
-           if () 
-        } catch {
-            
-        }
+        int numeroCiclos = Integer.parseInt(CicloTextField.getText());
+
+            if (numeroCiclos < 200) {
+                JOptionPane.showMessageDialog(this, "Debe ingresar un numero superior a 200");
+            }
     }//GEN-LAST:event_IniciarBotonActionPerformed
 
     private void CargarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CargarBotonActionPerformed
@@ -152,9 +154,9 @@ public class InterfazInicial extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_CantidadCpuSelectActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void CicloTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CicloTextFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_CicloTextFieldActionPerformed
 
     /**
      * @param args the command line arguments
@@ -195,11 +197,11 @@ public class InterfazInicial extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> CantidadCpuSelect;
     private javax.swing.JButton CargarBoton;
+    private javax.swing.JTextField CicloTextField;
     private javax.swing.JButton IniciarBoton;
     private javax.swing.JLabel TituloPrincipal;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
