@@ -1,7 +1,7 @@
-import DTT.Cpu;
-import DTT.ListaBloqueados;
-import DTT.ListaListos;
-import DTT.Process;
+import Classes.Cpu;
+import DataStructures.ListaBloqueados;
+import DataStructures.ListaListos;
+import DataStructures.Process;
 import java.util.concurrent.Semaphore;
 
 public class Os_project1 {
