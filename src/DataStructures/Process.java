@@ -1,5 +1,6 @@
-package DTT;
+package DataStructures;
 
+import Classes.Cpu;
 import java.util.concurrent.Semaphore;
 
 public class Process extends Thread {

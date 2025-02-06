@@ -140,10 +140,15 @@ public class InterfazInicial extends javax.swing.JFrame {
     private void IniciarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IniciarBotonActionPerformed
         // TODO add your handling code here:
         int numeroCiclos = Integer.parseInt(CicloTextField.getText());
-
+        try {
             if (numeroCiclos < 200) {
-                JOptionPane.showMessageDialog(this, "Debe ingresar un numero superior a 200");
+                JOptionPane.showMessageDialog(this, "El valor debe ser mayor o igual a 200", "Error", JOptionPane.ERROR_MESSAGE );
+                CicloTextField.requestFocusInWindow();
             }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "El valor debe ser un número entero", "Error", JOptionPane.ERROR_MESSAGE );
+            CicloTextField.requestFocusInWindow();
+        }
     }//GEN-LAST:event_IniciarBotonActionPerformed
 
     private void CargarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CargarBotonActionPerformed

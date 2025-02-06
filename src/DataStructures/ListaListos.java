@@ -1,4 +1,7 @@
-package DTT;
+package DataStructures;
+
+import Classes.Nodo;
+import Classes.ListaSimple;
 
 public class ListaListos {
 

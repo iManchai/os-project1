@@ -2,7 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package DTT;
+package DataStructures;
+
+import Classes.Nodo;
+import Classes.ListaSimple;
 
 public class ListaBloqueados {
 
