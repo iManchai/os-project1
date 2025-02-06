@@ -1,6 +1,8 @@
-package DataStructures;
+package Classes;
 
 import Classes.Cpu;
+import DataStructures.ListaBloqueados;
+import DataStructures.ListaListos;
 import java.util.concurrent.Semaphore;
 
 public class Process extends Thread {

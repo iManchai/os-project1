@@ -1,7 +1,7 @@
 import Classes.Cpu;
 import DataStructures.ListaBloqueados;
 import DataStructures.ListaListos;
-import DataStructures.Process;
+import Classes.Process;
 import java.util.concurrent.Semaphore;
 
 public class Os_project1 {

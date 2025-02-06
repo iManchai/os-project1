@@ -1,5 +1,5 @@
 
-package Classes;
+package DataStructures;
 
 
 public class Nodo {

@@ -1,4 +1,4 @@
-package Classes;
+package DataStructures;
 
 public class ListaSimple {
 

@@ -4,8 +4,7 @@
  */
 package DataStructures;
 
-import Classes.Nodo;
-import Classes.ListaSimple;
+import Classes.Process;
 
 public class ListaBloqueados {
 
