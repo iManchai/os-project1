@@ -139,12 +139,13 @@ public class InterfazInicial extends javax.swing.JFrame {
 
     private void IniciarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IniciarBotonActionPerformed
         // TODO add your handling code here:
-        int numeroCiclos = Integer.parseInt(CicloTextField.getText());
         try {
+            int numeroCiclos = Integer.parseInt(CicloTextField.getText());
             if (numeroCiclos < 200) {
                 JOptionPane.showMessageDialog(this, "El valor debe ser mayor o igual a 200", "Error", JOptionPane.ERROR_MESSAGE );
                 CicloTextField.requestFocusInWindow();
             }
+            new InterfazPrincipal().setVisible(true);
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "El valor debe ser un número entero", "Error", JOptionPane.ERROR_MESSAGE );
             CicloTextField.requestFocusInWindow();

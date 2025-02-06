@@ -2,6 +2,7 @@ import Classes.Cpu;
 import DataStructures.ListaBloqueados;
 import DataStructures.ListaListos;
 import Classes.Process;
+import Interfaz.InterfazInicial;
 import java.util.concurrent.Semaphore;
 
 public class Os_project1 {
@@ -25,6 +26,8 @@ public class Os_project1 {
         listaListos.agregarProceso(p4);
 
         cpu1.start();
+        
+        new InterfazInicial().setVisible(true);
 
 
         try {
