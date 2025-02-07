@@ -1,8 +1,7 @@
 package Classes;
 
 import Classes.Cpu;
-import DataStructures.ListaBloqueados;
-import DataStructures.ListaListos;
+import DataStructures.ListaSimple;
 import java.util.concurrent.Semaphore;
 
 public class Process extends Thread {
@@ -15,13 +14,13 @@ public class Process extends Thread {
     private boolean cpuBound;
     private boolean ioBound;
     private int ciclosExcepcion;
-    private ListaListos listaListos;
-    private ListaBloqueados listaBloqueados;
+    private ListaSimple listaListos;
+    private ListaSimple listaBloqueados;
     private Semaphore semaphore; // Semáforo para sincronización
     public Cpu cpu;
 
     public Process(int id, String name, int totalInstructions, boolean cpuBound, boolean ioBound, int ciclosExcepcion,
-            ListaListos listaListos, ListaBloqueados listaBloqueados, Semaphore semaphore, Cpu cpu) {
+            ListaSimple listaListos, ListaSimple listaBloqueados, Semaphore semaphore, Cpu cpu) {
         this.id = id;
         this.name = name;
         this.programCounter = 0;
@@ -43,7 +42,7 @@ public class Process extends Thread {
                 semaphore.acquire(); // Adquirir el semáforo antes de acceder a recursos compartidos
                 // Ejecutar una instrucción del proceso
                 System.out.println("Proceso " + name + " ejecutando instrucción " + programCounter);
-                listaListos.imprimirLista();
+                listaListos.printlist();
                 Thread.sleep(500);
 
                 programCounter++;
@@ -57,7 +56,7 @@ public class Process extends Thread {
                     System.out.println("Proceso " + name + " en espera de E/S");
 
                     // Mover el proceso a la lista de bloqueados
-                    listaBloqueados.agregarProceso(this);
+                    listaBloqueados.addProcess(this);
 
                     semaphore.release(); // Liberar el semáforo antes de bloquearse
 
@@ -65,8 +64,8 @@ public class Process extends Thread {
                     Thread.sleep(2000);
 
                     // Volver a la lista de procesos listos después de la E/S
-                    listaBloqueados.removerProceso(this);
-                    listaListos.agregarProceso(this); // Agregar al final de la lista de listos
+                    listaBloqueados.RemoveProcess(this);
+                    listaListos.addProcess(this); // Agregar al final de la lista de listos
 
                     status = ProcessStatus.READY;
                     return; // Volver al inicio del bucle para que el CPU tome el siguiente proceso
@@ -77,7 +76,7 @@ public class Process extends Thread {
             // Si el proceso terminó todas sus instrucciones
             if (programCounter == totalInstructions) {
                 status = ProcessStatus.FINISHED;
-                listaListos.removerProceso(this);
+                listaListos.RemoveProcess(this);
                 System.out.println("Proceso " + name + " finalizado.");
             }
         } catch (InterruptedException e) {
@@ -154,19 +153,19 @@ public class Process extends Thread {
         this.ciclosExcepcion = ciclosExcepcion;
     }
 
-    public ListaListos getListaProcesos() {
+    public ListaSimple getListaProcesos() {
         return listaListos;
     }
 
-    public void setListaProcesos(ListaListos listaProcesos) {
+    public void setListaProcesos(ListaSimple listaProcesos) {
         this.listaListos = listaProcesos;
     }
 
-    public ListaBloqueados getListaBloqueados() {
+    public ListaSimple getListaBloqueados() {
         return listaBloqueados;
     }
 
-    public void setListaBloqueados(ListaBloqueados listaBloqueados) {
+    public void setListaBloqueados(ListaSimple listaBloqueados) {
         this.listaBloqueados = listaBloqueados;
     }
 

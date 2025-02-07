@@ -1,5 +1,7 @@
 package DataStructures;
 
+import Classes.Process;
+
 public class ListaSimple {
 
     private Nodo pFirst;
@@ -12,8 +14,31 @@ public class ListaSimple {
         this.size = 0;
     }
 
-    public boolean EsVacia() {
+    public boolean isEmpty() {
         return (getpFirst() == null);
+    }
+
+    public Process nextProcess() {
+        Nodo nodo = getpFirst();
+        while (nodo != null) {
+            Process proceso = (Process) nodo.getInfo();
+            if (proceso.getStatus() == Process.ProcessStatus.READY) {
+                RemoveProcess(proceso);
+                return proceso;
+            }
+            nodo = nodo.getpNext();
+        }
+        return null;
+
+    }
+
+    // Obtener el primer proceso (sin eliminarlo)
+    public Process getFirstProcess() {
+        Nodo nodo = getpFirst();
+        if (nodo != null) {
+            return (Process) nodo.getInfo(); // Retorna el primer proceso en la lista
+        }
+        return null; // Si la lista está vacía, retorna null
     }
 
     public boolean contains(Object elemento) {
@@ -27,9 +52,9 @@ public class ListaSimple {
         return false;
     }
 
-    public void InsertAtTheEnd(Object x) {
+    public void addProcess(Object x) {
         Nodo nuevo = new Nodo(x);
-        if (this.EsVacia()) {
+        if (this.isEmpty()) {
             setpFirst(pLast = nuevo);
         } else {
             Nodo aux = pLast;
@@ -39,8 +64,8 @@ public class ListaSimple {
         size++;
     }
 
-    public void RemoveElement(Object elemento) {
-        if (EsVacia()) {
+    public void RemoveProcess(Object elemento) {
+        if (isEmpty()) {
             return;
         }
 
@@ -67,6 +92,22 @@ public class ListaSimple {
             prev = current;
             current = current.getpNext();
         }
+    }
+
+    public void printlist() {
+        if (isEmpty()) {
+            System.out.println("La lista de procesos listos está vacía.");
+            return;
+        }
+
+        Nodo actual = getpFirst();
+        while (actual != null) {
+            Process proceso = (Process) actual.getInfo();
+            System.out.print(proceso.getNameProcess() + " -> "); // Imprime el nombre del proceso
+            actual = actual.getpNext();
+
+        }
+        System.out.println("null");
     }
 
     public void vaciar() {
@@ -98,6 +139,5 @@ public class ListaSimple {
     public void setSize(int size) {
         this.size = size;
     }
-
 
 }
