@@ -1,6 +1,5 @@
 package Classes;
 
-import Classes.Cpu;
 import DataStructures.ListaSimple;
 import java.util.concurrent.Semaphore;
 
@@ -17,10 +16,10 @@ public class Process extends Thread {
     private ListaSimple listaListos;
     private ListaSimple listaBloqueados;
     private Semaphore semaphore; // Semáforo para sincronización
-    public Cpu cpu;
+    private int duracion;
 
     public Process(int id, String name, int totalInstructions, boolean cpuBound, boolean ioBound, int ciclosExcepcion,
-            ListaSimple listaListos, ListaSimple listaBloqueados, Semaphore semaphore, Cpu cpu) {
+            ListaSimple listaListos, ListaSimple listaBloqueados) {
         this.id = id;
         this.name = name;
         this.programCounter = 0;
@@ -32,7 +31,8 @@ public class Process extends Thread {
         this.listaListos = listaListos;
         this.listaBloqueados = listaBloqueados;
         this.semaphore = semaphore; // Semáforo compartido
-        this.cpu = cpu;
+        this.duracion = totalInstructions - programCounter;
+
     }
 
     @Override
@@ -40,7 +40,7 @@ public class Process extends Thread {
         try {
             while (programCounter < totalInstructions && status != ProcessStatus.BLOCKED) {
                 semaphore.acquire(); // Adquirir el semáforo antes de acceder a recursos compartidos
-                // Ejecutar una instrucción del proceso
+
                 System.out.println("Proceso " + name + " ejecutando instrucción " + programCounter);
                 listaListos.printlist();
                 Thread.sleep(500);
@@ -49,31 +49,30 @@ public class Process extends Thread {
 
                 semaphore.release(); // Liberar el semáforo después de ejecutar la instrucción
 
-                // Simular tiempo de ejecución de la instrucción
-                // Verificar si el proceso debe bloquearse por E/S
                 if (ioBound && programCounter % ciclosExcepcion == 0) {
                     status = ProcessStatus.BLOCKED;
                     System.out.println("Proceso " + name + " en espera de E/S");
 
-                    // Mover el proceso a la lista de bloqueados
-                    listaBloqueados.addProcess(this);
-
                     semaphore.release(); // Liberar el semáforo antes de bloquearse
 
-                    // Simular tiempo de espera de E/S
-                    Thread.sleep(2000);
+                    // Simular tiempo de espera de E/S en un hilo separado
+                    new Thread(() -> {
+                        try {
+                            Thread.sleep(2000); // Simular tiempo de espera de E/S
+                            System.out.println("E/S del proceso" + name + " listo");
+                            semaphore.acquire(); // Adquirir el semáforo antes de modificar la lista
+                            listaListos.addProcess(this);
+                            status = ProcessStatus.READY;
+                            semaphore.release(); // Liberar el semáforo después de modificar la lista
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }).start();
 
-                    // Volver a la lista de procesos listos después de la E/S
-                    listaBloqueados.RemoveProcess(this);
-                    listaListos.addProcess(this); // Agregar al final de la lista de listos
-
-                    status = ProcessStatus.READY;
                     return; // Volver al inicio del bucle para que el CPU tome el siguiente proceso
                 }
-
             }
 
-            // Si el proceso terminó todas sus instrucciones
             if (programCounter == totalInstructions) {
                 status = ProcessStatus.FINISHED;
                 listaListos.RemoveProcess(this);
@@ -82,9 +81,7 @@ public class Process extends Thread {
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
-            
-                semaphore.release(); // Asegurarse de liberar el semáforo en caso de excepción
-            
+            semaphore.release(); // Asegurarse de liberar el semáforo en caso de excepción
         }
     }
 
@@ -179,5 +176,13 @@ public class Process extends Thread {
 
     public enum ProcessStatus {
         READY, RUNNING, BLOCKED, FINISHED
+    }
+
+    public int getDuracion() {
+        return duracion;
+    }
+
+    public void setDuracion(int duracion) {
+        this.duracion = duracion;
     }
 }
