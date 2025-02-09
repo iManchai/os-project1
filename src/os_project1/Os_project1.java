@@ -5,6 +5,7 @@ import Interfaz.InterfazInicial;
 import java.util.concurrent.Semaphore;
 import DataStructures.ListaSimple;
 import Planificacion.Planificador;
+import Planificacion.PlanificadorFCFS;
 import Planificacion.PlanificadorSJF;
 
 public class Os_project1 {
@@ -13,7 +14,7 @@ public class Os_project1 {
         ListaSimple listaListos = new ListaSimple();
         ListaSimple listaBloqueados = new ListaSimple();
         Semaphore semaphoreList = new Semaphore(1);
-        Planificador planificador = new PlanificadorSJF();
+        Planificador planificador = new PlanificadorFCFS();
 
         // para cada cpu hay un semaforo
         Semaphore semaphoreCpu1 = new Semaphore(1);
@@ -26,6 +27,8 @@ public class Os_project1 {
         Process p3 = new Process(3, "Proceso 3", 20, true, false, 2, listaListos, listaBloqueados);
         Process p4 = new Process(4, "Proceso 4", 8, false, true, 7, listaListos, listaBloqueados);
 
+        
+        
         listaListos.addProcess(p1);
         listaListos.addProcess(p2);
         listaListos.addProcess(p3);
