@@ -17,6 +17,7 @@ public class Process extends Thread {
     private ListaSimple listaBloqueados;
     private Semaphore semaphore; // Semáforo para sincronización
     private int duracion;
+    private String cpuName;
 
     public Process(int id, String name, int totalInstructions, boolean cpuBound, boolean ioBound, int ciclosExcepcion,
             ListaSimple listaListos, ListaSimple listaBloqueados) {
@@ -32,6 +33,7 @@ public class Process extends Thread {
         this.listaBloqueados = listaBloqueados;
         this.semaphore = semaphore; // Semáforo compartido
         this.duracion = totalInstructions - programCounter;
+        this.cpuName = cpuName;
 
     }
 
@@ -41,7 +43,7 @@ public class Process extends Thread {
             while (programCounter < totalInstructions && status != ProcessStatus.BLOCKED) {
                 semaphore.acquire(); // Adquirir el semáforo antes de acceder a recursos compartidos
 
-                System.out.println("Proceso " + name + " ejecutando instrucción " + programCounter);
+                System.out.println( name + " ejecutando instrucción " + programCounter + " en el cpu:" + cpuName);
                 listaListos.printlist();
                 Thread.sleep(500);
 
@@ -185,4 +187,14 @@ public class Process extends Thread {
     public void setDuracion(int duracion) {
         this.duracion = duracion;
     }
+    
+    
+    public String getCpuName() {
+        return cpuName;
+    }
+
+    public void setCpuName(String cpuName) {
+        this.cpuName = cpuName;
+    }
+
 }

@@ -31,6 +31,7 @@ public class Cpu extends Thread {  // Extiende Thread para manejar concurrencia
                     // Obtener el siguiente proceso de la lista de listos
                     Process proceso = planificador.seleccionarProceso(listaProcesos);
                     proceso.setCpuSemaphore(semaphoreCpu);
+                    proceso.setCpuName("CPU" + id);
 
                     if (proceso != null && proceso.getStatus() == Process.ProcessStatus.READY) {
                         proceso.setStatus(Process.ProcessStatus.RUNNING);
@@ -49,7 +50,6 @@ public class Cpu extends Thread {  // Extiende Thread para manejar concurrencia
                     }
                 } else {
                     listaSemaphore.release();  // Liberar el semáforo si la lista está vacía
-                    break;  // Salir del bucle si no hay más procesos
                 }
 
                 listaSemaphore.release();  // Liberar el semáforo al final del ciclo
