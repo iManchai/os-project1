@@ -35,7 +35,7 @@ public class InterfazInicial extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
         IniciarBoton1 = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
+        SeccionProcesos = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JSeparator();
         jLabel4 = new javax.swing.JLabel();
@@ -46,9 +46,11 @@ public class InterfazInicial extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         CiclosLlamarIOTextField = new javax.swing.JTextField();
         CiclosTerminarIOTextField = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        CiclosTerminarIOTextField1 = new javax.swing.JTextField();
         jSeparator4 = new javax.swing.JSeparator();
         AgregarProcesoButton = new javax.swing.JButton();
-        jPanel4 = new javax.swing.JPanel();
+        SeccionConfiguracion = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jSeparator5 = new javax.swing.JSeparator();
         jLabel9 = new javax.swing.JLabel();
@@ -59,10 +61,40 @@ public class InterfazInicial extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         CicloTextField = new javax.swing.JTextField();
         AplicarConfiguraciónButton = new javax.swing.JButton();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jSeparator8 = new javax.swing.JSeparator();
+        CurrentCpus = new javax.swing.JLabel();
+        CurrentCycle = new javax.swing.JLabel();
+        CurrentPolicy = new javax.swing.JLabel();
         CancelarSimulacionButton = new javax.swing.JButton();
         jSeparator7 = new javax.swing.JSeparator();
-        jPanel2 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
+        SeccionPrincipal = new javax.swing.JPanel();
+        CPU1 = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        IdProceso1 = new javax.swing.JLabel();
+        NombreProceso1 = new javax.swing.JLabel();
+        EstadoProceso1 = new javax.swing.JLabel();
+        PC1 = new javax.swing.JLabel();
+        MAR1 = new javax.swing.JLabel();
+        CPU2 = new javax.swing.JPanel();
+        jLabel15 = new javax.swing.JLabel();
+        jPanel7 = new javax.swing.JPanel();
+        IdProceso2 = new javax.swing.JLabel();
+        NombreProceso2 = new javax.swing.JLabel();
+        EstadoProceso2 = new javax.swing.JLabel();
+        PC2 = new javax.swing.JLabel();
+        MAR2 = new javax.swing.JLabel();
+        CPU3 = new javax.swing.JPanel();
+        jLabel16 = new javax.swing.JLabel();
+        jPanel8 = new javax.swing.JPanel();
+        IdProceso3 = new javax.swing.JLabel();
+        NombreProceso3 = new javax.swing.JLabel();
+        EstadoProceso3 = new javax.swing.JLabel();
+        PC3 = new javax.swing.JLabel();
+        MAR3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -102,7 +134,7 @@ public class InterfazInicial extends javax.swing.JFrame {
             }
         });
 
-        jPanel3.setBackground(new java.awt.Color(187, 187, 187));
+        SeccionProcesos.setBackground(new java.awt.Color(187, 187, 187));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
@@ -140,6 +172,15 @@ public class InterfazInicial extends javax.swing.JFrame {
             }
         });
 
+        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel11.setText("NOMBRE DEL PROCESO");
+
+        CiclosTerminarIOTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CiclosTerminarIOTextField1ActionPerformed(evt);
+            }
+        });
+
         AgregarProcesoButton.setBackground(new java.awt.Color(0, 139, 252));
         AgregarProcesoButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         AgregarProcesoButton.setForeground(new java.awt.Color(0, 0, 0));
@@ -150,39 +191,44 @@ public class InterfazInicial extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(83, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(79, 79, 79))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+        javax.swing.GroupLayout SeccionProcesosLayout = new javax.swing.GroupLayout(SeccionProcesos);
+        SeccionProcesos.setLayout(SeccionProcesosLayout);
+        SeccionProcesosLayout.setHorizontalGroup(
+            SeccionProcesosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(SeccionProcesosLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jSeparator4)
-                    .addComponent(TipoProcesoSelect, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jSeparator3, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(LongitudTextField, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(CiclosLlamarIOTextField, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(CiclosTerminarIOTextField, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel7))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(92, 92, 92)
-                .addComponent(AgregarProcesoButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(SeccionProcesosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(SeccionProcesosLayout.createSequentialGroup()
+                        .addGroup(SeccionProcesosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(TipoProcesoSelect, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jSeparator3)
+                            .addComponent(LongitudTextField)
+                            .addComponent(CiclosLlamarIOTextField)
+                            .addComponent(CiclosTerminarIOTextField)
+                            .addComponent(CiclosTerminarIOTextField1)
+                            .addGroup(SeccionProcesosLayout.createSequentialGroup()
+                                .addGroup(SeccionProcesosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel11))
+                                .addGap(0, 55, Short.MAX_VALUE))
+                            .addComponent(jSeparator4, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SeccionProcesosLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(SeccionProcesosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SeccionProcesosLayout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(79, 79, 79))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SeccionProcesosLayout.createSequentialGroup()
+                                .addComponent(AgregarProcesoButton)
+                                .addGap(93, 93, 93))))))
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        SeccionProcesosLayout.setVerticalGroup(
+            SeccionProcesosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(SeccionProcesosLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -204,13 +250,17 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(CiclosTerminarIOTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(CiclosTerminarIOTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(AgregarProcesoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
-        jPanel4.setBackground(new java.awt.Color(187, 187, 187));
+        SeccionConfiguracion.setBackground(new java.awt.Color(187, 187, 187));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
@@ -251,48 +301,102 @@ public class InterfazInicial extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel12.setText("CANTIDAD DE CPUS ACTUALES:");
+
+        jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel13.setText("VELOCIDAD DE RELOJ ACTUAL:");
+
+        jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel14.setText("POLÍTICA DE PLANIFICACION ESCOGIDA:");
+
+        CurrentCpus.setForeground(new java.awt.Color(0, 0, 0));
+        CurrentCpus.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        CurrentCpus.setText("jLabel15");
+
+        CurrentCycle.setForeground(new java.awt.Color(0, 0, 0));
+        CurrentCycle.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        CurrentCycle.setText("jLabel15");
+
+        CurrentPolicy.setForeground(new java.awt.Color(0, 0, 0));
+        CurrentPolicy.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        CurrentPolicy.setText("jLabel15");
+
+        javax.swing.GroupLayout SeccionConfiguracionLayout = new javax.swing.GroupLayout(SeccionConfiguracion);
+        SeccionConfiguracion.setLayout(SeccionConfiguracionLayout);
+        SeccionConfiguracionLayout.setHorizontalGroup(
+            SeccionConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(SeccionConfiguracionLayout.createSequentialGroup()
+                .addGroup(SeccionConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(SeccionConfiguracionLayout.createSequentialGroup()
+                        .addGroup(SeccionConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(SeccionConfiguracionLayout.createSequentialGroup()
                                 .addGap(37, 37, 37)
                                 .addComponent(jLabel8))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
+                            .addGroup(SeccionConfiguracionLayout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(jLabel9)))
+                                .addComponent(jLabel9))
+                            .addGroup(SeccionConfiguracionLayout.createSequentialGroup()
+                                .addGap(72, 72, 72)
+                                .addComponent(AplicarConfiguraciónButton))
+                            .addGroup(SeccionConfiguracionLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel3))
+                            .addGroup(SeccionConfiguracionLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(SeccionConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(CurrentCpus)
+                                    .addComponent(jLabel14))))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
+                    .addGroup(SeccionConfiguracionLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(SeccionConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jSeparator8, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jSeparator5, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(PoliticaPlanificacionSelect, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jSeparator6, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(CantidadCpuSelect, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(CicloTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(SeccionConfiguracionLayout.createSequentialGroup()
+                                .addGroup(SeccionConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel2)
-                                    .addComponent(jLabel3))
+                                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(SeccionConfiguracionLayout.createSequentialGroup()
+                                        .addComponent(jLabel13)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(CurrentCycle)))
                                 .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(72, 72, 72)
-                .addComponent(AplicarConfiguraciónButton)
+            .addGroup(SeccionConfiguracionLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(CurrentPolicy)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        SeccionConfiguracionLayout.setVerticalGroup(
+            SeccionConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(SeccionConfiguracionLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel8)
+                .addGap(2, 2, 2)
+                .addComponent(jSeparator8, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(SeccionConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(CurrentCpus))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(SeccionConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(CurrentCycle))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel14)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(CurrentPolicy)
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(CantidadCpuSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -300,15 +404,15 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(CicloTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(PoliticaPlanificacionSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(AplicarConfiguraciónButton, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addComponent(AplicarConfiguraciónButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15))
         );
 
         CancelarSimulacionButton.setBackground(new java.awt.Color(217, 51, 39));
@@ -323,34 +427,262 @@ public class InterfazInicial extends javax.swing.JFrame {
 
         jSeparator7.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
-        jPanel2.setBackground(new java.awt.Color(187, 187, 187));
+        SeccionPrincipal.setBackground(new java.awt.Color(187, 187, 187));
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 277, Short.MAX_VALUE)
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 287, Short.MAX_VALUE)
-        );
+        CPU1.setPreferredSize(new java.awt.Dimension(304, 304));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(457, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(250, 250, 250));
+        jLabel10.setText("CPU 1");
+
+        jPanel6.setBackground(new java.awt.Color(107, 107, 107));
+
+        IdProceso1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        IdProceso1.setText("ID PROCESO:");
+
+        NombreProceso1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        NombreProceso1.setText("NOMBRE PROCESO:");
+
+        EstadoProceso1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        EstadoProceso1.setText("ESTADO PROCESO:");
+
+        PC1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        PC1.setText("PC:");
+
+        MAR1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        MAR1.setText("MAR:");
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(IdProceso1)
+                    .addComponent(NombreProceso1)
+                    .addComponent(EstadoProceso1)
+                    .addComponent(PC1)
+                    .addComponent(MAR1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(IdProceso1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(NombreProceso1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(EstadoProceso1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(PC1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(MAR1)
+                .addContainerGap(131, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout CPU1Layout = new javax.swing.GroupLayout(CPU1);
+        CPU1.setLayout(CPU1Layout);
+        CPU1Layout.setHorizontalGroup(
+            CPU1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(CPU1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(CPU1Layout.createSequentialGroup()
+                .addGap(127, 127, 127)
+                .addComponent(jLabel10)
+                .addContainerGap(127, Short.MAX_VALUE))
+        );
+        CPU1Layout.setVerticalGroup(
+            CPU1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(CPU1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        CPU2.setPreferredSize(new java.awt.Dimension(304, 304));
+
+        jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel15.setForeground(new java.awt.Color(250, 250, 250));
+        jLabel15.setText("CPU 2");
+
+        jPanel7.setBackground(new java.awt.Color(107, 107, 107));
+
+        IdProceso2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        IdProceso2.setText("ID PROCESO:");
+
+        NombreProceso2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        NombreProceso2.setText("NOMBRE PROCESO:");
+
+        EstadoProceso2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        EstadoProceso2.setText("ESTADO PROCESO:");
+
+        PC2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        PC2.setText("PC:");
+
+        MAR2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        MAR2.setText("MAR:");
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(IdProceso2)
+                    .addComponent(NombreProceso2)
+                    .addComponent(EstadoProceso2)
+                    .addComponent(PC2)
+                    .addComponent(MAR2))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(IdProceso2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(NombreProceso2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(EstadoProceso2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(PC2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(MAR2)
+                .addContainerGap(131, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout CPU2Layout = new javax.swing.GroupLayout(CPU2);
+        CPU2.setLayout(CPU2Layout);
+        CPU2Layout.setHorizontalGroup(
+            CPU2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(CPU2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(CPU2Layout.createSequentialGroup()
+                .addGap(127, 127, 127)
+                .addComponent(jLabel15)
+                .addContainerGap(127, Short.MAX_VALUE))
+        );
+        CPU2Layout.setVerticalGroup(
+            CPU2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(CPU2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel15)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        CPU3.setPreferredSize(new java.awt.Dimension(304, 304));
+
+        jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel16.setForeground(new java.awt.Color(250, 250, 250));
+        jLabel16.setText("CPU 3");
+
+        jPanel8.setBackground(new java.awt.Color(107, 107, 107));
+
+        IdProceso3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        IdProceso3.setText("ID PROCESO:");
+
+        NombreProceso3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        NombreProceso3.setText("NOMBRE PROCESO:");
+
+        EstadoProceso3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        EstadoProceso3.setText("ESTADO PROCESO:");
+
+        PC3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        PC3.setText("PC:");
+
+        MAR3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        MAR3.setText("MAR:");
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(IdProceso3)
+                    .addComponent(NombreProceso3)
+                    .addComponent(EstadoProceso3)
+                    .addComponent(PC3)
+                    .addComponent(MAR3))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(IdProceso3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(NombreProceso3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(EstadoProceso3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(PC3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(MAR3)
+                .addContainerGap(131, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout CPU3Layout = new javax.swing.GroupLayout(CPU3);
+        CPU3.setLayout(CPU3Layout);
+        CPU3Layout.setHorizontalGroup(
+            CPU3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(CPU3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(CPU3Layout.createSequentialGroup()
+                .addGap(127, 127, 127)
+                .addComponent(jLabel16)
+                .addContainerGap(127, Short.MAX_VALUE))
+        );
+        CPU3Layout.setVerticalGroup(
+            CPU3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(CPU3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel16)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout SeccionPrincipalLayout = new javax.swing.GroupLayout(SeccionPrincipal);
+        SeccionPrincipal.setLayout(SeccionPrincipalLayout);
+        SeccionPrincipalLayout.setHorizontalGroup(
+            SeccionPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(SeccionPrincipalLayout.createSequentialGroup()
+                .addGroup(SeccionPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(SeccionPrincipalLayout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addComponent(CPU1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(CPU2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(SeccionPrincipalLayout.createSequentialGroup()
+                        .addGap(175, 175, 175)
+                        .addComponent(CPU3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(18, Short.MAX_VALUE))
+        );
+        SeccionPrincipalLayout.setVerticalGroup(
+            SeccionPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(SeccionPrincipalLayout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(SeccionPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(CPU2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CPU1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(CPU3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -377,13 +709,13 @@ public class InterfazInicial extends javax.swing.JFrame {
                                 .addComponent(IniciarBoton1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(SeccionConfiguracion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(SeccionProcesos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jSeparator7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 362, Short.MAX_VALUE)))
+                                .addComponent(SeccionPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 387, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -401,13 +733,15 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(SeccionConfiguracion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(SeccionProcesos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jSeparator7)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(SeccionPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -480,6 +814,10 @@ public class InterfazInicial extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_LongitudTextFieldActionPerformed
 
+    private void CiclosTerminarIOTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CiclosTerminarIOTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CiclosTerminarIOTextField1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -519,19 +857,51 @@ public class InterfazInicial extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AgregarProcesoButton;
     private javax.swing.JButton AplicarConfiguraciónButton;
+    private javax.swing.JPanel CPU1;
+    private javax.swing.JPanel CPU2;
+    private javax.swing.JPanel CPU3;
     private javax.swing.JButton CancelarSimulacionButton;
     private javax.swing.JComboBox<String> CantidadCpuSelect;
     private javax.swing.JButton CargarButton;
     private javax.swing.JTextField CicloTextField;
     private javax.swing.JTextField CiclosLlamarIOTextField;
     private javax.swing.JTextField CiclosTerminarIOTextField;
+    private javax.swing.JTextField CiclosTerminarIOTextField1;
+    private javax.swing.JLabel CurrentCpus;
+    private javax.swing.JLabel CurrentCycle;
+    private javax.swing.JLabel CurrentPolicy;
+    private javax.swing.JLabel EstadoProceso1;
+    private javax.swing.JLabel EstadoProceso2;
+    private javax.swing.JLabel EstadoProceso3;
+    private javax.swing.JLabel IdProceso1;
+    private javax.swing.JLabel IdProceso2;
+    private javax.swing.JLabel IdProceso3;
     private javax.swing.JButton IniciarBoton1;
     private javax.swing.JButton IniciarButton;
     private javax.swing.JTextField LongitudTextField;
+    private javax.swing.JLabel MAR1;
+    private javax.swing.JLabel MAR2;
+    private javax.swing.JLabel MAR3;
+    private javax.swing.JLabel NombreProceso1;
+    private javax.swing.JLabel NombreProceso2;
+    private javax.swing.JLabel NombreProceso3;
+    private javax.swing.JLabel PC1;
+    private javax.swing.JLabel PC2;
+    private javax.swing.JLabel PC3;
     private javax.swing.JComboBox<String> PoliticaPlanificacionSelect;
+    private javax.swing.JPanel SeccionConfiguracion;
+    private javax.swing.JPanel SeccionPrincipal;
+    private javax.swing.JPanel SeccionProcesos;
     private javax.swing.JComboBox<String> TipoProcesoSelect;
     private javax.swing.JLabel TituloPrincipal;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -541,10 +911,9 @@ public class InterfazInicial extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
@@ -552,5 +921,6 @@ public class InterfazInicial extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSeparator jSeparator7;
+    private javax.swing.JSeparator jSeparator8;
     // End of variables declaration//GEN-END:variables
 }
