@@ -1,19 +1,24 @@
 package Classes;
 
- 
+import Planificacion.Planificador;
 import DataStructures.ListaSimple;
 import java.util.concurrent.Semaphore;
 
-
 public class Cpu extends Thread {  // Extiende Thread para manejar concurrencia
+
     private int id;
     private ListaSimple listaProcesos;
     private Semaphore listaSemaphore;  // Semáforo para sincronizar el acceso a la lista
+    public Planificador planificador;
+    private Semaphore semaphoreCpu;
 
-    public Cpu(int id, ListaSimple listaProcesos, Semaphore listaSemaphore) {
+    public Cpu(int id, ListaSimple listaProcesos, Semaphore listaSemaphore , Planificador planificador, Semaphore semaphoreCpu) {
         this.id = id;
         this.listaProcesos = listaProcesos;
         this.listaSemaphore = listaSemaphore;
+        this.planificador = planificador;
+        this.semaphoreCpu = semaphoreCpu;
+
     }
 
     @Override
@@ -24,7 +29,8 @@ public class Cpu extends Thread {  // Extiende Thread para manejar concurrencia
 
                 if (!listaProcesos.isEmpty()) {
                     // Obtener el siguiente proceso de la lista de listos
-                    Process proceso = listaProcesos.nextProcess();
+                    Process proceso = planificador.seleccionarProceso(listaProcesos);
+                    proceso.setCpuSemaphore(semaphoreCpu);
 
                     if (proceso != null && proceso.getStatus() == Process.ProcessStatus.READY) {
                         proceso.setStatus(Process.ProcessStatus.RUNNING);
