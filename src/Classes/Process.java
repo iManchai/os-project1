@@ -18,9 +18,11 @@ public class Process extends Thread {
     private Semaphore semaphore; // Semáforo para sincronización
     private int duracion;
     private String cpuName;
+    private int velocidadReloj;
+    private int ciclosES;
 
     public Process(int id, String name, int totalInstructions, boolean cpuBound, boolean ioBound, int ciclosExcepcion,
-            ListaSimple listaListos, ListaSimple listaBloqueados) {
+            ListaSimple listaListos, ListaSimple listaBloqueados, int velocidadReloj , int cicloES) {
         this.id = id;
         this.name = name;
         this.programCounter = 0;
@@ -34,6 +36,9 @@ public class Process extends Thread {
         this.semaphore = semaphore; // Semáforo compartido
         this.duracion = totalInstructions - programCounter;
         this.cpuName = cpuName;
+        this.velocidadReloj = velocidadReloj;
+        this.ciclosES = cicloES;
+        
 
     }
 
@@ -45,7 +50,7 @@ public class Process extends Thread {
 
                 System.out.println( name + " ejecutando instrucción " + programCounter + " en el cpu:" + cpuName);
                 listaListos.printlist();
-                Thread.sleep(500);
+                Thread.sleep(velocidadReloj);
 
                 programCounter++;
 
@@ -60,7 +65,7 @@ public class Process extends Thread {
                     // Simular tiempo de espera de E/S en un hilo separado
                     new Thread(() -> {
                         try {
-                            Thread.sleep(2000); // Simular tiempo de espera de E/S
+                            Thread.sleep(velocidadReloj * ciclosES); // Simular tiempo de espera de E/S
                             System.out.println("E/S del proceso" + name + " listo");
                             semaphore.acquire(); // Adquirir el semáforo antes de modificar la lista
                             listaListos.addProcess(this);

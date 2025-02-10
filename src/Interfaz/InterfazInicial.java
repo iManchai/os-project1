@@ -4,13 +4,37 @@
  */
 package Interfaz;
 
+import Classes.Process;
+import DataStructures.ListaSimple;
+import Planificacion.Planificador;
+import java.util.concurrent.Semaphore;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author manch
  */
 public class InterfazInicial extends javax.swing.JFrame {
+
+    ListaSimple listaListos = new ListaSimple();
+    ListaSimple listaBloqueados = new ListaSimple();
+    Semaphore semaphoreList = new Semaphore(1);
+    Planificador planificador;
+    int cantidadCpus;
+    int velocidadReloj = 0;
+    int procesosCreados = 1;
+
+    public static boolean validarCampoEntero(JTextField textField, String nombreCampo) {
+        try {
+            Integer.parseInt(textField.getText());
+            return true;
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "El campo: " + nombreCampo + "debe ser un entero", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
 
     /**
      * Creates new form InterfazPrincipal
@@ -50,7 +74,7 @@ public class InterfazInicial extends javax.swing.JFrame {
         CiclosLlamarIOTextField = new javax.swing.JTextField();
         CiclosTerminarIOTextField = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
-        CiclosTerminarIOTextField1 = new javax.swing.JTextField();
+        NombreProcesoTextField1 = new javax.swing.JTextField();
         jSeparator4 = new javax.swing.JSeparator();
         AgregarProcesoButton = new javax.swing.JButton();
         SeccionConfiguracion = new javax.swing.JPanel();
@@ -101,7 +125,7 @@ public class InterfazInicial extends javax.swing.JFrame {
         jLabel17 = new javax.swing.JLabel();
         jSeparator10 = new javax.swing.JSeparator();
         jScrollPane9 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        TablaListaDeListos = new javax.swing.JTable();
         SeccionListaBloqueados = new javax.swing.JPanel();
         jLabel18 = new javax.swing.JLabel();
         jSeparator11 = new javax.swing.JSeparator();
@@ -193,7 +217,7 @@ public class InterfazInicial extends javax.swing.JFrame {
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("TIPO DE PROCESO");
 
-        TipoProcesoSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        TipoProcesoSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "IObound", "Cpubound" }));
 
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("CICLOS PARA LLAMAR UNA INSTRUCCIÓN E/S");
@@ -216,9 +240,9 @@ public class InterfazInicial extends javax.swing.JFrame {
         jLabel11.setForeground(new java.awt.Color(0, 0, 0));
         jLabel11.setText("NOMBRE DEL PROCESO");
 
-        CiclosTerminarIOTextField1.addActionListener(new java.awt.event.ActionListener() {
+        NombreProcesoTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CiclosTerminarIOTextField1ActionPerformed(evt);
+                NombreProcesoTextField1ActionPerformed(evt);
             }
         });
 
@@ -244,7 +268,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                     .addComponent(LongitudTextField)
                     .addComponent(CiclosLlamarIOTextField)
                     .addComponent(CiclosTerminarIOTextField)
-                    .addComponent(CiclosTerminarIOTextField1)
+                    .addComponent(NombreProcesoTextField1)
                     .addGroup(SeccionProcesosLayout.createSequentialGroup()
                         .addGroup(SeccionProcesosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
@@ -290,7 +314,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel11)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(CiclosTerminarIOTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(NombreProcesoTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -312,7 +336,7 @@ public class InterfazInicial extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("CANTIDAD DE CPUS");
 
-        CantidadCpuSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        CantidadCpuSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "2", "3" }));
         CantidadCpuSelect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CantidadCpuSelectActionPerformed(evt);
@@ -368,41 +392,28 @@ public class InterfazInicial extends javax.swing.JFrame {
         SeccionConfiguracionLayout.setHorizontalGroup(
             SeccionConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(SeccionConfiguracionLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(SeccionConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(SeccionConfiguracionLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(SeccionConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSeparator8, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jSeparator5, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(PoliticaPlanificacionSelect, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jSeparator6, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(CantidadCpuSelect, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(CicloTextField)
-                            .addGroup(SeccionConfiguracionLayout.createSequentialGroup()
-                                .addGroup(SeccionConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(SeccionConfiguracionLayout.createSequentialGroup()
-                                        .addComponent(jLabel13)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(CurrentCycle)))
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addComponent(jSeparator8, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jSeparator5, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(PoliticaPlanificacionSelect, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator6, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(CantidadCpuSelect, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(CicloTextField)
                     .addGroup(SeccionConfiguracionLayout.createSequentialGroup()
                         .addGroup(SeccionConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(SeccionConfiguracionLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel9))
-                            .addGroup(SeccionConfiguracionLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel3))
-                            .addGroup(SeccionConfiguracionLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(SeccionConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(CurrentCpus)
-                                    .addComponent(jLabel14)))
-                            .addGroup(SeccionConfiguracionLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(CurrentPolicy)))
+                                .addComponent(jLabel13)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(CurrentCycle))
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel3)
+                            .addGroup(SeccionConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(CurrentCpus)
+                                .addComponent(jLabel14))
+                            .addComponent(CurrentPolicy))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SeccionConfiguracionLayout.createSequentialGroup()
@@ -507,7 +518,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addComponent(PC1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(MAR1)
-                .addContainerGap(131, Short.MAX_VALUE))
+                .addContainerGap(149, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout CPU1Layout = new javax.swing.GroupLayout(CPU1);
@@ -521,7 +532,7 @@ public class InterfazInicial extends javax.swing.JFrame {
             .addGroup(CPU1Layout.createSequentialGroup()
                 .addGap(127, 127, 127)
                 .addComponent(jLabel10)
-                .addContainerGap(127, Short.MAX_VALUE))
+                .addContainerGap(122, Short.MAX_VALUE))
         );
         CPU1Layout.setVerticalGroup(
             CPU1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -583,7 +594,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addComponent(PC2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(MAR2)
-                .addContainerGap(122, Short.MAX_VALUE))
+                .addContainerGap(140, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout CPU2Layout = new javax.swing.GroupLayout(CPU2);
@@ -597,7 +608,7 @@ public class InterfazInicial extends javax.swing.JFrame {
             .addGroup(CPU2Layout.createSequentialGroup()
                 .addGap(127, 127, 127)
                 .addComponent(jLabel15)
-                .addContainerGap(127, Short.MAX_VALUE))
+                .addContainerGap(122, Short.MAX_VALUE))
         );
         CPU2Layout.setVerticalGroup(
             CPU2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -659,7 +670,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addComponent(PC3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(MAR3)
-                .addContainerGap(131, Short.MAX_VALUE))
+                .addContainerGap(149, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout CPU3Layout = new javax.swing.GroupLayout(CPU3);
@@ -673,7 +684,7 @@ public class InterfazInicial extends javax.swing.JFrame {
             .addGroup(CPU3Layout.createSequentialGroup()
                 .addGap(127, 127, 127)
                 .addComponent(jLabel16)
-                .addContainerGap(127, Short.MAX_VALUE))
+                .addContainerGap(122, Short.MAX_VALUE))
         );
         CPU3Layout.setVerticalGroup(
             CPU3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -720,7 +731,7 @@ public class InterfazInicial extends javax.swing.JFrame {
         jLabel17.setForeground(new java.awt.Color(0, 0, 0));
         jLabel17.setText("LISTA DE LISTOS");
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        TablaListaDeListos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -728,10 +739,25 @@ public class InterfazInicial extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Nombre", "PC", "Estado"
             }
-        ));
-        jScrollPane9.setViewportView(jTable3);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane9.setViewportView(TablaListaDeListos);
 
         javax.swing.GroupLayout SeccionListaListosLayout = new javax.swing.GroupLayout(SeccionListaListos);
         SeccionListaListos.setLayout(SeccionListaListosLayout);
@@ -803,7 +829,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator11, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1077,11 +1103,11 @@ public class InterfazInicial extends javax.swing.JFrame {
         try {
             int numeroCiclos = Integer.parseInt(CicloTextField.getText());
             if (numeroCiclos < 200) {
-                JOptionPane.showMessageDialog(this, "El valor debe ser mayor o igual a 200", "Error", JOptionPane.ERROR_MESSAGE );
+                JOptionPane.showMessageDialog(this, "El valor debe ser mayor o igual a 200", "Error", JOptionPane.ERROR_MESSAGE);
                 CicloTextField.requestFocusInWindow();
             }
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "El valor debe ser un número entero", "Error", JOptionPane.ERROR_MESSAGE );
+            JOptionPane.showMessageDialog(this, "El valor debe ser un número entero", "Error", JOptionPane.ERROR_MESSAGE);
             CicloTextField.requestFocusInWindow();
         }
     }//GEN-LAST:event_IniciarButtonActionPerformed
@@ -1112,6 +1138,49 @@ public class InterfazInicial extends javax.swing.JFrame {
 
     private void AgregarProcesoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgregarProcesoButtonActionPerformed
         // TODO add your handling code here:
+
+        if (validarCampoEntero(CiclosLlamarIOTextField, "Ciclos para llamar una E/S")
+                && validarCampoEntero(LongitudTextField, "Longitud")
+                && validarCampoEntero(CiclosTerminarIOTextField, "Ciclos para terminar E/S")) {
+            int cicloLlamarIO = Integer.parseInt(CiclosLlamarIOTextField.getText());
+            int cicloTerminarIO = Integer.parseInt(CiclosTerminarIOTextField.getText());
+            int longitudProceso = Integer.parseInt(LongitudTextField.getText());
+            String nombreProceso = NombreProcesoTextField1.getText();
+
+            if (TipoProcesoSelect.getSelectedItem() == "IObound") {
+                Process process = new Process(procesosCreados, nombreProceso, longitudProceso, true, false, cicloTerminarIO, listaListos, listaBloqueados, velocidadReloj, cicloLlamarIO);
+                listaListos.addProcess(process);
+
+                DefaultTableModel modeloTablaListos = (DefaultTableModel) TablaListaDeListos.getModel(); // Obtén el modelo de la tabla
+
+                Object[] nuevaFila = new Object[]{
+                    procesosCreados,
+                    nombreProceso,
+                    process.getProgramCounter(),
+                    process.getStatus().name(),};
+                modeloTablaListos.addRow(nuevaFila);
+
+            } else {
+                Process process = new Process(procesosCreados, nombreProceso, longitudProceso, false, true, cicloTerminarIO, listaListos, listaBloqueados, velocidadReloj, cicloLlamarIO);
+                listaListos.addProcess(process);
+                System.out.println(process.getStatus().name());
+                DefaultTableModel modeloTablaListos = (DefaultTableModel) TablaListaDeListos.getModel(); // Obtén el modelo de la tabla
+
+                Object[] nuevaFila = new Object[]{
+                    procesosCreados,
+                    nombreProceso,
+                    process.getProgramCounter(),
+                    process.getStatus().name()};
+
+                modeloTablaListos.addRow(nuevaFila);
+
+            }
+
+            procesosCreados++;
+
+        }
+        listaListos.printlist();
+
     }//GEN-LAST:event_AgregarProcesoButtonActionPerformed
 
     private void CancelarSimulacionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelarSimulacionButtonActionPerformed
@@ -1126,9 +1195,9 @@ public class InterfazInicial extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_LongitudTextFieldActionPerformed
 
-    private void CiclosTerminarIOTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CiclosTerminarIOTextField1ActionPerformed
+    private void NombreProcesoTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NombreProcesoTextField1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_CiclosTerminarIOTextField1ActionPerformed
+    }//GEN-LAST:event_NombreProcesoTextField1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1178,7 +1247,6 @@ public class InterfazInicial extends javax.swing.JFrame {
     private javax.swing.JTextField CicloTextField;
     private javax.swing.JTextField CiclosLlamarIOTextField;
     private javax.swing.JTextField CiclosTerminarIOTextField;
-    private javax.swing.JTextField CiclosTerminarIOTextField1;
     private javax.swing.JLabel CurrentCpus;
     private javax.swing.JLabel CurrentCycle;
     private javax.swing.JLabel CurrentPolicy;
@@ -1198,6 +1266,7 @@ public class InterfazInicial extends javax.swing.JFrame {
     private javax.swing.JLabel NombreProceso1;
     private javax.swing.JLabel NombreProceso2;
     private javax.swing.JLabel NombreProceso3;
+    private javax.swing.JTextField NombreProcesoTextField1;
     private javax.swing.JLabel PC1;
     private javax.swing.JLabel PC2;
     private javax.swing.JLabel PC3;
@@ -1211,6 +1280,7 @@ public class InterfazInicial extends javax.swing.JFrame {
     private javax.swing.JPanel SeccionListaListos;
     private javax.swing.JPanel SeccionPrincipal;
     private javax.swing.JPanel SeccionProcesos;
+    private javax.swing.JTable TablaListaDeListos;
     private javax.swing.JTabbedPane TabsProcesosCulminados;
     private javax.swing.JComboBox<String> TipoProcesoSelect;
     private javax.swing.JLabel TituloPrincipal;
@@ -1259,7 +1329,6 @@ public class InterfazInicial extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
     private javax.swing.JTable jTable4;
     private javax.swing.JTable jTable5;
     private javax.swing.JTable jTable6;
