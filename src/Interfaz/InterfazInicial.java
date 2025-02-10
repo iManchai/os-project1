@@ -4,12 +4,16 @@
  */
 package Interfaz;
 
+import Classes.Cpu;
 import Classes.Process;
 import DataStructures.ListaSimple;
 import Planificacion.Planificador;
+import Planificacion.PlanificadorFCFS;
+import Planificacion.PlanificadorSJF;
 import java.util.concurrent.Semaphore;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -18,6 +22,9 @@ import javax.swing.table.DefaultTableModel;
  */
 public class InterfazInicial extends javax.swing.JFrame {
 
+    private CpuLabels cpu1Labels;
+    private CpuLabels cpu2Labels;
+    private CpuLabels cpu3Labels;
     ListaSimple listaListos = new ListaSimple();
     ListaSimple listaBloqueados = new ListaSimple();
     Semaphore semaphoreList = new Semaphore(1);
@@ -25,6 +32,50 @@ public class InterfazInicial extends javax.swing.JFrame {
     int cantidadCpus;
     int velocidadReloj = 0;
     int procesosCreados = 1;
+    Semaphore semaphoreCpu1 = new Semaphore(1);
+    Semaphore semaphoreCpu2 = new Semaphore(1);
+    Semaphore semaphoreCpu3 = new Semaphore(1);
+    Cpu cpu1 = new Cpu(1, listaListos, semaphoreList, planificador, semaphoreCpu1);
+    Cpu cpu2 = new Cpu(2, listaListos, semaphoreList, planificador, semaphoreCpu2);
+    Cpu cpu3 = new Cpu(3, listaListos, semaphoreList, planificador, semaphoreCpu3);
+    
+
+    public void setIDProcessCPU1(String id) {
+        IDProcessCPU1.setText(id);
+    }
+
+    public void setEstateProcessCPU1(String text) {
+        EstateProcessCPU1.setText(text);
+    }
+
+    public void setMarProcessCPU1(String text) {
+        MarProcessCPU1.setText(text);
+    }
+
+    public void setPcCPU1(String Pc) {
+        PcCPU1.setText(Pc);
+    }
+
+    public void actualizarInterfazCPU(int cpuId, String id, String estado, String pc) {
+    CpuLabels labels = null;
+    switch (cpuId) {
+        case 1: labels = cpu1Labels; break;
+        case 2: labels = cpu2Labels; break;
+        case 3: labels = cpu3Labels; break;
+    }
+
+    if (labels != null) {
+        CpuLabels finalLabels = labels;
+        SwingUtilities.invokeLater(() -> {
+            finalLabels.idLabel.setText(id);
+            finalLabels.estateLabel.setText(estado);
+            finalLabels.pcLabel.setText(pc);
+            // ... actualizar otros JLabels usando 'labels'
+        });
+    } else {
+        System.err.println("ID de CPU inválido: " + cpuId);
+    }
+}
 
     public static boolean validarCampoEntero(JTextField textField, String nombreCampo) {
         try {
@@ -41,6 +92,11 @@ public class InterfazInicial extends javax.swing.JFrame {
      */
     public InterfazInicial() {
         initComponents();
+        
+    cpu1Labels  = new CpuLabels(IDProcessCPU1, EstateProcessCPU1, PcCPU1);
+    cpu2Labels  = new CpuLabels(IDProcessCPU2, EstateProcessCPU2, PcCPU2);
+    cpu3Labels  = new CpuLabels(IDProcessCPU3, EstateProcessCPU3, PcCPU3);
+
     }
 
     /**
@@ -104,6 +160,11 @@ public class InterfazInicial extends javax.swing.JFrame {
         EstadoProceso1 = new javax.swing.JLabel();
         PC1 = new javax.swing.JLabel();
         MAR1 = new javax.swing.JLabel();
+        IDProcessCPU1 = new javax.swing.JLabel();
+        NameProcessCPU1 = new javax.swing.JLabel();
+        EstateProcessCPU1 = new javax.swing.JLabel();
+        MarProcessCPU1 = new javax.swing.JLabel();
+        PcCPU1 = new javax.swing.JLabel();
         CPU2 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
@@ -112,6 +173,11 @@ public class InterfazInicial extends javax.swing.JFrame {
         EstadoProceso2 = new javax.swing.JLabel();
         PC2 = new javax.swing.JLabel();
         MAR2 = new javax.swing.JLabel();
+        IDProcessCPU2 = new javax.swing.JLabel();
+        NameProcessCPU2 = new javax.swing.JLabel();
+        EstateProcessCPU2 = new javax.swing.JLabel();
+        MarProcessCPU2 = new javax.swing.JLabel();
+        PcCPU2 = new javax.swing.JLabel();
         CPU3 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
@@ -120,6 +186,11 @@ public class InterfazInicial extends javax.swing.JFrame {
         EstadoProceso3 = new javax.swing.JLabel();
         PC3 = new javax.swing.JLabel();
         MAR3 = new javax.swing.JLabel();
+        MarProcessCPU3 = new javax.swing.JLabel();
+        EstateProcessCPU3 = new javax.swing.JLabel();
+        NameProcessCPU3 = new javax.swing.JLabel();
+        IDProcessCPU3 = new javax.swing.JLabel();
+        PcCPU3 = new javax.swing.JLabel();
         jSeparator9 = new javax.swing.JSeparator();
         SeccionListaListos = new javax.swing.JPanel();
         jLabel17 = new javax.swing.JLabel();
@@ -331,7 +402,7 @@ public class InterfazInicial extends javax.swing.JFrame {
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("POLITICA DE PLANIFICACIÓN");
 
-        PoliticaPlanificacionSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        PoliticaPlanificacionSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SJF", "Item 3", "Item 4" }));
 
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("CANTIDAD DE CPUS");
@@ -377,15 +448,15 @@ public class InterfazInicial extends javax.swing.JFrame {
 
         CurrentCpus.setForeground(new java.awt.Color(0, 0, 0));
         CurrentCpus.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        CurrentCpus.setText("jLabel15");
+        CurrentCpus.setText("none");
 
         CurrentCycle.setForeground(new java.awt.Color(0, 0, 0));
         CurrentCycle.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        CurrentCycle.setText("jLabel15");
+        CurrentCycle.setText("none");
 
         CurrentPolicy.setForeground(new java.awt.Color(0, 0, 0));
         CurrentPolicy.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        CurrentPolicy.setText("jLabel15");
+        CurrentPolicy.setText("none");
 
         javax.swing.GroupLayout SeccionConfiguracionLayout = new javax.swing.GroupLayout(SeccionConfiguracion);
         SeccionConfiguracion.setLayout(SeccionConfiguracionLayout);
@@ -403,16 +474,17 @@ public class InterfazInicial extends javax.swing.JFrame {
                     .addGroup(SeccionConfiguracionLayout.createSequentialGroup()
                         .addGroup(SeccionConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
-                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(SeccionConfiguracionLayout.createSequentialGroup()
+                                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(CurrentCpus))
                             .addGroup(SeccionConfiguracionLayout.createSequentialGroup()
                                 .addComponent(jLabel13)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(CurrentCycle))
                             .addComponent(jLabel9)
                             .addComponent(jLabel3)
-                            .addGroup(SeccionConfiguracionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(CurrentCpus)
-                                .addComponent(jLabel14))
+                            .addComponent(jLabel14)
                             .addComponent(CurrentPolicy))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -491,6 +563,26 @@ public class InterfazInicial extends javax.swing.JFrame {
         MAR1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         MAR1.setText("MAR:");
 
+        IDProcessCPU1.setForeground(new java.awt.Color(0, 0, 0));
+        IDProcessCPU1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        IDProcessCPU1.setText("jLabel15");
+
+        NameProcessCPU1.setForeground(new java.awt.Color(0, 0, 0));
+        NameProcessCPU1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        NameProcessCPU1.setText("jLabel15");
+
+        EstateProcessCPU1.setForeground(new java.awt.Color(0, 0, 0));
+        EstateProcessCPU1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        EstateProcessCPU1.setText("jLabel15");
+
+        MarProcessCPU1.setForeground(new java.awt.Color(0, 0, 0));
+        MarProcessCPU1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        MarProcessCPU1.setText("jLabel15");
+
+        PcCPU1.setForeground(new java.awt.Color(0, 0, 0));
+        PcCPU1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        PcCPU1.setText("jLabel15");
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -498,27 +590,52 @@ public class InterfazInicial extends javax.swing.JFrame {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(IdProceso1)
-                    .addComponent(NombreProceso1)
-                    .addComponent(EstadoProceso1)
-                    .addComponent(PC1)
-                    .addComponent(MAR1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(IdProceso1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(IDProcessCPU1))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(NombreProceso1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(NameProcessCPU1))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(EstadoProceso1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(EstateProcessCPU1))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(PC1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(PcCPU1))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(MAR1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(MarProcessCPU1)))
+                .addContainerGap(91, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(IdProceso1)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(IdProceso1)
+                    .addComponent(IDProcessCPU1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(NombreProceso1)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(NombreProceso1)
+                    .addComponent(NameProcessCPU1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(EstadoProceso1)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(EstadoProceso1)
+                    .addComponent(EstateProcessCPU1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(PC1)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(PC1)
+                    .addComponent(PcCPU1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(MAR1)
-                .addContainerGap(149, Short.MAX_VALUE))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(MAR1)
+                    .addComponent(MarProcessCPU1))
+                .addContainerGap(144, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout CPU1Layout = new javax.swing.GroupLayout(CPU1);
@@ -567,6 +684,26 @@ public class InterfazInicial extends javax.swing.JFrame {
         MAR2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         MAR2.setText("MAR:");
 
+        IDProcessCPU2.setForeground(new java.awt.Color(0, 0, 0));
+        IDProcessCPU2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        IDProcessCPU2.setText("jLabel15");
+
+        NameProcessCPU2.setForeground(new java.awt.Color(0, 0, 0));
+        NameProcessCPU2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        NameProcessCPU2.setText("jLabel15");
+
+        EstateProcessCPU2.setForeground(new java.awt.Color(0, 0, 0));
+        EstateProcessCPU2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        EstateProcessCPU2.setText("jLabel15");
+
+        MarProcessCPU2.setForeground(new java.awt.Color(0, 0, 0));
+        MarProcessCPU2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        MarProcessCPU2.setText("jLabel15");
+
+        PcCPU2.setForeground(new java.awt.Color(0, 0, 0));
+        PcCPU2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        PcCPU2.setText("jLabel15");
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
@@ -574,27 +711,52 @@ public class InterfazInicial extends javax.swing.JFrame {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(IdProceso2)
-                    .addComponent(NombreProceso2)
-                    .addComponent(EstadoProceso2)
-                    .addComponent(PC2)
-                    .addComponent(MAR2))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(IdProceso2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(IDProcessCPU2))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(NombreProceso2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(NameProcessCPU2))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(EstadoProceso2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(EstateProcessCPU2))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(PC2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(PcCPU2))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(MAR2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(MarProcessCPU2)))
+                .addContainerGap(91, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(IdProceso2)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(IdProceso2)
+                    .addComponent(IDProcessCPU2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(NombreProceso2)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(NombreProceso2)
+                    .addComponent(NameProcessCPU2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(EstadoProceso2)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(EstadoProceso2)
+                    .addComponent(EstateProcessCPU2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(PC2)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(PC2)
+                    .addComponent(PcCPU2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(MAR2)
-                .addContainerGap(140, Short.MAX_VALUE))
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(MAR2)
+                    .addComponent(MarProcessCPU2))
+                .addContainerGap(135, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout CPU2Layout = new javax.swing.GroupLayout(CPU2);
@@ -643,6 +805,26 @@ public class InterfazInicial extends javax.swing.JFrame {
         MAR3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         MAR3.setText("MAR:");
 
+        MarProcessCPU3.setForeground(new java.awt.Color(0, 0, 0));
+        MarProcessCPU3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        MarProcessCPU3.setText("jLabel15");
+
+        EstateProcessCPU3.setForeground(new java.awt.Color(0, 0, 0));
+        EstateProcessCPU3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        EstateProcessCPU3.setText("jLabel15");
+
+        NameProcessCPU3.setForeground(new java.awt.Color(0, 0, 0));
+        NameProcessCPU3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        NameProcessCPU3.setText("jLabel15");
+
+        IDProcessCPU3.setForeground(new java.awt.Color(0, 0, 0));
+        IDProcessCPU3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        IDProcessCPU3.setText("jLabel15");
+
+        PcCPU3.setForeground(new java.awt.Color(0, 0, 0));
+        PcCPU3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        PcCPU3.setText("jLabel15");
+
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
@@ -650,27 +832,52 @@ public class InterfazInicial extends javax.swing.JFrame {
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(IdProceso3)
-                    .addComponent(NombreProceso3)
-                    .addComponent(EstadoProceso3)
-                    .addComponent(PC3)
-                    .addComponent(MAR3))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addComponent(IdProceso3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(IDProcessCPU3))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addComponent(PC3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(PcCPU3))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addComponent(MAR3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(MarProcessCPU3))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(EstadoProceso3)
+                            .addComponent(NombreProceso3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(NameProcessCPU3)
+                            .addComponent(EstateProcessCPU3))))
+                .addContainerGap(91, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(IdProceso3)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(IdProceso3)
+                    .addComponent(IDProcessCPU3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(NombreProceso3)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(NombreProceso3)
+                    .addComponent(NameProcessCPU3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(EstadoProceso3)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(EstadoProceso3)
+                    .addComponent(EstateProcessCPU3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(PC3)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(PC3)
+                    .addComponent(PcCPU3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(MAR3)
-                .addContainerGap(149, Short.MAX_VALUE))
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(MAR3)
+                    .addComponent(MarProcessCPU3))
+                .addContainerGap(144, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout CPU3Layout = new javax.swing.GroupLayout(CPU3);
@@ -1100,16 +1307,18 @@ public class InterfazInicial extends javax.swing.JFrame {
 
     private void IniciarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IniciarButtonActionPerformed
         // TODO add your handling code here:
-        try {
-            int numeroCiclos = Integer.parseInt(CicloTextField.getText());
-            if (numeroCiclos < 200) {
-                JOptionPane.showMessageDialog(this, "El valor debe ser mayor o igual a 200", "Error", JOptionPane.ERROR_MESSAGE);
-                CicloTextField.requestFocusInWindow();
-            }
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "El valor debe ser un número entero", "Error", JOptionPane.ERROR_MESSAGE);
-            CicloTextField.requestFocusInWindow();
+
+        if (cantidadCpus == 2) {
+            cpu1.start();
+            cpu2.start();
+
+        } else {
+            cpu1.start();
+            cpu2.start();
+            cpu3.start();
         }
+
+
     }//GEN-LAST:event_IniciarButtonActionPerformed
 
     private void CargarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CargarButtonActionPerformed
@@ -1148,7 +1357,7 @@ public class InterfazInicial extends javax.swing.JFrame {
             String nombreProceso = NombreProcesoTextField1.getText();
 
             if (TipoProcesoSelect.getSelectedItem() == "IObound") {
-                Process process = new Process(procesosCreados, nombreProceso, longitudProceso, true, false, cicloTerminarIO, listaListos, listaBloqueados, velocidadReloj, cicloLlamarIO);
+                Process process = new Process(procesosCreados, nombreProceso, longitudProceso, false, true, cicloLlamarIO, listaListos, listaBloqueados, velocidadReloj, cicloTerminarIO, this, 0);
                 listaListos.addProcess(process);
 
                 DefaultTableModel modeloTablaListos = (DefaultTableModel) TablaListaDeListos.getModel(); // Obtén el modelo de la tabla
@@ -1161,7 +1370,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                 modeloTablaListos.addRow(nuevaFila);
 
             } else {
-                Process process = new Process(procesosCreados, nombreProceso, longitudProceso, false, true, cicloTerminarIO, listaListos, listaBloqueados, velocidadReloj, cicloLlamarIO);
+                Process process = new Process(procesosCreados, nombreProceso, longitudProceso, true, false, cicloLlamarIO, listaListos, listaBloqueados, velocidadReloj, cicloTerminarIO, this, 0);
                 listaListos.addProcess(process);
                 System.out.println(process.getStatus().name());
                 DefaultTableModel modeloTablaListos = (DefaultTableModel) TablaListaDeListos.getModel(); // Obtén el modelo de la tabla
@@ -1189,6 +1398,34 @@ public class InterfazInicial extends javax.swing.JFrame {
 
     private void AplicarConfiguraciónButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AplicarConfiguraciónButtonActionPerformed
         // TODO add your handling code here:
+
+        if (validarCampoEntero(CicloTextField, "Duracion de cada ciclo")) {
+            velocidadReloj = Integer.parseInt(CicloTextField.getText());
+            cantidadCpus = Integer.parseInt(CantidadCpuSelect.getSelectedItem().toString());
+            String politica = PoliticaPlanificacionSelect.getSelectedItem().toString();
+
+            CurrentCpus.setText(CantidadCpuSelect.getSelectedItem().toString());
+            CurrentCycle.setText(CicloTextField.getText());
+            CurrentPolicy.setText(politica);
+
+            if (politica == "FCFS") {
+                cpu1.setPlanificador(new PlanificadorFCFS());
+                cpu2.setPlanificador(new PlanificadorFCFS());
+                cpu3.setPlanificador(new PlanificadorFCFS());
+
+            }
+            if (politica == "SJF") {
+                cpu1.setPlanificador(new PlanificadorSJF());
+                cpu1.setPlanificador(new PlanificadorSJF());
+                cpu1.setPlanificador(new PlanificadorSJF());
+
+            } else {
+
+            }
+
+        }
+
+
     }//GEN-LAST:event_AplicarConfiguraciónButtonActionPerformed
 
     private void LongitudTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LongitudTextFieldActionPerformed
@@ -1253,7 +1490,13 @@ public class InterfazInicial extends javax.swing.JFrame {
     private javax.swing.JLabel EstadoProceso1;
     private javax.swing.JLabel EstadoProceso2;
     private javax.swing.JLabel EstadoProceso3;
+    private javax.swing.JLabel EstateProcessCPU1;
+    private javax.swing.JLabel EstateProcessCPU2;
+    private javax.swing.JLabel EstateProcessCPU3;
     private javax.swing.JLabel GlobalCounter;
+    private javax.swing.JLabel IDProcessCPU1;
+    private javax.swing.JLabel IDProcessCPU2;
+    private javax.swing.JLabel IDProcessCPU3;
     private javax.swing.JLabel IdProceso1;
     private javax.swing.JLabel IdProceso2;
     private javax.swing.JLabel IdProceso3;
@@ -1263,6 +1506,12 @@ public class InterfazInicial extends javax.swing.JFrame {
     private javax.swing.JLabel MAR1;
     private javax.swing.JLabel MAR2;
     private javax.swing.JLabel MAR3;
+    private javax.swing.JLabel MarProcessCPU1;
+    private javax.swing.JLabel MarProcessCPU2;
+    private javax.swing.JLabel MarProcessCPU3;
+    private javax.swing.JLabel NameProcessCPU1;
+    private javax.swing.JLabel NameProcessCPU2;
+    private javax.swing.JLabel NameProcessCPU3;
     private javax.swing.JLabel NombreProceso1;
     private javax.swing.JLabel NombreProceso2;
     private javax.swing.JLabel NombreProceso3;
@@ -1270,6 +1519,9 @@ public class InterfazInicial extends javax.swing.JFrame {
     private javax.swing.JLabel PC1;
     private javax.swing.JLabel PC2;
     private javax.swing.JLabel PC3;
+    private javax.swing.JLabel PcCPU1;
+    private javax.swing.JLabel PcCPU2;
+    private javax.swing.JLabel PcCPU3;
     private javax.swing.JComboBox<String> PoliticaPlanificacionSelect;
     private javax.swing.JPanel ProcessEndedCpu1;
     private javax.swing.JPanel ProcessEndedCpu2;
