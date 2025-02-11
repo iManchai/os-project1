@@ -30,7 +30,7 @@ public class InterfazInicial extends javax.swing.JFrame {
     ListaSimple listaBloqueados = new ListaSimple();
     Semaphore semaphoreList = new Semaphore(1);
     Planificador planificador;
-    int cantidadCpus;
+    int cantidadCpus = 2;
     int velocidadReloj = 0;
     int procesosCreados = 1;
     Semaphore semaphoreCpu1 = new Semaphore(1);
@@ -57,7 +57,7 @@ public class InterfazInicial extends javax.swing.JFrame {
         PcCPU1.setText(Pc);
     }
 
-    public void actualizarInterfazCPU(int cpuId, String id, String estado, String pc) {
+    public void actualizarInterfazCPU(int cpuId, String id,String estado,String pc ,String name ) {
     CpuLabels labels = null;
     switch (cpuId) {
         case 1: labels = cpu1Labels; break;
@@ -69,6 +69,7 @@ public class InterfazInicial extends javax.swing.JFrame {
         CpuLabels finalLabels = labels;
         SwingUtilities.invokeLater(() -> {
             finalLabels.idLabel.setText(id);
+            finalLabels.nameLabel.setText(name);
             finalLabels.estateLabel.setText(estado);
             finalLabels.pcLabel.setText(pc);
             // ... actualizar otros JLabels usando 'labels'
@@ -94,9 +95,9 @@ public class InterfazInicial extends javax.swing.JFrame {
     public InterfazInicial() {
         initComponents();
         
-    cpu1Labels  = new CpuLabels(IDProcessCPU1, EstateProcessCPU1, PcCPU1);
-    cpu2Labels  = new CpuLabels(IDProcessCPU2, EstateProcessCPU2, PcCPU2);
-    cpu3Labels  = new CpuLabels(IDProcessCPU3, EstateProcessCPU3, PcCPU3);
+    cpu1Labels  = new CpuLabels(IDProcessCPU1,NameProcessCPU1 ,EstateProcessCPU1, PcCPU1);
+    cpu2Labels  = new CpuLabels(IDProcessCPU2, NameProcessCPU2 ,EstateProcessCPU2, PcCPU2);
+    cpu3Labels  = new CpuLabels(IDProcessCPU3, NameProcessCPU3 ,EstateProcessCPU3, PcCPU3);
 
     }
 
@@ -202,7 +203,7 @@ public class InterfazInicial extends javax.swing.JFrame {
         jLabel18 = new javax.swing.JLabel();
         jSeparator11 = new javax.swing.JSeparator();
         jScrollPane8 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        TablaBloqueados = new javax.swing.JTable();
         jSeparator12 = new javax.swing.JSeparator();
         jLabel19 = new javax.swing.JLabel();
         GlobalCounter = new javax.swing.JLabel();
@@ -1003,7 +1004,7 @@ public class InterfazInicial extends javax.swing.JFrame {
         jLabel18.setForeground(new java.awt.Color(217, 51, 39));
         jLabel18.setText("LISTA DE BLOQUEADOS");
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        TablaBloqueados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -1026,7 +1027,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane8.setViewportView(jTable2);
+        jScrollPane8.setViewportView(TablaBloqueados);
 
         javax.swing.GroupLayout SeccionListaBloqueadosLayout = new javax.swing.GroupLayout(SeccionListaBloqueados);
         SeccionListaBloqueados.setLayout(SeccionListaBloqueadosLayout);
@@ -1338,14 +1339,15 @@ public class InterfazInicial extends javax.swing.JFrame {
     private void IniciarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IniciarButtonActionPerformed
         // TODO add your handling code here:
 
-        if (cantidadCpus == 2) {
+        if (cantidadCpus == 3) {
             cpu1.start();
             cpu2.start();
+            cpu3.start();
 
         } else {
             cpu1.start();
             cpu2.start();
-            cpu3.start();
+            
         }
 
 
@@ -1432,6 +1434,7 @@ public class InterfazInicial extends javax.swing.JFrame {
         if (validarCampoEntero(CicloTextField, "Duracion de cada ciclo")) {
             velocidadReloj = Integer.parseInt(CicloTextField.getText());
             cantidadCpus = Integer.parseInt(CantidadCpuSelect.getSelectedItem().toString());
+            System.out.println(cantidadCpus);
             String politica = PoliticaPlanificacionSelect.getSelectedItem().toString();
 
             CurrentCpus.setText(CantidadCpuSelect.getSelectedItem().toString());
@@ -1576,6 +1579,7 @@ public class InterfazInicial extends javax.swing.JFrame {
     private javax.swing.JPanel SeccionListaListos;
     private javax.swing.JPanel SeccionPrincipal;
     private javax.swing.JPanel SeccionProcesos;
+    private javax.swing.JTable TablaBloqueados;
     private javax.swing.JTable TablaListaDeListos;
     private javax.swing.JTabbedPane TabsProcesosCulminados;
     private javax.swing.JComboBox<String> TipoProcesoSelect;
@@ -1624,7 +1628,6 @@ public class InterfazInicial extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator9;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable4;
     private javax.swing.JTable jTable5;
     private javax.swing.JTable jTable6;
