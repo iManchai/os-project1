@@ -22,6 +22,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class InterfazInicial extends javax.swing.JFrame {
 
+    private boolean isRunning;
     private CpuLabels cpu1Labels;
     private CpuLabels cpu2Labels;
     private CpuLabels cpu3Labels;
@@ -288,7 +289,12 @@ public class InterfazInicial extends javax.swing.JFrame {
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("TIPO DE PROCESO");
 
-        TipoProcesoSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "IObound", "Cpubound" }));
+        TipoProcesoSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "IO Bound", "Cpu Bound" }));
+        TipoProcesoSelect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TipoProcesoSelectActionPerformed(evt);
+            }
+        });
 
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("CICLOS PARA LLAMAR UNA INSTRUCCIÓN E/S");
@@ -610,7 +616,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                         .addComponent(MAR1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(MarProcessCPU1)))
-                .addContainerGap(91, Short.MAX_VALUE))
+                .addContainerGap(105, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -635,7 +641,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(MAR1)
                     .addComponent(MarProcessCPU1))
-                .addContainerGap(144, Short.MAX_VALUE))
+                .addContainerGap(131, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout CPU1Layout = new javax.swing.GroupLayout(CPU1);
@@ -731,7 +737,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                         .addComponent(MAR2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(MarProcessCPU2)))
-                .addContainerGap(91, Short.MAX_VALUE))
+                .addContainerGap(105, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -756,7 +762,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(MAR2)
                     .addComponent(MarProcessCPU2))
-                .addContainerGap(135, Short.MAX_VALUE))
+                .addContainerGap(122, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout CPU2Layout = new javax.swing.GroupLayout(CPU2);
@@ -852,7 +858,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(NameProcessCPU3)
                             .addComponent(EstateProcessCPU3))))
-                .addContainerGap(91, Short.MAX_VALUE))
+                .addContainerGap(105, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -877,7 +883,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(MAR3)
                     .addComponent(MarProcessCPU3))
-                .addContainerGap(144, Short.MAX_VALUE))
+                .addContainerGap(131, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout CPU3Layout = new javax.swing.GroupLayout(CPU3);
@@ -1008,9 +1014,24 @@ public class InterfazInicial extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Nombre", "PC", "Estado"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane8.setViewportView(jTable2);
 
         javax.swing.GroupLayout SeccionListaBloqueadosLayout = new javax.swing.GroupLayout(SeccionListaBloqueados);
@@ -1036,7 +1057,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator11, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1058,9 +1079,24 @@ public class InterfazInicial extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Nombre", "PC", "Estado"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout ProcessEndedSystemLayout = new javax.swing.GroupLayout(ProcessEndedSystem);
@@ -1355,24 +1391,24 @@ public class InterfazInicial extends javax.swing.JFrame {
             int cicloTerminarIO = Integer.parseInt(CiclosTerminarIOTextField.getText());
             int longitudProceso = Integer.parseInt(LongitudTextField.getText());
             String nombreProceso = NombreProcesoTextField1.getText();
+            
 
-            if (TipoProcesoSelect.getSelectedItem() == "IObound") {
+            if (TipoProcesoSelect.getSelectedItem() == "IO Bound") {
+                
                 Process process = new Process(procesosCreados, nombreProceso, longitudProceso, false, true, cicloLlamarIO, listaListos, listaBloqueados, velocidadReloj, cicloTerminarIO, this, 0);
                 listaListos.addProcess(process);
 
+                // Agregar a la tabla de listos en la interfaz
                 DefaultTableModel modeloTablaListos = (DefaultTableModel) TablaListaDeListos.getModel(); // Obtén el modelo de la tabla
-
                 Object[] nuevaFila = new Object[]{
                     procesosCreados,
                     nombreProceso,
                     process.getProgramCounter(),
                     process.getStatus().name(),};
                 modeloTablaListos.addRow(nuevaFila);
-
             } else {
                 Process process = new Process(procesosCreados, nombreProceso, longitudProceso, true, false, cicloLlamarIO, listaListos, listaBloqueados, velocidadReloj, cicloTerminarIO, this, 0);
                 listaListos.addProcess(process);
-                System.out.println(process.getStatus().name());
                 DefaultTableModel modeloTablaListos = (DefaultTableModel) TablaListaDeListos.getModel(); // Obtén el modelo de la tabla
 
                 Object[] nuevaFila = new Object[]{
@@ -1435,6 +1471,20 @@ public class InterfazInicial extends javax.swing.JFrame {
     private void NombreProcesoTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NombreProcesoTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_NombreProcesoTextField1ActionPerformed
+
+    private void TipoProcesoSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TipoProcesoSelectActionPerformed
+        // TODO add your handling code here:
+        if (TipoProcesoSelect.getSelectedItem() == "Cpu Bound") {
+            // Desabilitar los campos de ciclos de ejecucion IO y su duracion de ejecucion.
+            CiclosLlamarIOTextField.setEnabled(false);
+            CiclosTerminarIOTextField.setEnabled(false);
+            CiclosLlamarIOTextField.setText("");
+            CiclosTerminarIOTextField.setText("");
+        } else {
+            CiclosLlamarIOTextField.setEnabled(true);
+            CiclosTerminarIOTextField.setEnabled(true);
+        }
+    }//GEN-LAST:event_TipoProcesoSelectActionPerformed
 
     /**
      * @param args the command line arguments
