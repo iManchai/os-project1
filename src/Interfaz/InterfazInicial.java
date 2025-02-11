@@ -946,10 +946,7 @@ public class InterfazInicial extends javax.swing.JFrame {
 
         TablaListaDeListos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "ID", "Nombre", "PC", "Estado"
@@ -1008,10 +1005,7 @@ public class InterfazInicial extends javax.swing.JFrame {
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "ID", "Nombre", "PC", "Estado"
