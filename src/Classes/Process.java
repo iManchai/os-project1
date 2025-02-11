@@ -56,7 +56,7 @@ public void run() {
 
             semaphore.acquire(); // Adquirir el semáforo antes de acceder a recursos compartidos
 
-            interfaz.actualizarInterfazCPU(cpu, String.valueOf(id), status.name(), String.valueOf(programCounter));
+            interfaz.actualizarInterfazCPU(cpu, String.valueOf(id),name , status.name(), String.valueOf(programCounter));
 
             System.out.println(name + " ejecutando instrucción " + programCounter + " en el cpu:" + cpuName);
             listaListos.printlist();
@@ -72,7 +72,10 @@ public void run() {
                 status = ProcessStatus.BLOCKED;
                 listaBloqueados.addProcess(this);
                 System.out.println("Proceso " + name + " en espera de E/S");
+                interfaz.actualizarInterfazCPU(cpu, "", " ", " ", " ");
 
+                semaphore.release();
+                
                 // Simular tiempo de espera de E/S en un hilo separado
                 Thread ioThread = new Thread(() -> { 
                     try {
@@ -90,13 +93,9 @@ public void run() {
                     }
                 });
 
-                ioThread.start(); // Inicia el hilo de E/S
+                ioThread.start(); 
 
-                try {
-                    ioThread.join(); // Espera a que el hilo de E/S termine
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+
 
                 return; // Volver al inicio del bucle para que el CPU tome el siguiente proceso
             }
