@@ -72,7 +72,7 @@ public void run() {
                 status = ProcessStatus.BLOCKED;
                 listaBloqueados.addProcess(this);
                 System.out.println("Proceso " + name + " en espera de E/S");
-                interfaz.actualizarInterfazCPU(cpu, "0", "SO", "Running", "1");
+                interfaz.actualizarInterfazCPU(cpu, "0", "SO", "RUNNING", "1");
 
                 semaphore.release();
                 

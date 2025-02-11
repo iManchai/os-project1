@@ -39,7 +39,6 @@ public class InterfazInicial extends javax.swing.JFrame {
     Cpu cpu1 = new Cpu(1, listaListos, semaphoreList, planificador, semaphoreCpu1);
     Cpu cpu2 = new Cpu(2, listaListos, semaphoreList, planificador, semaphoreCpu2);
     Cpu cpu3 = new Cpu(3, listaListos, semaphoreList, planificador, semaphoreCpu3);
-    
 
     public void setIDProcessCPU1(String id) {
         IDProcessCPU1.setText(id);
@@ -57,27 +56,33 @@ public class InterfazInicial extends javax.swing.JFrame {
         PcCPU1.setText(Pc);
     }
 
-    public void actualizarInterfazCPU(int cpuId, String id,String estado,String pc ,String name ) {
-    CpuLabels labels = null;
-    switch (cpuId) {
-        case 1: labels = cpu1Labels; break;
-        case 2: labels = cpu2Labels; break;
-        case 3: labels = cpu3Labels; break;
-    }
+    public void actualizarInterfazCPU(int cpuId, String id, String estado, String pc, String name) {
+        CpuLabels labels = null;
+        switch (cpuId) {
+            case 1:
+                labels = cpu1Labels;
+                break;
+            case 2:
+                labels = cpu2Labels;
+                break;
+            case 3:
+                labels = cpu3Labels;
+                break;
+        }
 
-    if (labels != null) {
-        CpuLabels finalLabels = labels;
-        SwingUtilities.invokeLater(() -> {
-            finalLabels.idLabel.setText(id);
-            finalLabels.nameLabel.setText(name);
-            finalLabels.estateLabel.setText(estado);
-            finalLabels.pcLabel.setText(pc);
-            // ... actualizar otros JLabels usando 'labels'
-        });
-    } else {
-        System.err.println("ID de CPU inválido: " + cpuId);
+        if (labels != null) {
+            CpuLabels finalLabels = labels;
+            SwingUtilities.invokeLater(() -> {
+                finalLabels.idLabel.setText(id);
+                finalLabels.nameLabel.setText(name);
+                finalLabels.estateLabel.setText(estado);
+                finalLabels.pcLabel.setText(pc);
+                // ... actualizar otros JLabels usando 'labels'
+            });
+        } else {
+            System.err.println("ID de CPU inválido: " + cpuId);
+        }
     }
-}
 
     public static boolean validarCampoEntero(JTextField textField, String nombreCampo) {
         try {
@@ -94,11 +99,14 @@ public class InterfazInicial extends javax.swing.JFrame {
      */
     public InterfazInicial() {
         initComponents();
-        
-    cpu1Labels  = new CpuLabels(IDProcessCPU1,NameProcessCPU1 ,EstateProcessCPU1, PcCPU1);
-    cpu2Labels  = new CpuLabels(IDProcessCPU2, NameProcessCPU2 ,EstateProcessCPU2, PcCPU2);
-    cpu3Labels  = new CpuLabels(IDProcessCPU3, NameProcessCPU3 ,EstateProcessCPU3, PcCPU3);
 
+        cpu1Labels = new CpuLabels(IDProcessCPU1, NameProcessCPU1, EstateProcessCPU1, PcCPU1);
+        cpu2Labels = new CpuLabels(IDProcessCPU2, NameProcessCPU2, EstateProcessCPU2, PcCPU2);
+        cpu3Labels = new CpuLabels(IDProcessCPU3, NameProcessCPU3, EstateProcessCPU3, PcCPU3);
+
+        while (isRunning) {
+
+        }
     }
 
     /**
@@ -216,16 +224,16 @@ public class InterfazInicial extends javax.swing.JFrame {
         TabsProcesosCulminados = new javax.swing.JTabbedPane();
         ProcessEndedSystem = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        EndedProcessesSystem = new javax.swing.JTable();
         ProcessEndedCpu1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable4 = new javax.swing.JTable();
+        EndedProcessesCPU1 = new javax.swing.JTable();
         ProcessEndedCpu2 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable5 = new javax.swing.JTable();
+        EndedProcessesCPU2 = new javax.swing.JTable();
         ProcessEndedCpu3 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTable6 = new javax.swing.JTable();
+        EndedProcessesCPU3 = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -1024,6 +1032,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        TablaListaDeListos.getTableHeader().setReorderingAllowed(false);
         jScrollPane9.setViewportView(TablaListaDeListos);
 
         javax.swing.GroupLayout SeccionListaListosLayout = new javax.swing.GroupLayout(SeccionListaListos);
@@ -1083,6 +1092,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        TablaBloqueados.getTableHeader().setReorderingAllowed(false);
         jScrollPane8.setViewportView(TablaBloqueados);
 
         javax.swing.GroupLayout SeccionListaBloqueadosLayout = new javax.swing.GroupLayout(SeccionListaBloqueados);
@@ -1122,7 +1132,7 @@ public class InterfazInicial extends javax.swing.JFrame {
 
         ProcessEndedSystem.setBackground(new java.awt.Color(187, 187, 187));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        EndedProcessesSystem.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -1145,7 +1155,8 @@ public class InterfazInicial extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        EndedProcessesSystem.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(EndedProcessesSystem);
 
         javax.swing.GroupLayout ProcessEndedSystemLayout = new javax.swing.GroupLayout(ProcessEndedSystem);
         ProcessEndedSystem.setLayout(ProcessEndedSystemLayout);
@@ -1168,7 +1179,7 @@ public class InterfazInicial extends javax.swing.JFrame {
 
         ProcessEndedCpu1.setBackground(new java.awt.Color(187, 187, 187));
 
-        jTable4.setModel(new javax.swing.table.DefaultTableModel(
+        EndedProcessesCPU1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -1191,7 +1202,8 @@ public class InterfazInicial extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(jTable4);
+        EndedProcessesCPU1.getTableHeader().setReorderingAllowed(false);
+        jScrollPane2.setViewportView(EndedProcessesCPU1);
 
         javax.swing.GroupLayout ProcessEndedCpu1Layout = new javax.swing.GroupLayout(ProcessEndedCpu1);
         ProcessEndedCpu1.setLayout(ProcessEndedCpu1Layout);
@@ -1214,7 +1226,7 @@ public class InterfazInicial extends javax.swing.JFrame {
 
         ProcessEndedCpu2.setBackground(new java.awt.Color(187, 187, 187));
 
-        jTable5.setModel(new javax.swing.table.DefaultTableModel(
+        EndedProcessesCPU2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -1237,7 +1249,8 @@ public class InterfazInicial extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane3.setViewportView(jTable5);
+        EndedProcessesCPU2.getTableHeader().setReorderingAllowed(false);
+        jScrollPane3.setViewportView(EndedProcessesCPU2);
 
         javax.swing.GroupLayout ProcessEndedCpu2Layout = new javax.swing.GroupLayout(ProcessEndedCpu2);
         ProcessEndedCpu2.setLayout(ProcessEndedCpu2Layout);
@@ -1260,18 +1273,25 @@ public class InterfazInicial extends javax.swing.JFrame {
 
         ProcessEndedCpu3.setBackground(new java.awt.Color(187, 187, 187));
 
-        jTable6.setModel(new javax.swing.table.DefaultTableModel(
+        EndedProcessesCPU3.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Nombre", "PC", "Estado"
             }
-        ));
-        jScrollPane4.setViewportView(jTable6);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        EndedProcessesCPU3.getTableHeader().setReorderingAllowed(false);
+        EndedProcessesCPU3.setUpdateSelectionOnSort(false);
+        jScrollPane4.setViewportView(EndedProcessesCPU3);
 
         javax.swing.GroupLayout ProcessEndedCpu3Layout = new javax.swing.GroupLayout(ProcessEndedCpu3);
         ProcessEndedCpu3.setLayout(ProcessEndedCpu3Layout);
@@ -1420,13 +1440,10 @@ public class InterfazInicial extends javax.swing.JFrame {
             cpu1.start();
             cpu2.start();
             cpu3.start();
-
         } else {
             cpu1.start();
             cpu2.start();
-            
         }
-
 
     }//GEN-LAST:event_IniciarButtonActionPerformed
 
@@ -1464,10 +1481,9 @@ public class InterfazInicial extends javax.swing.JFrame {
             int cicloTerminarIO = Integer.parseInt(CiclosTerminarIOTextField.getText());
             int longitudProceso = Integer.parseInt(LongitudTextField.getText());
             String nombreProceso = NombreProcesoTextField1.getText();
-            
 
             if (TipoProcesoSelect.getSelectedItem() == "IO Bound") {
-                
+
                 Process process = new Process(procesosCreados, nombreProceso, longitudProceso, false, true, cicloLlamarIO, listaListos, listaBloqueados, velocidadReloj, cicloTerminarIO, this, 0);
                 listaListos.addProcess(process);
 
@@ -1518,13 +1534,13 @@ public class InterfazInicial extends javax.swing.JFrame {
             CurrentCycle.setText(CicloTextField.getText());
             CurrentPolicy.setText(politica);
 
-            if (politica == "FCFS") {
+            if ("FCFS".equals(politica)) {
                 cpu1.setPlanificador(new PlanificadorFCFS());
                 cpu2.setPlanificador(new PlanificadorFCFS());
                 cpu3.setPlanificador(new PlanificadorFCFS());
 
             }
-            if (politica == "SJF") {
+            if ("SJF".equals(politica)) {
                 cpu1.setPlanificador(new PlanificadorSJF());
                 cpu2.setPlanificador(new PlanificadorSJF());
                 cpu3.setPlanificador(new PlanificadorSJF());
@@ -1585,6 +1601,10 @@ public class InterfazInicial extends javax.swing.JFrame {
     private javax.swing.JLabel CurrentCpus;
     private javax.swing.JLabel CurrentCycle;
     private javax.swing.JLabel CurrentPolicy;
+    private javax.swing.JTable EndedProcessesCPU1;
+    private javax.swing.JTable EndedProcessesCPU2;
+    private javax.swing.JTable EndedProcessesCPU3;
+    private javax.swing.JTable EndedProcessesSystem;
     private javax.swing.JLabel EstadoProceso1;
     private javax.swing.JLabel EstadoProceso2;
     private javax.swing.JLabel EstadoProceso3;
@@ -1684,9 +1704,5 @@ public class InterfazInicial extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
     private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable4;
-    private javax.swing.JTable jTable5;
-    private javax.swing.JTable jTable6;
     // End of variables declaration//GEN-END:variables
 }
