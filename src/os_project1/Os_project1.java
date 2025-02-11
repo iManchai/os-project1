@@ -1,4 +1,5 @@
 
+package os_project1;
 import Interfaz.InterfazInicial;
 
 public class Os_project1 {

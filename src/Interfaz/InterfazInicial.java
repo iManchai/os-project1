@@ -167,6 +167,8 @@ public class InterfazInicial extends javax.swing.JFrame {
         EstateProcessCPU1 = new javax.swing.JLabel();
         MarProcessCPU1 = new javax.swing.JLabel();
         PcCPU1 = new javax.swing.JLabel();
+        Longitud1 = new javax.swing.JLabel();
+        LongitudProcessCPU1 = new javax.swing.JLabel();
         CPU2 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
@@ -180,6 +182,8 @@ public class InterfazInicial extends javax.swing.JFrame {
         EstateProcessCPU2 = new javax.swing.JLabel();
         MarProcessCPU2 = new javax.swing.JLabel();
         PcCPU2 = new javax.swing.JLabel();
+        Longitud2 = new javax.swing.JLabel();
+        LongitudProcessCPU2 = new javax.swing.JLabel();
         CPU3 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
@@ -193,6 +197,8 @@ public class InterfazInicial extends javax.swing.JFrame {
         NameProcessCPU3 = new javax.swing.JLabel();
         IDProcessCPU3 = new javax.swing.JLabel();
         PcCPU3 = new javax.swing.JLabel();
+        Longitud3 = new javax.swing.JLabel();
+        LongitudProcessCPU3 = new javax.swing.JLabel();
         jSeparator9 = new javax.swing.JSeparator();
         SeccionListaListos = new javax.swing.JPanel();
         jLabel17 = new javax.swing.JLabel();
@@ -555,7 +561,7 @@ public class InterfazInicial extends javax.swing.JFrame {
         CPU1.setPreferredSize(new java.awt.Dimension(304, 304));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(250, 250, 250));
+        jLabel10.setForeground(new java.awt.Color(0, 0, 0));
         jLabel10.setText("CPU 1");
 
         jPanel6.setBackground(new java.awt.Color(107, 107, 107));
@@ -595,6 +601,13 @@ public class InterfazInicial extends javax.swing.JFrame {
         PcCPU1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         PcCPU1.setText("jLabel15");
 
+        Longitud1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Longitud1.setText("LONGITUD:");
+
+        LongitudProcessCPU1.setForeground(new java.awt.Color(0, 0, 0));
+        LongitudProcessCPU1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        LongitudProcessCPU1.setText("jLabel15");
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -621,7 +634,11 @@ public class InterfazInicial extends javax.swing.JFrame {
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(MAR1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(MarProcessCPU1)))
+                        .addComponent(MarProcessCPU1))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(Longitud1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(LongitudProcessCPU1)))
                 .addContainerGap(105, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
@@ -647,7 +664,11 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(MAR1)
                     .addComponent(MarProcessCPU1))
-                .addContainerGap(144, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Longitud1)
+                    .addComponent(LongitudProcessCPU1))
+                .addContainerGap(105, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout CPU1Layout = new javax.swing.GroupLayout(CPU1);
@@ -676,7 +697,7 @@ public class InterfazInicial extends javax.swing.JFrame {
         CPU2.setPreferredSize(new java.awt.Dimension(304, 304));
 
         jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel15.setForeground(new java.awt.Color(250, 250, 250));
+        jLabel15.setForeground(new java.awt.Color(0, 0, 0));
         jLabel15.setText("CPU 2");
 
         jPanel7.setBackground(new java.awt.Color(107, 107, 107));
@@ -716,6 +737,13 @@ public class InterfazInicial extends javax.swing.JFrame {
         PcCPU2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         PcCPU2.setText("jLabel15");
 
+        Longitud2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Longitud2.setText("LONGITUD:");
+
+        LongitudProcessCPU2.setForeground(new java.awt.Color(0, 0, 0));
+        LongitudProcessCPU2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        LongitudProcessCPU2.setText("jLabel15");
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
@@ -742,7 +770,11 @@ public class InterfazInicial extends javax.swing.JFrame {
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addComponent(MAR2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(MarProcessCPU2)))
+                        .addComponent(MarProcessCPU2))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(Longitud2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(LongitudProcessCPU2)))
                 .addContainerGap(105, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
@@ -768,7 +800,11 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(MAR2)
                     .addComponent(MarProcessCPU2))
-                .addContainerGap(135, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Longitud2)
+                    .addComponent(LongitudProcessCPU2))
+                .addContainerGap(96, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout CPU2Layout = new javax.swing.GroupLayout(CPU2);
@@ -797,7 +833,7 @@ public class InterfazInicial extends javax.swing.JFrame {
         CPU3.setPreferredSize(new java.awt.Dimension(304, 304));
 
         jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel16.setForeground(new java.awt.Color(250, 250, 250));
+        jLabel16.setForeground(new java.awt.Color(0, 0, 0));
         jLabel16.setText("CPU 3");
 
         jPanel8.setBackground(new java.awt.Color(107, 107, 107));
@@ -837,6 +873,13 @@ public class InterfazInicial extends javax.swing.JFrame {
         PcCPU3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         PcCPU3.setText("jLabel15");
 
+        Longitud3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Longitud3.setText("LONGITUD:");
+
+        LongitudProcessCPU3.setForeground(new java.awt.Color(0, 0, 0));
+        LongitudProcessCPU3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        LongitudProcessCPU3.setText("jLabel15");
+
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
@@ -863,7 +906,11 @@ public class InterfazInicial extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(NameProcessCPU3)
-                            .addComponent(EstateProcessCPU3))))
+                            .addComponent(EstateProcessCPU3)))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addComponent(Longitud3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(LongitudProcessCPU3)))
                 .addContainerGap(105, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
@@ -889,7 +936,11 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(MAR3)
                     .addComponent(MarProcessCPU3))
-                .addContainerGap(144, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Longitud3)
+                    .addComponent(LongitudProcessCPU3))
+                .addContainerGap(105, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout CPU3Layout = new javax.swing.GroupLayout(CPU3);
@@ -1057,7 +1108,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator11, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1073,10 +1124,7 @@ public class InterfazInicial extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "ID", "Nombre", "PC", "Estado"
@@ -1122,15 +1170,27 @@ public class InterfazInicial extends javax.swing.JFrame {
 
         jTable4.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Nombre", "PC", "Estado"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane2.setViewportView(jTable4);
 
         javax.swing.GroupLayout ProcessEndedCpu1Layout = new javax.swing.GroupLayout(ProcessEndedCpu1);
@@ -1156,15 +1216,27 @@ public class InterfazInicial extends javax.swing.JFrame {
 
         jTable5.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Nombre", "PC", "Estado"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, true, true, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane3.setViewportView(jTable5);
 
         javax.swing.GroupLayout ProcessEndedCpu2Layout = new javax.swing.GroupLayout(ProcessEndedCpu2);
@@ -1496,36 +1568,6 @@ public class InterfazInicial extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(InterfazInicial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(InterfazInicial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(InterfazInicial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(InterfazInicial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new InterfazInicial().setVisible(true);
-            }
-        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1558,6 +1600,12 @@ public class InterfazInicial extends javax.swing.JFrame {
     private javax.swing.JLabel IdProceso3;
     private javax.swing.JButton IniciarBoton1;
     private javax.swing.JButton IniciarButton;
+    private javax.swing.JLabel Longitud1;
+    private javax.swing.JLabel Longitud2;
+    private javax.swing.JLabel Longitud3;
+    private javax.swing.JLabel LongitudProcessCPU1;
+    private javax.swing.JLabel LongitudProcessCPU2;
+    private javax.swing.JLabel LongitudProcessCPU3;
     private javax.swing.JTextField LongitudTextField;
     private javax.swing.JLabel MAR1;
     private javax.swing.JLabel MAR2;
