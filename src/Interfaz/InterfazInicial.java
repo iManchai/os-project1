@@ -410,6 +410,11 @@ public class InterfazInicial extends javax.swing.JFrame {
         jLabel9.setText("POLITICA DE PLANIFICACIÓN");
 
         PoliticaPlanificacionSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SJF", "Item 3", "Item 4" }));
+        PoliticaPlanificacionSelect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PoliticaPlanificacionSelectActionPerformed(evt);
+            }
+        });
 
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("CANTIDAD DE CPUS");
@@ -642,7 +647,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(MAR1)
                     .addComponent(MarProcessCPU1))
-                .addContainerGap(131, Short.MAX_VALUE))
+                .addContainerGap(144, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout CPU1Layout = new javax.swing.GroupLayout(CPU1);
@@ -763,7 +768,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(MAR2)
                     .addComponent(MarProcessCPU2))
-                .addContainerGap(122, Short.MAX_VALUE))
+                .addContainerGap(135, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout CPU2Layout = new javax.swing.GroupLayout(CPU2);
@@ -884,7 +889,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(MAR3)
                     .addComponent(MarProcessCPU3))
-                .addContainerGap(131, Short.MAX_VALUE))
+                .addContainerGap(144, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout CPU3Layout = new javax.swing.GroupLayout(CPU3);
@@ -1052,7 +1057,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator11, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1449,8 +1454,8 @@ public class InterfazInicial extends javax.swing.JFrame {
             }
             if (politica == "SJF") {
                 cpu1.setPlanificador(new PlanificadorSJF());
-                cpu1.setPlanificador(new PlanificadorSJF());
-                cpu1.setPlanificador(new PlanificadorSJF());
+                cpu2.setPlanificador(new PlanificadorSJF());
+                cpu3.setPlanificador(new PlanificadorSJF());
 
             } else {
 
@@ -1482,6 +1487,10 @@ public class InterfazInicial extends javax.swing.JFrame {
             CiclosTerminarIOTextField.setEnabled(true);
         }
     }//GEN-LAST:event_TipoProcesoSelectActionPerformed
+
+    private void PoliticaPlanificacionSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PoliticaPlanificacionSelectActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_PoliticaPlanificacionSelectActionPerformed
 
     /**
      * @param args the command line arguments
