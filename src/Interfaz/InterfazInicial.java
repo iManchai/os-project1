@@ -1516,7 +1516,7 @@ public class InterfazInicial extends javax.swing.JFrame {
             procesosCreados++;
 
         }
-        listaListos.printlist();
+        listaListos.printlist("listos");
 
     }//GEN-LAST:event_AgregarProcesoButtonActionPerformed
 

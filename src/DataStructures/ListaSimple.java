@@ -94,9 +94,9 @@ public class ListaSimple {
         }
     }
 
-    public void printlist() {
+    public void printlist(String tipo) {
         if (isEmpty()) {
-            System.out.println("La lista de procesos listos está vacía.");
+            System.out.println("La lista de procesos "+ tipo + " está vacía.");
             return;
         }
 
