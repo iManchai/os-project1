@@ -66,7 +66,7 @@
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Component id="IniciarButton" min="-2" pref="172" max="-2" attributes="0"/>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="CancelarSimulacionButton" min="-2" pref="172" max="-2" attributes="0"/>
+                                      <Component id="FinalizarSimulacionButton" min="-2" pref="172" max="-2" attributes="0"/>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Component id="IniciarBoton1" min="-2" pref="172" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
@@ -116,7 +116,7 @@
                               <Component id="CargarButton" alignment="3" max="32767" attributes="0"/>
                               <Component id="IniciarButton" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="IniciarBoton1" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="CancelarSimulacionButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="FinalizarSimulacionButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Component id="jSeparator12" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
@@ -225,7 +225,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="IniciarBoton1ActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="CancelarSimulacionButton">
+            <Component class="javax.swing.JButton" name="FinalizarSimulacionButton">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="27" green="33" red="d9" type="rgb"/>
@@ -239,7 +239,7 @@
                 <Property name="text" type="java.lang.String" value="FINALIZAR SIMULACI&#xd3;N"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CancelarSimulacionButtonActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="FinalizarSimulacionButtonActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JSeparator" name="jSeparator7">
@@ -265,7 +265,7 @@
                               <Component id="LongitudTextField" alignment="0" max="32767" attributes="0"/>
                               <Component id="CiclosLlamarIOTextField" alignment="0" max="32767" attributes="0"/>
                               <Component id="CiclosTerminarIOTextField" alignment="0" max="32767" attributes="0"/>
-                              <Component id="NombreProcesoTextField1" alignment="0" max="32767" attributes="0"/>
+                              <Component id="NombreProcesoTextField" alignment="0" max="32767" attributes="0"/>
                               <Group type="102" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
@@ -318,7 +318,7 @@
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="NombreProcesoTextField1" min="-2" pref="31" max="-2" attributes="0"/>
+                          <Component id="NombreProcesoTextField" min="-2" pref="31" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jSeparator4" min="-2" pref="9" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
@@ -413,9 +413,9 @@
                     <Property name="text" type="java.lang.String" value="NOMBRE DEL PROCESO"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="NombreProcesoTextField1">
+                <Component class="javax.swing.JTextField" name="NombreProcesoTextField">
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="NombreProcesoTextField1ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="NombreProcesoTextFieldActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JSeparator" name="jSeparator4">
@@ -436,9 +436,6 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="AgregarProcesoButtonActionPerformed"/>
                   </Events>
-                  <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="AgregarProcesoButton.setEnabled(false);"/>
-                  </AuxValues>
                 </Component>
               </SubComponents>
             </Container>
@@ -683,7 +680,6 @@
                       <Color blue="0" green="0" red="0" type="rgb"/>
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="2"/>
-                    <Property name="text" type="java.lang.String" value="none"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="CurrentCycle">
@@ -692,7 +688,6 @@
                       <Color blue="0" green="0" red="0" type="rgb"/>
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="2"/>
-                    <Property name="text" type="java.lang.String" value="none"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="CurrentPolicy">
