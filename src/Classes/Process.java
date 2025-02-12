@@ -81,7 +81,7 @@ public void run() {
                     try {
                         semaphore.acquire();
                         Thread.sleep(velocidadReloj); // Simular tiempo de espera de E/S
-                        interfaz.actualizarInterfazCPU(cpu, "0" ,"SO" , "RUNNING", "1" , "1" );
+                        interfaz.actualizarInterfazCPU(cpu, "0" ,"SO" , "RUNNING", "0" , "1" );
                         semaphore.release();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
