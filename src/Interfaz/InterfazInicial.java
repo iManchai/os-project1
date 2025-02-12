@@ -9,6 +9,7 @@ import Classes.Process;
 import DataStructures.ListaSimple;
 import Planificacion.Planificador;
 import Planificacion.PlanificadorFCFS;
+import Planificacion.PlanificadorRR;
 import Planificacion.PlanificadorSJF;
 import java.util.concurrent.Semaphore;
 import javax.swing.JOptionPane;
@@ -426,7 +427,7 @@ public class InterfazInicial extends javax.swing.JFrame {
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("POLITICA DE PLANIFICACIÓN");
 
-        PoliticaPlanificacionSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SJF", "Item 3", "Item 4" }));
+        PoliticaPlanificacionSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SJF", "RR", "Item 4" }));
         PoliticaPlanificacionSelect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 PoliticaPlanificacionSelectActionPerformed(evt);
@@ -1487,7 +1488,7 @@ public class InterfazInicial extends javax.swing.JFrame {
 
             if (TipoProcesoSelect.getSelectedItem() == "IO Bound") {
 
-                Process process = new Process(procesosCreados, nombreProceso, longitudProceso, false, true, cicloLlamarIO, listaListos, listaBloqueados, velocidadReloj, cicloTerminarIO, this, 0);
+                Process process = new Process(procesosCreados, nombreProceso, longitudProceso, false, true, cicloLlamarIO, listaListos, listaBloqueados, velocidadReloj, cicloTerminarIO, this, 0, 1);
                 listaListos.addProcess(process);
 
                 // Agregar a la tabla de listos en la interfaz
@@ -1499,7 +1500,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                     process.getStatus().name(),};
                 modeloTablaListos.addRow(nuevaFila);
             } else {
-                Process process = new Process(procesosCreados, nombreProceso, longitudProceso, true, false, cicloLlamarIO, listaListos, listaBloqueados, velocidadReloj, cicloTerminarIO, this, 0);
+                Process process = new Process(procesosCreados, nombreProceso, longitudProceso, true, false, cicloLlamarIO, listaListos, listaBloqueados, velocidadReloj, cicloTerminarIO, this, 0, 1);
                 listaListos.addProcess(process);
                 DefaultTableModel modeloTablaListos = (DefaultTableModel) TablaListaDeListos.getModel(); // Obtén el modelo de la tabla
 
@@ -1548,6 +1549,13 @@ public class InterfazInicial extends javax.swing.JFrame {
                 cpu1.setPlanificador(new PlanificadorSJF());
                 cpu2.setPlanificador(new PlanificadorSJF());
                 cpu3.setPlanificador(new PlanificadorSJF());
+
+            }
+            if ("RR".equals(politica)) {
+
+                cpu1.setPlanificador(new PlanificadorRR());
+                cpu2.setPlanificador(new PlanificadorRR());
+                cpu3.setPlanificador(new PlanificadorRR());
 
             } else {
 

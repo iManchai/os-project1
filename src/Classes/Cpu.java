@@ -1,6 +1,7 @@
 package Classes;
 
 import Planificacion.Planificador;
+import Planificacion.PlanificadorRR;
 import DataStructures.ListaSimple;
 import java.util.concurrent.Semaphore;
 
@@ -34,6 +35,9 @@ public void run() {
                 
                 if (!listaProcesos.isEmpty()) {
                     Process proceso = planificador.seleccionarProceso(listaProcesos);
+                    
+                    
+
 
                     // Verificar si proceso es null antes de acceder a sus métodos
                     if (proceso != null) {

@@ -16,7 +16,10 @@ public class PlanificadorSJF implements Planificador {
         Nodo nodoActual = lista.getpFirst();
 
         while (nodoActual != null) {
+            
             Process procesoActual = (Process) nodoActual.getInfo();
+            
+            
 
             if (procesoActual.getStatus() == Process.ProcessStatus.READY) {
                 if (procesoMasCorto == null || procesoActual.getDuracion() < procesoMasCorto.getDuracion()) {
@@ -27,8 +30,9 @@ public class PlanificadorSJF implements Planificador {
         }
 
         if (procesoMasCorto != null) {
-            lista.RemoveProcess(procesoMasCorto); // Remueve el proceso de la lista después de seleccionarlo
+            lista.RemoveProcess(procesoMasCorto); 
         }
+        procesoMasCorto.setTiempoEjecucionRR(1);
         return procesoMasCorto;
     }
 }
