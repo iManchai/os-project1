@@ -23,9 +23,11 @@ public class Process extends Thread {
     private int ciclosES;
     private InterfazInicial interfaz;
     private int cpu;
+    private int tiempoEjecucionRR;
+    private int tiempoEnCPU;
 
     public Process(int id, String name, int totalInstructions, boolean cpuBound, boolean ioBound, int ciclosExcepcion,
-            ListaSimple listaListos, ListaSimple listaBloqueados, int velocidadReloj, int cicloES, InterfazInicial interfaz, int cpu) {
+            ListaSimple listaListos, ListaSimple listaBloqueados, int velocidadReloj, int cicloES, InterfazInicial interfaz, int cpu, int tiempoEjecucionRR, int tiempoEnCPU) {
         this.id = id;
         this.name = name;
         this.programCounter = 0;
@@ -43,10 +45,12 @@ public class Process extends Thread {
         this.ciclosES = cicloES;
         this.interfaz = interfaz;
         this.cpu = cpu;
+        this.tiempoEjecucionRR = tiempoEjecucionRR;
+        this.tiempoEnCPU = tiempoEnCPU;
     }
     
     public Process(int id, String name, int totalInstructions, boolean cpuBound, boolean ioBound,
-            ListaSimple listaListos, ListaSimple listaBloqueados, int velocidadReloj, InterfazInicial interfaz, int cpu) {
+            ListaSimple listaListos, ListaSimple listaBloqueados, int velocidadReloj, InterfazInicial interfaz, int cpu, int tiempoEjecucionRR, int tiempoEnCPU ) {
         this.id = id;
         this.name = name;
         this.programCounter = 0;
@@ -62,80 +66,101 @@ public class Process extends Thread {
         this.velocidadReloj = velocidadReloj;
         this.interfaz = interfaz;
         this.cpu = cpu;
+        this.tiempoEjecucionRR = tiempoEjecucionRR;
+        this.tiempoEnCPU = tiempoEnCPU;
     }
 
-@Override
-public void run() {
-    try {
-        while (programCounter < totalInstructions && status != ProcessStatus.BLOCKED) {
+    @Override
+    public void run() {
+        try {
+            while (programCounter < totalInstructions && status != ProcessStatus.BLOCKED) {
 
-            semaphore.acquire(); // Adquirir el semáforo antes de acceder a recursos compartidos
-
-            interfaz.actualizarInterfazCPU(cpu, String.valueOf(id), name, status.name(), String.valueOf(programCounter), String.valueOf(totalInstructions));
-
-            System.out.println(name + " ejecutando instrucción " + programCounter + " en el cpu:" + cpuName);
-            listaListos.printlist("listos");
-            listaBloqueados.printlist("bloqueados");
-            System.out.println("siguiente iteración-------------->");
-            Thread.sleep(velocidadReloj);
-
-            programCounter++;
-
-            semaphore.release(); // Liberar el semáforo después de ejecutar la instrucción
-
-            if (ioBound && programCounter % ciclosExcepcion == 0) {
-                status = ProcessStatus.BLOCKED;
-                listaBloqueados.addProcess(this);
-                System.out.println("Proceso " + name + " en espera de E/S");
-
-                
-                Thread os = new Thread(() -> {
+                Thread os = new Thread(() -> { // Hilo para el SO
                     try {
-                        semaphore.acquire(); 
+                        semaphore.acquire();
                         interfaz.actualizarInterfazCPU(cpu, "0", "SO", "RUNNING", "0", "1");
                         System.out.println("SO ejecutándose en el cpu:" + cpuName);
-                        Thread.sleep(velocidadReloj * 3); 
-                        semaphore.release(); 
+                        Thread.sleep(velocidadReloj * 3);
+                        semaphore.release();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 });
 
-                os.start(); 
+                semaphore.acquire();
 
-                
-                Thread ioThread = new Thread(() -> {
-                    try {
-                        Thread.sleep(velocidadReloj * ciclosES); // Simular tiempo de espera de E/S
-                        System.out.println("E/S del proceso " + name + " listo");
-                        semaphore.acquire(); // Adquirir el semáforo para modificar las listas
-                        listaBloqueados.RemoveProcess(this);
-                        listaListos.addProcess(this);
-                        status = ProcessStatus.READY;
-                        semaphore.release(); // Liberar el semáforo después de modificar las listas
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                });
+                if (tiempoEjecucionRR == 5 && tiempoEnCPU == 5) {
+                    os.start();
+                    status = ProcessStatus.READY;
+                    tiempoEnCPU = 0;
+                    listaListos.addProcess(this);
+                    System.out.println("Proceso " + name + " sale del CPU (Round Robin)" + cpuName);
+                    semaphore.release();
+                    return;
+                }
 
-                ioThread.start(); 
+                interfaz.actualizarInterfazCPU(cpu, String.valueOf(id), name, status.name(), String.valueOf(programCounter), String.valueOf(totalInstructions));
 
-                return; 
+                System.out.println(name + " ejecutando instrucción " + programCounter + " en el cpu:" + cpuName);
+                listaListos.printlist("listos");
+                listaBloqueados.printlist("bloqueados");
+                System.out.println("siguiente iteración-------------->");
+                Thread.sleep(velocidadReloj);
+
+                tiempoEnCPU++;
+                programCounter++;
+
+                semaphore.release(); // Liberar el semáforo
+
+                if (ioBound && programCounter % ciclosExcepcion == 0) {
+                    status = ProcessStatus.BLOCKED;
+                    tiempoEnCPU = 0;
+                    listaBloqueados.addProcess(this);
+                    System.out.println("Proceso " + name + " en espera de E/S");
+
+                    os.start();
+
+                    Thread ioThread = new Thread(() -> { // Hilo para E/S
+                        try {
+                            Thread.sleep(velocidadReloj * ciclosES);
+                            System.out.println("E/S del proceso " + name + " listo");
+                            semaphore.acquire();
+                            listaBloqueados.RemoveProcess(this);
+                            listaListos.addProcess(this);
+                            status = ProcessStatus.READY;
+                            semaphore.release();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    });
+
+                    ioThread.start();
+
+                    return; // Salir del método run()
+                }
             }
-        }
 
-        if (programCounter == totalInstructions) {
-            status = ProcessStatus.FINISHED;
-            listaListos.RemoveProcess(this);
-            System.out.println("Proceso " + name + " finalizado.");
+            if (programCounter == totalInstructions) {
+                status = ProcessStatus.FINISHED;
+                listaListos.RemoveProcess(this);
+                System.out.println("Proceso " + name + " finalizado.");
+                return;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
         }
-    } catch (InterruptedException e) {
-        e.printStackTrace();
-    } finally {
     }
-}
 
     // Getters y setters
+    public int getTiempoEjecucionRR() {
+        return tiempoEjecucionRR;
+    }
+
+    public void setTiempoEjecucionRR(int tiempoEjecucionRR) {
+        this.tiempoEjecucionRR = tiempoEjecucionRR;
+    }
+
     public int getIdProcess() {
         return id;
     }

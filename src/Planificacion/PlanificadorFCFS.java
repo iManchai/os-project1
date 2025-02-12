@@ -7,6 +7,8 @@ public class PlanificadorFCFS implements Planificador {
 
     @Override
     public Process seleccionarProceso(ListaSimple lista) {
-        return lista.nextProcess();
+        Process proceso = lista.nextProcess();
+        proceso.setTiempoEjecucionRR(1);
+        return proceso;
     }
 }

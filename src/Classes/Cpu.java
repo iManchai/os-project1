@@ -1,6 +1,7 @@
 package Classes;
 
 import Planificacion.Planificador;
+import Planificacion.PlanificadorRR;
 import DataStructures.ListaSimple;
 import Planificacion.PlanificadorFCFS;
 import java.util.concurrent.Semaphore;
@@ -12,7 +13,6 @@ public class Cpu extends Thread {  // Extiende Thread para manejar concurrencia
     private Semaphore listaSemaphore;  // Semáforo para sincronizar el acceso a la lista
     public Planificador planificador = new PlanificadorFCFS(); // Configuracion default al iniciar la simulacion
     private Semaphore semaphoreCpu;
-    
 
     public Cpu(int id, ListaSimple listaProcesos, Semaphore listaSemaphore, Semaphore semaphoreCpu) {
         this.id = id;
@@ -21,44 +21,45 @@ public class Cpu extends Thread {  // Extiende Thread para manejar concurrencia
         this.semaphoreCpu = semaphoreCpu;
     }
 
-@Override
-public void run() {
-    try {
-        while (true) {
-            listaSemaphore.acquire();
-            
+    @Override
+    public void run() {
+        try {
+            while (true) {
 
-            try {
-                
-                if (!listaProcesos.isEmpty()) {
-                    Process proceso = planificador.seleccionarProceso(listaProcesos);
+                try {
 
-                    // Verificar si proceso es null antes de acceder a sus métodos
-                    if (proceso != null) {
+                    if (!listaProcesos.isEmpty()) {
+                        System.out.println("CPU:" + id + " adquirio el semaforo");
+                        listaSemaphore.acquire();
+                        Process proceso = planificador.seleccionarProceso(listaProcesos);
+
                         proceso.setCpuSemaphore(semaphoreCpu);
                         proceso.setCpuName("CPU" + id);
                         proceso.setCpu(id);
 
-                        if (proceso.getStatus() == Process.ProcessStatus.READY) {
-                            proceso.setStatus(Process.ProcessStatus.RUNNING);
-                            System.out.println("CPU " + id + " ejecutando: " + proceso.getNameProcess());
+                        proceso.setStatus(Process.ProcessStatus.RUNNING);
+                        System.out.println("CPU " + id + " ejecutando: " + proceso.getNameProcess());
 
-                            listaSemaphore.release();
+                        listaSemaphore.release();
 
-                            proceso.run();
+                        proceso.run();
 
-                            listaSemaphore.acquire();
-                        }
+                        System.out.println("CPU:" + id + " solto es semaforo");
+
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } finally {
-                listaSemaphore.release();
             }
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }}
+
+    
+
+    
+
+    
 
     public int getIdCpu() {
         return id;
