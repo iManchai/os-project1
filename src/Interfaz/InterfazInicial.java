@@ -91,27 +91,42 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
             Integer.parseInt(textField.getText());
             return true;
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(null, "El campo: " + nombreCampo + "debe ser un entero", "ERROR", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "El campo: " + nombreCampo + " debe ser un entero", "ERROR", JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }
 
-    /**
-     * Creates new form InterfazPrincipal
-     */
+public static boolean validarCampoStringNoVacio(JTextField textField, String nombreCampo) {
+    String texto = textField.getText().trim(); // Obtener el texto y eliminar espacios en blanco al inicio y al final
+
+    if (texto.isEmpty()) {
+        // Mostrar un mensaje de error o realizar alguna acción (p. ej., cambiar el foco)
+        javax.swing.JOptionPane.showMessageDialog(null, "El campo '" + nombreCampo + "' no puede estar vacío.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        textField.requestFocus(); // Opcional: enfocar el campo para que el usuario lo corrija
+        return false; // Indica que la validación falló
+    }
+
+    return true; // Indica que la validación fue exitosa
+}
+        /**
+         * Creates new form InterfazPrincipal
+         */
     public InterfazInicial() {
         initComponents();
 
         cpu1Labels = new CpuLabels(IDProcessCPU1, NameProcessCPU1, EstateProcessCPU1, PcCPU1, LongitudProcessCPU1);
         cpu2Labels = new CpuLabels(IDProcessCPU2, NameProcessCPU2, EstateProcessCPU2, PcCPU2, LongitudProcessCPU2);
         cpu3Labels = new CpuLabels(IDProcessCPU3, NameProcessCPU3, EstateProcessCPU3, PcCPU3, LongitudProcessCPU3);
-        
+
         // Setear labels al inicializar el JFrame
         CurrentCpus.setText(Integer.toString(cantidadCpus));
         CurrentCycle.setText(Integer.toString(velocidadReloj));
         GlobalCounter.setText(Integer.toString(contadorGlobal));
         CurrentPolicy.setText(planificadorEscogido);
-        
+
+        // Setear boton de finalizar disabled
+        FinalizarSimulacionButton.setEnabled(isRunning);
+
         // Inicializamos el Jframe como un Thread.
         Thread t = new Thread(this);
         t.start();
@@ -134,7 +149,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
         IniciarBoton1 = new javax.swing.JButton();
-        CancelarSimulacionButton = new javax.swing.JButton();
+        FinalizarSimulacionButton = new javax.swing.JButton();
         jSeparator7 = new javax.swing.JSeparator();
         SeccionProcesos = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -148,7 +163,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         CiclosLlamarIOTextField = new javax.swing.JTextField();
         CiclosTerminarIOTextField = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
-        NombreProcesoTextField1 = new javax.swing.JTextField();
+        NombreProcesoTextField = new javax.swing.JTextField();
         jSeparator4 = new javax.swing.JSeparator();
         AgregarProcesoButton = new javax.swing.JButton();
         SeccionConfiguracion = new javax.swing.JPanel();
@@ -282,13 +297,13 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
             }
         });
 
-        CancelarSimulacionButton.setBackground(new java.awt.Color(217, 51, 39));
-        CancelarSimulacionButton.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
-        CancelarSimulacionButton.setForeground(new java.awt.Color(0, 0, 0));
-        CancelarSimulacionButton.setText("FINALIZAR SIMULACIÓN");
-        CancelarSimulacionButton.addActionListener(new java.awt.event.ActionListener() {
+        FinalizarSimulacionButton.setBackground(new java.awt.Color(217, 51, 39));
+        FinalizarSimulacionButton.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
+        FinalizarSimulacionButton.setForeground(new java.awt.Color(0, 0, 0));
+        FinalizarSimulacionButton.setText("FINALIZAR SIMULACIÓN");
+        FinalizarSimulacionButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CancelarSimulacionButtonActionPerformed(evt);
+                FinalizarSimulacionButtonActionPerformed(evt);
             }
         });
 
@@ -340,9 +355,9 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         jLabel11.setForeground(new java.awt.Color(0, 0, 0));
         jLabel11.setText("NOMBRE DEL PROCESO");
 
-        NombreProcesoTextField1.addActionListener(new java.awt.event.ActionListener() {
+        NombreProcesoTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NombreProcesoTextField1ActionPerformed(evt);
+                NombreProcesoTextFieldActionPerformed(evt);
             }
         });
 
@@ -368,7 +383,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                     .addComponent(LongitudTextField)
                     .addComponent(CiclosLlamarIOTextField)
                     .addComponent(CiclosTerminarIOTextField)
-                    .addComponent(NombreProcesoTextField1)
+                    .addComponent(NombreProcesoTextField)
                     .addGroup(SeccionProcesosLayout.createSequentialGroup()
                         .addGroup(SeccionProcesosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
@@ -414,7 +429,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel11)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(NombreProcesoTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(NombreProcesoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1336,7 +1351,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(IniciarButton, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(CancelarSimulacionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(FinalizarSimulacionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(IniciarBoton1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1376,7 +1391,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                         .addComponent(CargarButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(IniciarButton)
                         .addComponent(IniciarBoton1)
-                        .addComponent(CancelarSimulacionButton))
+                        .addComponent(FinalizarSimulacionButton))
                     .addComponent(jSeparator12)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -1441,19 +1456,19 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
     private void IniciarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IniciarButtonActionPerformed
         // TODO add your handling code here:
-        
+
         try {
             isRunning = true;
-            
+
             if (cantidadCpus == 3) {
-               cpu1.start();
-               cpu2.start();
-               cpu3.start();
-           } else {
-               cpu1.start();
-               cpu2.start();
-           }   
-           IniciarButton.setEnabled(false);
+                cpu1.start();
+                cpu2.start();
+                cpu3.start();
+            } else {
+                cpu1.start();
+                cpu2.start();
+            }
+            IniciarButton.setEnabled(false);
         } catch (NumberFormatException ex) {
             System.out.println("Error");
         }
@@ -1489,11 +1504,12 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
         if (validarCampoEntero(CiclosLlamarIOTextField, "Ciclos para llamar una E/S")
                 && validarCampoEntero(LongitudTextField, "Longitud")
-                && validarCampoEntero(CiclosTerminarIOTextField, "Ciclos para terminar E/S")) {
+                && validarCampoEntero(CiclosTerminarIOTextField, "Ciclos para terminar E/S")
+                && validarCampoStringNoVacio(NombreProcesoTextField, "Nombre del proceso")) {
             int cicloLlamarIO = Integer.parseInt(CiclosLlamarIOTextField.getText());
             int cicloTerminarIO = Integer.parseInt(CiclosTerminarIOTextField.getText());
             int longitudProceso = Integer.parseInt(LongitudTextField.getText());
-            String nombreProceso = NombreProcesoTextField1.getText();
+            String nombreProceso = NombreProcesoTextField.getText();
 
             if (TipoProcesoSelect.getSelectedItem() == "IO Bound") {
 
@@ -1530,9 +1546,9 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
     }//GEN-LAST:event_AgregarProcesoButtonActionPerformed
 
-    private void CancelarSimulacionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelarSimulacionButtonActionPerformed
+    private void FinalizarSimulacionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FinalizarSimulacionButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_CancelarSimulacionButtonActionPerformed
+    }//GEN-LAST:event_FinalizarSimulacionButtonActionPerformed
 
     private void AplicarConfiguraciónButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AplicarConfiguraciónButtonActionPerformed
         // TODO add your handling code here:
@@ -1570,9 +1586,9 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         // TODO add your handling code here:
     }//GEN-LAST:event_LongitudTextFieldActionPerformed
 
-    private void NombreProcesoTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NombreProcesoTextField1ActionPerformed
+    private void NombreProcesoTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NombreProcesoTextFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_NombreProcesoTextField1ActionPerformed
+    }//GEN-LAST:event_NombreProcesoTextFieldActionPerformed
 
     private void TipoProcesoSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TipoProcesoSelectActionPerformed
         // TODO add your handling code here:
@@ -1604,7 +1620,6 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     private javax.swing.JPanel CPU1;
     private javax.swing.JPanel CPU2;
     private javax.swing.JPanel CPU3;
-    private javax.swing.JButton CancelarSimulacionButton;
     private javax.swing.JComboBox<String> CantidadCpuSelect;
     private javax.swing.JButton CargarButton;
     private javax.swing.JTextField CicloTextField;
@@ -1623,6 +1638,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     private javax.swing.JLabel EstateProcessCPU1;
     private javax.swing.JLabel EstateProcessCPU2;
     private javax.swing.JLabel EstateProcessCPU3;
+    private javax.swing.JButton FinalizarSimulacionButton;
     private javax.swing.JLabel GlobalCounter;
     private javax.swing.JLabel IDProcessCPU1;
     private javax.swing.JLabel IDProcessCPU2;
@@ -1651,7 +1667,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     private javax.swing.JLabel NombreProceso1;
     private javax.swing.JLabel NombreProceso2;
     private javax.swing.JLabel NombreProceso3;
-    private javax.swing.JTextField NombreProcesoTextField1;
+    private javax.swing.JTextField NombreProcesoTextField;
     private javax.swing.JLabel PC1;
     private javax.swing.JLabel PC2;
     private javax.swing.JLabel PC3;
@@ -1720,7 +1736,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
     @Override
     public void run() {
-        while(true) {
+        while (true) {
             if (isRunning) {
                 CantidadCpuSelect.setEnabled(false);
                 try {
@@ -1738,4 +1754,3 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         }
     }
 }
-
