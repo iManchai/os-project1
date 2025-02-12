@@ -2,6 +2,7 @@ package Classes;
 
 import DataStructures.ListaSimple;
 import java.util.concurrent.Semaphore;
+import Interfaz.InterfazInicial;
 
 public class Process extends Thread {
 
@@ -17,9 +18,15 @@ public class Process extends Thread {
     private ListaSimple listaBloqueados;
     private Semaphore semaphore; // Semáforo para sincronización
     private int duracion;
+    private String cpuName;
+    private int velocidadReloj;
+    private int ciclosES;
+    private InterfazInicial interfaz;
+    private int cpu;
+    
 
     public Process(int id, String name, int totalInstructions, boolean cpuBound, boolean ioBound, int ciclosExcepcion,
-            ListaSimple listaListos, ListaSimple listaBloqueados) {
+            ListaSimple listaListos, ListaSimple listaBloqueados, int velocidadReloj , int cicloES , InterfazInicial interfaz,int cpu) {
         this.id = id;
         this.name = name;
         this.programCounter = 0;
@@ -32,58 +39,94 @@ public class Process extends Thread {
         this.listaBloqueados = listaBloqueados;
         this.semaphore = semaphore; // Semáforo compartido
         this.duracion = totalInstructions - programCounter;
+        this.cpuName = cpuName;
+        this.velocidadReloj = velocidadReloj;
+        this.ciclosES = cicloES;
+        this.interfaz = interfaz;
+        this.cpu = cpu;
+        
+        
 
     }
 
-    @Override
-    public void run() {
-        try {
-            while (programCounter < totalInstructions && status != ProcessStatus.BLOCKED) {
-                semaphore.acquire(); // Adquirir el semáforo antes de acceder a recursos compartidos
+@Override
+public void run() {
+    try {
+        while (programCounter < totalInstructions && status != ProcessStatus.BLOCKED) {
 
-                System.out.println("Proceso " + name + " ejecutando instrucción " + programCounter);
-                listaListos.printlist();
-                Thread.sleep(500);
+            semaphore.acquire(); // Adquirir el semáforo antes de acceder a recursos compartidos
 
-                programCounter++;
+            interfaz.actualizarInterfazCPU(cpu, String.valueOf(id),name , status.name(), String.valueOf(programCounter) , String.valueOf(totalInstructions) );
 
-                semaphore.release(); // Liberar el semáforo después de ejecutar la instrucción
+            System.out.println(name + " ejecutando instrucción " + programCounter + " en el cpu:" + cpuName);
+            listaListos.printlist();
+            listaBloqueados.printlist();
+            System.out.println("siguiente iteracion-------------->");
+            Thread.sleep(velocidadReloj);
 
-                if (ioBound && programCounter % ciclosExcepcion == 0) {
-                    status = ProcessStatus.BLOCKED;
-                    System.out.println("Proceso " + name + " en espera de E/S");
+            programCounter++;
 
-                    semaphore.release(); // Liberar el semáforo antes de bloquearse
+            semaphore.release(); // Liberar el semáforo después de ejecutar la instrucción
 
-                    // Simular tiempo de espera de E/S en un hilo separado
-                    new Thread(() -> {
-                        try {
-                            Thread.sleep(2000); // Simular tiempo de espera de E/S
-                            System.out.println("E/S del proceso" + name + " listo");
-                            semaphore.acquire(); // Adquirir el semáforo antes de modificar la lista
-                            listaListos.addProcess(this);
-                            status = ProcessStatus.READY;
-                            semaphore.release(); // Liberar el semáforo después de modificar la lista
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }).start();
+            if (ioBound && programCounter % ciclosExcepcion == 0) {
+                status = ProcessStatus.BLOCKED;
+                listaBloqueados.addProcess(this);
+                System.out.println("Proceso " + name + " en espera de E/S");
 
-                    return; // Volver al inicio del bucle para que el CPU tome el siguiente proceso
-                }
+                semaphore.release();
+                
+                
+                                // Simular tiempo de espera de E/S en un hilo separado
+                Thread os = new Thread(() -> { 
+                    try {
+                        semaphore.acquire();
+                        Thread.sleep(velocidadReloj); // Simular tiempo de espera de E/S
+                        interfaz.actualizarInterfazCPU(cpu, "0" ,"SO" , "RUNNING", "1" , "1" );
+                        semaphore.release();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                });
+                
+                os.start();
+
+                
+                
+                // Simular tiempo de espera de E/S en un hilo separado
+                Thread ioThread = new Thread(() -> { 
+                    try {
+                        Thread.sleep(velocidadReloj * ciclosES); // Simular tiempo de espera de E/S
+                        System.out.println("E/S del proceso" + name + " listo");
+                        semaphore.acquire(); 
+                        listaBloqueados.RemoveProcess(this);
+                        listaListos.addProcess(this);
+                        status = ProcessStatus.READY;
+                        semaphore.release(); 
+
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                });
+
+                ioThread.start(); 
+
+
+
+                return; // Volver al inicio del bucle para que el CPU tome el siguiente proceso
             }
-
-            if (programCounter == totalInstructions) {
-                status = ProcessStatus.FINISHED;
-                listaListos.RemoveProcess(this);
-                System.out.println("Proceso " + name + " finalizado.");
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } finally {
-            semaphore.release(); // Asegurarse de liberar el semáforo en caso de excepción
         }
+
+        if (programCounter == totalInstructions) {
+            status = ProcessStatus.FINISHED;
+            listaListos.RemoveProcess(this);
+            System.out.println("Proceso " + name + " finalizado.");
+        }
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    } finally {
+       
     }
+}
 
     // Getters y setters
     public int getIdProcess() {
@@ -185,4 +228,24 @@ public class Process extends Thread {
     public void setDuracion(int duracion) {
         this.duracion = duracion;
     }
+    
+    
+    public String getCpuName() {
+        return cpuName;
+    }
+
+    public void setCpuName(String cpuName) {
+        this.cpuName = cpuName;
+    }
+
+    public int getCpu() {
+        return cpu;
+    }
+
+    public void setCpu(int cpu) {
+        this.cpu = cpu;
+    }
+    
+    
+
 }

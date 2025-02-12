@@ -11,53 +11,56 @@ public class Cpu extends Thread {  // Extiende Thread para manejar concurrencia
     private Semaphore listaSemaphore;  // Semáforo para sincronizar el acceso a la lista
     public Planificador planificador;
     private Semaphore semaphoreCpu;
+    
 
-    public Cpu(int id, ListaSimple listaProcesos, Semaphore listaSemaphore , Planificador planificador, Semaphore semaphoreCpu) {
+    public Cpu(int id, ListaSimple listaProcesos, Semaphore listaSemaphore, Planificador planificador, Semaphore semaphoreCpu) {
         this.id = id;
         this.listaProcesos = listaProcesos;
         this.listaSemaphore = listaSemaphore;
         this.planificador = planificador;
         this.semaphoreCpu = semaphoreCpu;
+        
 
     }
 
-    @Override
-    public void run() {
-        try {
-            while (true) {
-                listaSemaphore.acquire();  // Adquirir el semáforo para acceder a la lista
+@Override
+public void run() {
+    try {
+        while (true) {
+            listaSemaphore.acquire();
+            
 
+            try {
+                
                 if (!listaProcesos.isEmpty()) {
-                    // Obtener el siguiente proceso de la lista de listos
                     Process proceso = planificador.seleccionarProceso(listaProcesos);
-                    proceso.setCpuSemaphore(semaphoreCpu);
 
-                    if (proceso != null && proceso.getStatus() == Process.ProcessStatus.READY) {
-                        proceso.setStatus(Process.ProcessStatus.RUNNING);
-                        System.out.println("CPU " + id + " ejecutando: " + proceso.getNameProcess());
+                    // Verificar si proceso es null antes de acceder a sus métodos
+                    if (proceso != null) {
+                        proceso.setCpuSemaphore(semaphoreCpu);
+                        proceso.setCpuName("CPU" + id);
+                        proceso.setCpu(id);
 
-                        listaSemaphore.release();  // Liberar el semáforo antes de ejecutar el proceso
+                        if (proceso.getStatus() == Process.ProcessStatus.READY) {
+                            proceso.setStatus(Process.ProcessStatus.RUNNING);
+                            System.out.println("CPU " + id + " ejecutando: " + proceso.getNameProcess());
 
-                        // Ejecutar el proceso
-                        proceso.run();
+                            listaSemaphore.release();
 
-                        // Volver a adquirir el semáforo para actualizar la lista
-                        listaSemaphore.acquire();
+                            proceso.run();
 
-                    } else {
-                        listaSemaphore.release();  // Liberar el semáforo si no hay procesos listos
+                            listaSemaphore.acquire();
+                        }
                     }
-                } else {
-                    listaSemaphore.release();  // Liberar el semáforo si la lista está vacía
-                    break;  // Salir del bucle si no hay más procesos
                 }
-
-                listaSemaphore.release();  // Liberar el semáforo al final del ciclo
+            } finally {
+                listaSemaphore.release();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+}
 
     public int getIdCpu() {
         return id;
@@ -66,4 +69,13 @@ public class Cpu extends Thread {  // Extiende Thread para manejar concurrencia
     public void setIdCpu(int id) {
         this.id = id;
     }
+
+    public Planificador getPlanificador() {
+        return planificador;
+    }
+
+    public void setPlanificador(Planificador planificador) {
+        this.planificador = planificador;
+    }
+
 }
