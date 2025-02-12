@@ -11,6 +11,7 @@ public class Cpu extends Thread {  // Extiende Thread para manejar concurrencia
     private Semaphore listaSemaphore;  // Semáforo para sincronizar el acceso a la lista
     public Planificador planificador;
     private Semaphore semaphoreCpu;
+    
 
     public Cpu(int id, ListaSimple listaProcesos, Semaphore listaSemaphore, Planificador planificador, Semaphore semaphoreCpu) {
         this.id = id;
@@ -18,6 +19,7 @@ public class Cpu extends Thread {  // Extiende Thread para manejar concurrencia
         this.listaSemaphore = listaSemaphore;
         this.planificador = planificador;
         this.semaphoreCpu = semaphoreCpu;
+        
 
     }
 
@@ -26,8 +28,10 @@ public void run() {
     try {
         while (true) {
             listaSemaphore.acquire();
+            
 
             try {
+                
                 if (!listaProcesos.isEmpty()) {
                     Process proceso = planificador.seleccionarProceso(listaProcesos);
 

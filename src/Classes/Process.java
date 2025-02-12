@@ -56,7 +56,7 @@ public void run() {
 
             semaphore.acquire(); // Adquirir el semáforo antes de acceder a recursos compartidos
 
-            interfaz.actualizarInterfazCPU(cpu, String.valueOf(id),name , status.name(), String.valueOf(programCounter));
+            interfaz.actualizarInterfazCPU(cpu, String.valueOf(id),name , status.name(), String.valueOf(programCounter) , String.valueOf(totalInstructions) );
 
             System.out.println(name + " ejecutando instrucción " + programCounter + " en el cpu:" + cpuName);
             listaListos.printlist();
@@ -72,16 +72,31 @@ public void run() {
                 status = ProcessStatus.BLOCKED;
                 listaBloqueados.addProcess(this);
                 System.out.println("Proceso " + name + " en espera de E/S");
-                interfaz.actualizarInterfazCPU(cpu, "0", "SO", "RUNNING", "1");
 
                 semaphore.release();
+                
+                
+                                // Simular tiempo de espera de E/S en un hilo separado
+                Thread os = new Thread(() -> { 
+                    try {
+                        semaphore.acquire();
+                        Thread.sleep(velocidadReloj); // Simular tiempo de espera de E/S
+                        interfaz.actualizarInterfazCPU(cpu, "0" ,"SO" , "RUNNING", "0" , "1" );
+                        semaphore.release();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                });
+                
+                os.start();
+
+                
                 
                 // Simular tiempo de espera de E/S en un hilo separado
                 Thread ioThread = new Thread(() -> { 
                     try {
                         Thread.sleep(velocidadReloj * ciclosES); // Simular tiempo de espera de E/S
                         System.out.println("E/S del proceso" + name + " listo");
-
                         semaphore.acquire(); 
                         listaBloqueados.RemoveProcess(this);
                         listaListos.addProcess(this);

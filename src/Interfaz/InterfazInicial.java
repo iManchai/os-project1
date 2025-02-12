@@ -28,6 +28,7 @@ public class InterfazInicial extends javax.swing.JFrame {
     private CpuLabels cpu3Labels;
     ListaSimple listaListos = new ListaSimple();
     ListaSimple listaBloqueados = new ListaSimple();
+    ListaSimple listaSO = new ListaSimple();
     Semaphore semaphoreList = new Semaphore(1);
     Planificador planificador;
     int cantidadCpus = 2;
@@ -39,6 +40,7 @@ public class InterfazInicial extends javax.swing.JFrame {
     Cpu cpu1 = new Cpu(1, listaListos, semaphoreList, planificador, semaphoreCpu1);
     Cpu cpu2 = new Cpu(2, listaListos, semaphoreList, planificador, semaphoreCpu2);
     Cpu cpu3 = new Cpu(3, listaListos, semaphoreList, planificador, semaphoreCpu3);
+    
 
     public void setIDProcessCPU1(String id) {
         IDProcessCPU1.setText(id);
@@ -56,7 +58,7 @@ public class InterfazInicial extends javax.swing.JFrame {
         PcCPU1.setText(Pc);
     }
 
-    public void actualizarInterfazCPU(int cpuId, String id, String estado, String pc, String name) {
+    public void actualizarInterfazCPU(int cpuId, String id, String estado, String pc, String name, String longitud) {
         CpuLabels labels = null;
         switch (cpuId) {
             case 1:
@@ -77,6 +79,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                 finalLabels.nameLabel.setText(name);
                 finalLabels.estateLabel.setText(estado);
                 finalLabels.pcLabel.setText(pc);
+                finalLabels.longitud.setText(longitud);
                 // ... actualizar otros JLabels usando 'labels'
             });
         } else {
@@ -100,9 +103,9 @@ public class InterfazInicial extends javax.swing.JFrame {
     public InterfazInicial() {
         initComponents();
 
-        cpu1Labels = new CpuLabels(IDProcessCPU1, NameProcessCPU1, EstateProcessCPU1, PcCPU1);
-        cpu2Labels = new CpuLabels(IDProcessCPU2, NameProcessCPU2, EstateProcessCPU2, PcCPU2);
-        cpu3Labels = new CpuLabels(IDProcessCPU3, NameProcessCPU3, EstateProcessCPU3, PcCPU3);
+        cpu1Labels = new CpuLabels(IDProcessCPU1, NameProcessCPU1, EstateProcessCPU1, PcCPU1,LongitudProcessCPU1);
+        cpu2Labels = new CpuLabels(IDProcessCPU2, NameProcessCPU2, EstateProcessCPU2, PcCPU2,LongitudProcessCPU2);
+        cpu3Labels = new CpuLabels(IDProcessCPU3, NameProcessCPU3, EstateProcessCPU3, PcCPU3,LongitudProcessCPU3);
 
         while (isRunning) {
 
