@@ -28,7 +28,6 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     private CpuLabels cpu3Labels;
     ListaSimple listaListos = new ListaSimple();
     ListaSimple listaBloqueados = new ListaSimple();
-    ListaSimple listaSO = new ListaSimple();
     Semaphore semaphoreList = new Semaphore(1);
     int cantidadCpus = 2;
     int velocidadReloj = 1000;
@@ -347,7 +346,6 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
             }
         });
 
-        AgregarProcesoButton.setEnabled(false);
         AgregarProcesoButton.setBackground(new java.awt.Color(0, 139, 252));
         AgregarProcesoButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         AgregarProcesoButton.setForeground(new java.awt.Color(0, 0, 0));
@@ -1543,19 +1541,18 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
             velocidadReloj = Integer.parseInt(CicloTextField.getText());
             cantidadCpus = Integer.parseInt(CantidadCpuSelect.getSelectedItem().toString());
             String politica = PoliticaPlanificacionSelect.getSelectedItem().toString();
-            AgregarProcesoButton.setEnabled(true);
 
             CurrentCpus.setText(CantidadCpuSelect.getSelectedItem().toString());
             CurrentCycle.setText(CicloTextField.getText());
             CurrentPolicy.setText(politica);
 
-            if (planificadorEscogido === ) {
+            if (planificadorEscogido == "FCFS") {
                 cpu1.setPlanificador(new PlanificadorFCFS());
                 cpu2.setPlanificador(new PlanificadorFCFS());
                 cpu3.setPlanificador(new PlanificadorFCFS());
 
             }
-            if ("SJF".equals(politica)) {
+            if (planificadorEscogido == "SJF") {
                 cpu1.setPlanificador(new PlanificadorSJF());
                 cpu2.setPlanificador(new PlanificadorSJF());
                 cpu3.setPlanificador(new PlanificadorSJF());

@@ -2,6 +2,7 @@ package Classes;
 
 import Planificacion.Planificador;
 import DataStructures.ListaSimple;
+import Planificacion.PlanificadorFCFS;
 import java.util.concurrent.Semaphore;
 
 public class Cpu extends Thread {  // Extiende Thread para manejar concurrencia
@@ -9,7 +10,7 @@ public class Cpu extends Thread {  // Extiende Thread para manejar concurrencia
     private int id;
     private ListaSimple listaProcesos;
     private Semaphore listaSemaphore;  // Semáforo para sincronizar el acceso a la lista
-    public Planificador planificador;
+    public Planificador planificador = new PlanificadorFCFS(); // Configuracion default al iniciar la simulacion
     private Semaphore semaphoreCpu;
     
 
