@@ -4,7 +4,7 @@ import Classes.Process;
 import DataStructures.ListaSimple;
 import DataStructures.Nodo;
 
-public class PlanificadorSJF implements Planificador {
+public class PlanificadorSRT implements Planificador {
 
     @Override
     public Process seleccionarProceso(ListaSimple lista) {
@@ -22,7 +22,7 @@ public class PlanificadorSJF implements Planificador {
             
 
             if (procesoActual.getStatus() == Process.ProcessStatus.READY) {
-                if (procesoMasCorto == null || procesoActual.getDuracion() < procesoMasCorto.getDuracion()) {
+                if (procesoMasCorto == null || procesoActual.getDuracion() - procesoActual.getProgramCounter() < procesoMasCorto.getDuracion()) {
                     procesoMasCorto = procesoActual;
                 }
             }
