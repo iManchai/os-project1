@@ -43,7 +43,25 @@ public class Process extends Thread {
         this.ciclosES = cicloES;
         this.interfaz = interfaz;
         this.cpu = cpu;
-
+    }
+    
+    public Process(int id, String name, int totalInstructions, boolean cpuBound, boolean ioBound,
+            ListaSimple listaListos, ListaSimple listaBloqueados, int velocidadReloj, InterfazInicial interfaz, int cpu) {
+        this.id = id;
+        this.name = name;
+        this.programCounter = 0;
+        this.status = ProcessStatus.READY;
+        this.totalInstructions = totalInstructions;
+        this.cpuBound = cpuBound;
+        this.ioBound = ioBound;
+        this.listaListos = listaListos;
+        this.listaBloqueados = listaBloqueados;
+        this.semaphore = semaphore; // Semáforo compartido
+        this.duracion = totalInstructions - programCounter;
+        this.cpuName = cpuName;
+        this.velocidadReloj = velocidadReloj;
+        this.interfaz = interfaz;
+        this.cpu = cpu;
     }
 
 @Override

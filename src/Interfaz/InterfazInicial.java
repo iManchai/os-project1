@@ -96,21 +96,22 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         }
     }
 
-public static boolean validarCampoStringNoVacio(JTextField textField, String nombreCampo) {
-    String texto = textField.getText().trim(); // Obtener el texto y eliminar espacios en blanco al inicio y al final
+    public static boolean validarCampoStringNoVacio(JTextField textField, String nombreCampo) {
+        String texto = textField.getText().trim(); // Obtener el texto y eliminar espacios en blanco al inicio y al final
 
-    if (texto.isEmpty()) {
-        // Mostrar un mensaje de error o realizar alguna acción (p. ej., cambiar el foco)
-        javax.swing.JOptionPane.showMessageDialog(null, "El campo '" + nombreCampo + "' no puede estar vacío.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-        textField.requestFocus(); // Opcional: enfocar el campo para que el usuario lo corrija
-        return false; // Indica que la validación falló
+        if (texto.isEmpty()) {
+            // Mostrar un mensaje de error o realizar alguna acción (p. ej., cambiar el foco)
+            javax.swing.JOptionPane.showMessageDialog(null, "El campo '" + nombreCampo + "' no puede estar vacío.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            textField.requestFocus(); // Opcional: enfocar el campo para que el usuario lo corrija
+            return false; // Indica que la validación falló
+        }
+
+        return true; // Indica que la validación fue exitosa
     }
 
-    return true; // Indica que la validación fue exitosa
-}
-        /**
-         * Creates new form InterfazPrincipal
-         */
+    /**
+     * Creates new form InterfazPrincipal
+     */
     public InterfazInicial() {
         initComponents();
 
@@ -123,9 +124,6 @@ public static boolean validarCampoStringNoVacio(JTextField textField, String nom
         CurrentCycle.setText(Integer.toString(velocidadReloj));
         GlobalCounter.setText(Integer.toString(contadorGlobal));
         CurrentPolicy.setText(planificadorEscogido);
-
-        // Setear boton de finalizar disabled
-        FinalizarSimulacionButton.setEnabled(isRunning);
 
         // Inicializamos el Jframe como un Thread.
         Thread t = new Thread(this);
@@ -1468,7 +1466,6 @@ public static boolean validarCampoStringNoVacio(JTextField textField, String nom
                 cpu1.start();
                 cpu2.start();
             }
-            IniciarButton.setEnabled(false);
         } catch (NumberFormatException ex) {
             System.out.println("Error");
         }
@@ -1501,17 +1498,15 @@ public static boolean validarCampoStringNoVacio(JTextField textField, String nom
 
     private void AgregarProcesoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgregarProcesoButtonActionPerformed
         // TODO add your handling code here:
-
-        if (validarCampoEntero(CiclosLlamarIOTextField, "Ciclos para llamar una E/S")
-                && validarCampoEntero(LongitudTextField, "Longitud")
-                && validarCampoEntero(CiclosTerminarIOTextField, "Ciclos para terminar E/S")
-                && validarCampoStringNoVacio(NombreProcesoTextField, "Nombre del proceso")) {
-            int cicloLlamarIO = Integer.parseInt(CiclosLlamarIOTextField.getText());
-            int cicloTerminarIO = Integer.parseInt(CiclosTerminarIOTextField.getText());
-            int longitudProceso = Integer.parseInt(LongitudTextField.getText());
-            String nombreProceso = NombreProcesoTextField.getText();
-
-            if (TipoProcesoSelect.getSelectedItem() == "IO Bound") {
+        if (TipoProcesoSelect.getSelectedItem() == "IO Bound") {
+            if (validarCampoEntero(CiclosLlamarIOTextField, "Ciclos para llamar una E/S")
+                    && validarCampoEntero(LongitudTextField, "Longitud")
+                    && validarCampoEntero(CiclosTerminarIOTextField, "Ciclos para terminar E/S")
+                    && validarCampoStringNoVacio(NombreProcesoTextField, "Nombre del proceso")) {
+                int cicloLlamarIO = Integer.parseInt(CiclosLlamarIOTextField.getText());
+                int cicloTerminarIO = Integer.parseInt(CiclosTerminarIOTextField.getText());
+                int longitudProceso = Integer.parseInt(LongitudTextField.getText());
+                String nombreProceso = NombreProcesoTextField.getText();
 
                 Process process = new Process(procesosCreados, nombreProceso, longitudProceso, false, true, cicloLlamarIO, listaListos, listaBloqueados, velocidadReloj, cicloTerminarIO, this, 0);
                 listaListos.addProcess(process);
@@ -1524,8 +1519,13 @@ public static boolean validarCampoStringNoVacio(JTextField textField, String nom
                     process.getProgramCounter(),
                     process.getStatus().name(),};
                 modeloTablaListos.addRow(nuevaFila);
-            } else {
-                Process process = new Process(procesosCreados, nombreProceso, longitudProceso, true, false, cicloLlamarIO, listaListos, listaBloqueados, velocidadReloj, cicloTerminarIO, this, 0);
+            }
+        } else {
+            if (validarCampoStringNoVacio(NombreProcesoTextField, "Nombre del proceso") && validarCampoEntero(LongitudTextField, "Longitud")) {
+                int longitudProceso = Integer.parseInt(LongitudTextField.getText());
+                String nombreProceso = NombreProcesoTextField.getText();
+
+                Process process = new Process(procesosCreados, nombreProceso, longitudProceso, true, false, listaListos, listaBloqueados, velocidadReloj, this, 0);
                 listaListos.addProcess(process);
                 DefaultTableModel modeloTablaListos = (DefaultTableModel) TablaListaDeListos.getModel(); // Obtén el modelo de la tabla
 
@@ -1536,18 +1536,18 @@ public static boolean validarCampoStringNoVacio(JTextField textField, String nom
                     process.getStatus().name()};
 
                 modeloTablaListos.addRow(nuevaFila);
-
             }
-
-            procesosCreados++;
-
         }
+
+        procesosCreados++;
         listaListos.printlist("listos");
 
     }//GEN-LAST:event_AgregarProcesoButtonActionPerformed
 
     private void FinalizarSimulacionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FinalizarSimulacionButtonActionPerformed
         // TODO add your handling code here:
+        isRunning = false;
+        contadorGlobal = 0;
     }//GEN-LAST:event_FinalizarSimulacionButtonActionPerformed
 
     private void AplicarConfiguraciónButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AplicarConfiguraciónButtonActionPerformed
@@ -1572,7 +1572,6 @@ public static boolean validarCampoStringNoVacio(JTextField textField, String nom
                 cpu1.setPlanificador(new PlanificadorSJF());
                 cpu2.setPlanificador(new PlanificadorSJF());
                 cpu3.setPlanificador(new PlanificadorSJF());
-
             } else {
 
             }
@@ -1739,6 +1738,8 @@ public static boolean validarCampoStringNoVacio(JTextField textField, String nom
         while (true) {
             if (isRunning) {
                 CantidadCpuSelect.setEnabled(false);
+                FinalizarSimulacionButton.setEnabled(true);
+                IniciarButton.setEnabled(false);
                 try {
                     // MANEJO DEL CONTADOR GLOBAL EN LA INTERFAZ
                     Thread.sleep(velocidadReloj);
@@ -1750,6 +1751,8 @@ public static boolean validarCampoStringNoVacio(JTextField textField, String nom
                 }
             } else {
                 CantidadCpuSelect.setEnabled(true);
+                FinalizarSimulacionButton.setEnabled(false);
+                IniciarButton.setEnabled(true);
             }
         }
     }
