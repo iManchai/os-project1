@@ -683,7 +683,6 @@
                       <Color blue="0" green="0" red="0" type="rgb"/>
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="2"/>
-                    <Property name="text" type="java.lang.String" value="none"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="CurrentCycle">
@@ -692,7 +691,6 @@
                       <Color blue="0" green="0" red="0" type="rgb"/>
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="2"/>
-                    <Property name="text" type="java.lang.String" value="none"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="CurrentPolicy">

@@ -20,9 +20,9 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author manch
  */
-public class InterfazInicial extends javax.swing.JFrame {
+public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
-    private boolean isRunning;
+    public static boolean isRunning = false;
     private CpuLabels cpu1Labels;
     private CpuLabels cpu2Labels;
     private CpuLabels cpu3Labels;
@@ -32,8 +32,9 @@ public class InterfazInicial extends javax.swing.JFrame {
     Semaphore semaphoreList = new Semaphore(1);
     Planificador planificador;
     int cantidadCpus = 2;
-    int velocidadReloj = 0;
+    int velocidadReloj = 1000;
     int procesosCreados = 1;
+    int contadorGlobal = 0;
     Semaphore semaphoreCpu1 = new Semaphore(1);
     Semaphore semaphoreCpu2 = new Semaphore(1);
     Semaphore semaphoreCpu3 = new Semaphore(1);
@@ -105,10 +106,13 @@ public class InterfazInicial extends javax.swing.JFrame {
         cpu1Labels = new CpuLabels(IDProcessCPU1, NameProcessCPU1, EstateProcessCPU1, PcCPU1, LongitudProcessCPU1);
         cpu2Labels = new CpuLabels(IDProcessCPU2, NameProcessCPU2, EstateProcessCPU2, PcCPU2, LongitudProcessCPU2);
         cpu3Labels = new CpuLabels(IDProcessCPU3, NameProcessCPU3, EstateProcessCPU3, PcCPU3, LongitudProcessCPU3);
-
-        while (isRunning) {
-
-        }
+        
+        CurrentCpus.setText(Integer.toString(cantidadCpus));
+        CurrentCycle.setText(Integer.toString(velocidadReloj));
+        GlobalCounter.setText(Integer.toString(contadorGlobal));
+        
+        Thread t = new Thread(this);
+        t.start();
     }
 
     /**
@@ -477,11 +481,9 @@ public class InterfazInicial extends javax.swing.JFrame {
 
         CurrentCpus.setForeground(new java.awt.Color(0, 0, 0));
         CurrentCpus.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        CurrentCpus.setText("none");
 
         CurrentCycle.setForeground(new java.awt.Color(0, 0, 0));
         CurrentCycle.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        CurrentCycle.setText("none");
 
         CurrentPolicy.setForeground(new java.awt.Color(0, 0, 0));
         CurrentPolicy.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -679,7 +681,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Longitud1)
                     .addComponent(LongitudProcessCPU1))
-                .addContainerGap(120, Short.MAX_VALUE))
+                .addContainerGap(105, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout CPU1Layout = new javax.swing.GroupLayout(CPU1);
@@ -815,7 +817,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Longitud2)
                     .addComponent(LongitudProcessCPU2))
-                .addContainerGap(111, Short.MAX_VALUE))
+                .addContainerGap(96, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout CPU2Layout = new javax.swing.GroupLayout(CPU2);
@@ -951,7 +953,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Longitud3)
                     .addComponent(LongitudProcessCPU3))
-                .addContainerGap(120, Short.MAX_VALUE))
+                .addContainerGap(105, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout CPU3Layout = new javax.swing.GroupLayout(CPU3);
@@ -1121,7 +1123,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator11, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1438,14 +1440,20 @@ public class InterfazInicial extends javax.swing.JFrame {
 
     private void IniciarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IniciarButtonActionPerformed
         // TODO add your handling code here:
-
-        if (cantidadCpus == 3) {
-            cpu1.start();
-            cpu2.start();
-            cpu3.start();
-        } else {
-            cpu1.start();
-            cpu2.start();
+        
+        try {
+            isRunning = true;
+            
+            if (cantidadCpus == 3) {
+               cpu1.start();
+               cpu2.start();
+               cpu3.start();
+           } else {
+               cpu1.start();
+               cpu2.start();
+           }   
+        } catch (NumberFormatException ex) {
+            System.out.println("Error");
         }
 
     }//GEN-LAST:event_IniciarButtonActionPerformed
@@ -1709,4 +1717,23 @@ public class InterfazInicial extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator9;
     private javax.swing.JTabbedPane jTabbedPane2;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void run() {
+        while(true) {
+            if (isRunning) {
+                CantidadCpuSelect.setEnabled(false);
+                try {
+                    Thread.sleep(velocidadReloj);
+                    contadorGlobal++;
+                    GlobalCounter.setText(Integer.toString(contadorGlobal));
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return;
+                }
+            } else {
+                CantidadCpuSelect.setEnabled(true);
+            }
+        }
+    }
 }
