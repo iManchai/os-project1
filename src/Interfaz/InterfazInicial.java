@@ -30,17 +30,17 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     ListaSimple listaBloqueados = new ListaSimple();
     ListaSimple listaSO = new ListaSimple();
     Semaphore semaphoreList = new Semaphore(1);
-    Planificador planificador;
     int cantidadCpus = 2;
     int velocidadReloj = 1000;
     int procesosCreados = 1;
     int contadorGlobal = 0;
+    String planificadorEscogido = "FCFS";
     Semaphore semaphoreCpu1 = new Semaphore(1);
     Semaphore semaphoreCpu2 = new Semaphore(1);
     Semaphore semaphoreCpu3 = new Semaphore(1);
-    Cpu cpu1 = new Cpu(1, listaListos, semaphoreList, planificador, semaphoreCpu1);
-    Cpu cpu2 = new Cpu(2, listaListos, semaphoreList, planificador, semaphoreCpu2);
-    Cpu cpu3 = new Cpu(3, listaListos, semaphoreList, planificador, semaphoreCpu3);
+    Cpu cpu1 = new Cpu(1, listaListos, semaphoreList, semaphoreCpu1);
+    Cpu cpu2 = new Cpu(2, listaListos, semaphoreList, semaphoreCpu2);
+    Cpu cpu3 = new Cpu(3, listaListos, semaphoreList, semaphoreCpu3);
 
     public void setIDProcessCPU1(String id) {
         IDProcessCPU1.setText(id);
@@ -107,10 +107,13 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         cpu2Labels = new CpuLabels(IDProcessCPU2, NameProcessCPU2, EstateProcessCPU2, PcCPU2, LongitudProcessCPU2);
         cpu3Labels = new CpuLabels(IDProcessCPU3, NameProcessCPU3, EstateProcessCPU3, PcCPU3, LongitudProcessCPU3);
         
+        // Setear labels al inicializar el JFrame
         CurrentCpus.setText(Integer.toString(cantidadCpus));
         CurrentCycle.setText(Integer.toString(velocidadReloj));
         GlobalCounter.setText(Integer.toString(contadorGlobal));
+        CurrentPolicy.setText(planificadorEscogido);
         
+        // Inicializamos el Jframe como un Thread.
         Thread t = new Thread(this);
         t.start();
     }
@@ -1452,6 +1455,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                cpu1.start();
                cpu2.start();
            }   
+           IniciarButton.setEnabled(false);
         } catch (NumberFormatException ex) {
             System.out.println("Error");
         }
@@ -1538,7 +1542,6 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         if (validarCampoEntero(CicloTextField, "Duracion de cada ciclo")) {
             velocidadReloj = Integer.parseInt(CicloTextField.getText());
             cantidadCpus = Integer.parseInt(CantidadCpuSelect.getSelectedItem().toString());
-            System.out.println(cantidadCpus);
             String politica = PoliticaPlanificacionSelect.getSelectedItem().toString();
             AgregarProcesoButton.setEnabled(true);
 
@@ -1546,7 +1549,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
             CurrentCycle.setText(CicloTextField.getText());
             CurrentPolicy.setText(politica);
 
-            if ("FCFS".equals(politica)) {
+            if (planificadorEscogido === ) {
                 cpu1.setPlanificador(new PlanificadorFCFS());
                 cpu2.setPlanificador(new PlanificadorFCFS());
                 cpu3.setPlanificador(new PlanificadorFCFS());
@@ -1724,6 +1727,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
             if (isRunning) {
                 CantidadCpuSelect.setEnabled(false);
                 try {
+                    // MANEJO DEL CONTADOR GLOBAL EN LA INTERFAZ
                     Thread.sleep(velocidadReloj);
                     contadorGlobal++;
                     GlobalCounter.setText(Integer.toString(contadorGlobal));
@@ -1737,3 +1741,4 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         }
     }
 }
+

@@ -13,14 +13,11 @@ public class Cpu extends Thread {  // Extiende Thread para manejar concurrencia
     private Semaphore semaphoreCpu;
     
 
-    public Cpu(int id, ListaSimple listaProcesos, Semaphore listaSemaphore, Planificador planificador, Semaphore semaphoreCpu) {
+    public Cpu(int id, ListaSimple listaProcesos, Semaphore listaSemaphore, Semaphore semaphoreCpu) {
         this.id = id;
         this.listaProcesos = listaProcesos;
         this.listaSemaphore = listaSemaphore;
-        this.planificador = planificador;
         this.semaphoreCpu = semaphoreCpu;
-        
-
     }
 
 @Override
