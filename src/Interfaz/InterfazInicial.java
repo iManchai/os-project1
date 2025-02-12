@@ -1488,7 +1488,7 @@ public class InterfazInicial extends javax.swing.JFrame {
 
             if (TipoProcesoSelect.getSelectedItem() == "IO Bound") {
 
-                Process process = new Process(procesosCreados, nombreProceso, longitudProceso, false, true, cicloLlamarIO, listaListos, listaBloqueados, velocidadReloj, cicloTerminarIO, this, 0, 1);
+                Process process = new Process(procesosCreados, nombreProceso, longitudProceso, false, true, cicloLlamarIO, listaListos, listaBloqueados, velocidadReloj, cicloTerminarIO, this, 0, 1, 0);
                 listaListos.addProcess(process);
 
                 // Agregar a la tabla de listos en la interfaz
@@ -1500,7 +1500,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                     process.getStatus().name(),};
                 modeloTablaListos.addRow(nuevaFila);
             } else {
-                Process process = new Process(procesosCreados, nombreProceso, longitudProceso, true, false, cicloLlamarIO, listaListos, listaBloqueados, velocidadReloj, cicloTerminarIO, this, 0, 1);
+                Process process = new Process(procesosCreados, nombreProceso, longitudProceso, true, false, cicloLlamarIO, listaListos, listaBloqueados, velocidadReloj, cicloTerminarIO, this, 0, 1, 0);
                 listaListos.addProcess(process);
                 DefaultTableModel modeloTablaListos = (DefaultTableModel) TablaListaDeListos.getModel(); // Obtén el modelo de la tabla
 

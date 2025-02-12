@@ -24,9 +24,10 @@ public class Process extends Thread {
     private InterfazInicial interfaz;
     private int cpu;
     private int tiempoEjecucionRR;
+    private int tiempoEnCPU;
 
     public Process(int id, String name, int totalInstructions, boolean cpuBound, boolean ioBound, int ciclosExcepcion,
-            ListaSimple listaListos, ListaSimple listaBloqueados, int velocidadReloj, int cicloES, InterfazInicial interfaz, int cpu, int tiempoEjecucionRR) {
+            ListaSimple listaListos, ListaSimple listaBloqueados, int velocidadReloj, int cicloES, InterfazInicial interfaz, int cpu, int tiempoEjecucionRR, int tiempoEnCPU) {
         this.id = id;
         this.name = name;
         this.programCounter = 0;
@@ -45,6 +46,7 @@ public class Process extends Thread {
         this.interfaz = interfaz;
         this.cpu = cpu;
         this.tiempoEjecucionRR = tiempoEjecucionRR;
+        this.tiempoEnCPU = tiempoEnCPU;
 
     }
 
@@ -53,13 +55,26 @@ public class Process extends Thread {
         try {
             while (programCounter < totalInstructions && status != ProcessStatus.BLOCKED) {
 
-                semaphore.acquire(); 
+                Thread os = new Thread(() -> { // Hilo para el SO
+                    try {
+                        semaphore.acquire();
+                        interfaz.actualizarInterfazCPU(cpu, "0", "SO", "RUNNING", "0", "1");
+                        System.out.println("SO ejecutándose en el cpu:" + cpuName);
+                        Thread.sleep(velocidadReloj * 3);
+                        semaphore.release();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                });
 
-                if (programCounter > 0 && programCounter % tiempoEjecucionRR == 0 && tiempoEjecucionRR == 5) {
+                semaphore.acquire();
+
+                if (tiempoEjecucionRR == 5 && tiempoEnCPU == 5) {
+                    os.start();
                     status = ProcessStatus.READY;
-                    programCounter ++;
+                    tiempoEnCPU = 0;
                     listaListos.addProcess(this);
-                    System.out.println("Proceso " + name + " sale del CPU (Round Robin)");
+                    System.out.println("Proceso " + name + " sale del CPU (Round Robin)" + cpuName);
                     semaphore.release();
                     return;
                 }
@@ -72,26 +87,16 @@ public class Process extends Thread {
                 System.out.println("siguiente iteración-------------->");
                 Thread.sleep(velocidadReloj);
 
+                tiempoEnCPU++;
                 programCounter++;
 
                 semaphore.release(); // Liberar el semáforo
 
                 if (ioBound && programCounter % ciclosExcepcion == 0) {
                     status = ProcessStatus.BLOCKED;
+                    tiempoEnCPU = 0;
                     listaBloqueados.addProcess(this);
                     System.out.println("Proceso " + name + " en espera de E/S");
-
-                    Thread os = new Thread(() -> { // Hilo para el SO
-                        try {
-                            semaphore.acquire();
-                            interfaz.actualizarInterfazCPU(cpu, "0", "SO", "RUNNING", "0", "1");
-                            System.out.println("SO ejecutándose en el cpu:" + cpuName);
-                            Thread.sleep(velocidadReloj * 3);
-                            semaphore.release();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    });
 
                     os.start();
 
@@ -119,6 +124,7 @@ public class Process extends Thread {
                 status = ProcessStatus.FINISHED;
                 listaListos.RemoveProcess(this);
                 System.out.println("Proceso " + name + " finalizado.");
+                return;
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
