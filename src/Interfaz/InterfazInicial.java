@@ -40,7 +40,6 @@ public class InterfazInicial extends javax.swing.JFrame {
     Cpu cpu1 = new Cpu(1, listaListos, semaphoreList, planificador, semaphoreCpu1);
     Cpu cpu2 = new Cpu(2, listaListos, semaphoreList, planificador, semaphoreCpu2);
     Cpu cpu3 = new Cpu(3, listaListos, semaphoreList, planificador, semaphoreCpu3);
-    
 
     public void setIDProcessCPU1(String id) {
         IDProcessCPU1.setText(id);
@@ -103,9 +102,9 @@ public class InterfazInicial extends javax.swing.JFrame {
     public InterfazInicial() {
         initComponents();
 
-        cpu1Labels = new CpuLabels(IDProcessCPU1, NameProcessCPU1, EstateProcessCPU1, PcCPU1,LongitudProcessCPU1);
-        cpu2Labels = new CpuLabels(IDProcessCPU2, NameProcessCPU2, EstateProcessCPU2, PcCPU2,LongitudProcessCPU2);
-        cpu3Labels = new CpuLabels(IDProcessCPU3, NameProcessCPU3, EstateProcessCPU3, PcCPU3,LongitudProcessCPU3);
+        cpu1Labels = new CpuLabels(IDProcessCPU1, NameProcessCPU1, EstateProcessCPU1, PcCPU1, LongitudProcessCPU1);
+        cpu2Labels = new CpuLabels(IDProcessCPU2, NameProcessCPU2, EstateProcessCPU2, PcCPU2, LongitudProcessCPU2);
+        cpu3Labels = new CpuLabels(IDProcessCPU3, NameProcessCPU3, EstateProcessCPU3, PcCPU3, LongitudProcessCPU3);
 
         while (isRunning) {
 
@@ -341,6 +340,7 @@ public class InterfazInicial extends javax.swing.JFrame {
             }
         });
 
+        AgregarProcesoButton.setEnabled(false);
         AgregarProcesoButton.setBackground(new java.awt.Color(0, 139, 252));
         AgregarProcesoButton.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         AgregarProcesoButton.setForeground(new java.awt.Color(0, 0, 0));
@@ -679,7 +679,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Longitud1)
                     .addComponent(LongitudProcessCPU1))
-                .addContainerGap(105, Short.MAX_VALUE))
+                .addContainerGap(120, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout CPU1Layout = new javax.swing.GroupLayout(CPU1);
@@ -815,7 +815,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Longitud2)
                     .addComponent(LongitudProcessCPU2))
-                .addContainerGap(96, Short.MAX_VALUE))
+                .addContainerGap(111, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout CPU2Layout = new javax.swing.GroupLayout(CPU2);
@@ -951,7 +951,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Longitud3)
                     .addComponent(LongitudProcessCPU3))
-                .addContainerGap(105, Short.MAX_VALUE))
+                .addContainerGap(120, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout CPU3Layout = new javax.swing.GroupLayout(CPU3);
@@ -1121,7 +1121,7 @@ public class InterfazInicial extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator11, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1532,6 +1532,7 @@ public class InterfazInicial extends javax.swing.JFrame {
             cantidadCpus = Integer.parseInt(CantidadCpuSelect.getSelectedItem().toString());
             System.out.println(cantidadCpus);
             String politica = PoliticaPlanificacionSelect.getSelectedItem().toString();
+            AgregarProcesoButton.setEnabled(true);
 
             CurrentCpus.setText(CantidadCpuSelect.getSelectedItem().toString());
             CurrentCycle.setText(CicloTextField.getText());
