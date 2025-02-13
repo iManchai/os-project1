@@ -7,10 +7,11 @@ package Interfaz;
 import Classes.Cpu;
 import Classes.Process;
 import DataStructures.ListaSimple;
-import Planificacion.Planificador;
+import DataStructures.Nodo;
 import Planificacion.PlanificadorFCFS;
 import Planificacion.PlanificadorRR;
 import Planificacion.PlanificadorSJF;
+import Planificacion.PlanificadorSRT;
 import java.util.concurrent.Semaphore;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -27,10 +28,13 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     private CpuLabels cpu1Labels;
     private CpuLabels cpu2Labels;
     private CpuLabels cpu3Labels;
+    private DefaultTableModel modeloTablaListos;
+    private DefaultTableModel modeloTablaBloqueados;
     ListaSimple listaListos = new ListaSimple();
     ListaSimple listaBloqueados = new ListaSimple();
     ListaSimple listaTotalProcesos = new ListaSimple();
     Semaphore semaphoreList = new Semaphore(1);
+
     int cantidadCpus = 2;
     int velocidadReloj = 1000;
     int procesosCreados = 1;
@@ -39,9 +43,9 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     Semaphore semaphoreCpu1 = new Semaphore(1);
     Semaphore semaphoreCpu2 = new Semaphore(1);
     Semaphore semaphoreCpu3 = new Semaphore(1);
-    Cpu cpu1 = new Cpu(1, listaListos, semaphoreList, semaphoreCpu1,velocidadReloj,this);
-    Cpu cpu2 = new Cpu(2, listaListos, semaphoreList, semaphoreCpu2,velocidadReloj,this);
-    Cpu cpu3 = new Cpu(3, listaListos, semaphoreList, semaphoreCpu3,velocidadReloj,this);
+    Cpu cpu1 = new Cpu(1, listaListos, semaphoreList, semaphoreCpu1, velocidadReloj, this);
+    Cpu cpu2 = new Cpu(2, listaListos, semaphoreList, semaphoreCpu2, velocidadReloj, this);
+    Cpu cpu3 = new Cpu(3, listaListos, semaphoreList, semaphoreCpu3, velocidadReloj, this);
 
     public void setIDProcessCPU1(String id) {
         IDProcessCPU1.setText(id);
@@ -57,6 +61,69 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
     public void setPcCPU1(String Pc) {
         PcCPU1.setText(Pc);
+    }
+
+    public DefaultTableModel getModeloTablaBloqueados() {
+        return modeloTablaBloqueados;
+    }
+
+    public void setModeloTablaBloqueados(DefaultTableModel modeloTablaBloqueados) {
+        this.modeloTablaBloqueados = modeloTablaBloqueados;
+    }
+    
+    
+    
+    
+
+    public DefaultTableModel getModeloTablaListos() {
+        return modeloTablaListos;
+    }
+
+    public void setModeloTablaListos(DefaultTableModel modeloTablaListos) {
+        this.modeloTablaListos = modeloTablaListos;
+    }
+    
+    
+
+    
+public void actulizarTablaBorrar(DefaultTableModel modeloTablaListos, int procesosCreados) {
+    for (int i = 0; i < modeloTablaListos.getRowCount(); i++) {
+        int idProceso = (int) modeloTablaListos.getValueAt(i, 0);
+
+        if (idProceso == procesosCreados) {
+            modeloTablaListos.removeRow(i);
+            return; // Importante: Salir después de borrar
+        }
+    }
+}
+
+public void actualizarIntefazCrear(DefaultTableModel modeloTablaListos, int procesosCreados, String nombreProceso, int programCounter, String status, int totalInstructions) {
+    // No necesitas buscar si ya existe, simplemente añade la nueva fila
+    Object[] nuevaFila = new Object[]{
+        procesosCreados,
+        nombreProceso,
+        programCounter,
+        status,
+        totalInstructions
+    };
+    modeloTablaListos.addRow(nuevaFila);
+}
+
+public void actualizarIntefaz(DefaultTableModel modeloTablaListos, int procesosCreados, String nombreProceso, int programCounter, String status, int totalInstructions) {
+
+    
+    for (int i = 0; i < modeloTablaListos.getRowCount(); i++) {
+        int idProceso = (int) modeloTablaListos.getValueAt(i, 0);
+
+        if (idProceso == procesosCreados) {
+            System.out.println("actualizar");
+            modeloTablaListos.setValueAt(programCounter, i , 2);
+            modeloTablaListos.setValueAt(status, i , 3);
+            modeloTablaListos.setValueAt(totalInstructions, i , 4);
+            return; 
+        }
+    }
+
     }
 
     public void actualizarInterfazCPU(int cpuId, String id, String estado, String pc, String name, String longitud) {
@@ -110,13 +177,13 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
         return true; // Indica que la validación fue exitosa
     }
-    
+
     public static boolean validarVelocidadReloj(JTextField textField) {
         int velocidadReloj = Integer.parseInt(textField.getText());
-        
+
         if (velocidadReloj <= 5000 && velocidadReloj >= 200) {
             return true;
-        }  else {
+        } else {
             JOptionPane.showMessageDialog(null, "El valor de la velocidad de reloj debe ser entre 200 y 5000", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
@@ -127,7 +194,8 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
      */
     public InterfazInicial() {
         initComponents();
-
+        modeloTablaListos = (DefaultTableModel) TablaListaDeListos.getModel();
+        modeloTablaBloqueados = (DefaultTableModel) TablaBloqueados.getModel();
         cpu1Labels = new CpuLabels(IDProcessCPU1, NameProcessCPU1, EstateProcessCPU1, PcCPU1, LongitudProcessCPU1);
         cpu2Labels = new CpuLabels(IDProcessCPU2, NameProcessCPU2, EstateProcessCPU2, PcCPU2, LongitudProcessCPU2);
         cpu3Labels = new CpuLabels(IDProcessCPU3, NameProcessCPU3, EstateProcessCPU3, PcCPU3, LongitudProcessCPU3);
@@ -457,7 +525,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("POLITICA DE PLANIFICACIÓN");
 
-        PoliticaPlanificacionSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SJF", "RR", "Item 4" }));
+        PoliticaPlanificacionSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SJF", "RR", "SRT" }));
         PoliticaPlanificacionSelect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 PoliticaPlanificacionSelectActionPerformed(evt);
@@ -708,7 +776,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Longitud1)
                     .addComponent(LongitudProcessCPU1))
-                .addContainerGap(105, Short.MAX_VALUE))
+                .addContainerGap(120, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout CPU1Layout = new javax.swing.GroupLayout(CPU1);
@@ -844,7 +912,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Longitud2)
                     .addComponent(LongitudProcessCPU2))
-                .addContainerGap(96, Short.MAX_VALUE))
+                .addContainerGap(111, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout CPU2Layout = new javax.swing.GroupLayout(CPU2);
@@ -980,7 +1048,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Longitud3)
                     .addComponent(LongitudProcessCPU3))
-                .addContainerGap(105, Short.MAX_VALUE))
+                .addContainerGap(120, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout CPU3Layout = new javax.swing.GroupLayout(CPU3);
@@ -1046,14 +1114,14 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
             },
             new String [] {
-                "ID", "Nombre", "PC", "Estado"
+                "ID", "Nombre", "PC", "Estado", "Longitud"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -1106,14 +1174,14 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
             },
             new String [] {
-                "ID", "Nombre", "PC", "Estado"
+                "ID", "Nombre", "PC", "Estado", "Longitud"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -1150,7 +1218,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator11, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1525,12 +1593,14 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                 listaListos.addProcess(process);
 
                 // Agregar a la tabla de listos en la interfaz
-                DefaultTableModel modeloTablaListos = (DefaultTableModel) TablaListaDeListos.getModel(); // Obtén el modelo de la tabla
                 Object[] nuevaFila = new Object[]{
                     procesosCreados,
                     nombreProceso,
                     process.getProgramCounter(),
-                    process.getStatus().name(),};
+                    process.getStatus().name(),
+                    process.getTotalInstructions()
+
+                };
                 modeloTablaListos.addRow(nuevaFila);
             }
         } else {
@@ -1540,7 +1610,6 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
                 Process process = new Process(procesosCreados, nombreProceso, longitudProceso, true, false, listaListos, listaBloqueados, velocidadReloj, this, 0, 1, 0);
                 listaListos.addProcess(process);
-                DefaultTableModel modeloTablaListos = (DefaultTableModel) TablaListaDeListos.getModel(); // Obtén el modelo de la tabla
 
                 Object[] nuevaFila = new Object[]{
                     procesosCreados,
@@ -1581,7 +1650,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                 cpu3.setPlanificador(new PlanificadorFCFS());
 
             }
-            if (planificadorEscogido == "SJF") {
+            if ("SJF".equals(politica)) {
                 cpu1.setPlanificador(new PlanificadorSJF());
                 cpu2.setPlanificador(new PlanificadorSJF());
                 cpu3.setPlanificador(new PlanificadorSJF());
@@ -1591,6 +1660,11 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                 cpu1.setPlanificador(new PlanificadorRR());
                 cpu2.setPlanificador(new PlanificadorRR());
                 cpu3.setPlanificador(new PlanificadorRR());
+            }
+            if (planificadorEscogido == "SRT") {
+                cpu1.setPlanificador(new PlanificadorSRT());
+                cpu2.setPlanificador(new PlanificadorSRT());
+                cpu3.setPlanificador(new PlanificadorSRT());
             } else {
 
             }
@@ -1630,7 +1704,9 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+
     }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AgregarProcesoButton;
@@ -1754,7 +1830,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
     @Override
     public void run() {
-        
+
         while (true) {
             if (isRunning) {
                 CantidadCpuSelect.setEnabled(false);

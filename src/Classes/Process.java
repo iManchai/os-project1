@@ -72,6 +72,11 @@ public class Process extends Thread {
 
     @Override
     public void run() {
+
+
+            interfaz.actulizarTablaBorrar(interfaz.getModeloTablaListos(), id);
+
+
         try {
             Os os = new Os(0, "Os", 3, velocidadReloj, interfaz, cpu);
             os.setSemaphore(semaphore);
@@ -79,11 +84,14 @@ public class Process extends Thread {
 
                 semaphore.acquire();
 
+                interfaz.actualizarIntefaz(interfaz.getModeloTablaListos(), id, name, programCounter, status.name(), totalInstructions);
+
                 if (tiempoEjecucionRR == 5 && tiempoEnCPU == 5) {
                     status = ProcessStatus.READY;
                     tiempoEnCPU = 0;
                     listaListos.addProcess(this);
                     System.out.println("Proceso " + name + " sale del CPU (Round Robin)" + cpuName);
+                    interfaz.actualizarIntefazCrear(interfaz.getModeloTablaListos(), id, name, programCounter, status.name(), totalInstructions);
                     semaphore.release();
 
                     os.start();
@@ -106,8 +114,10 @@ public class Process extends Thread {
 
                 if (ioBound && programCounter % ciclosExcepcion == 0) {
                     status = ProcessStatus.BLOCKED;
+                    
                     tiempoEnCPU = 0;
                     listaBloqueados.addProcess(this);
+                    interfaz.actualizarIntefazCrear(interfaz.getModeloTablaBloqueados(), id, name, programCounter, status.name(), totalInstructions);
                     System.out.println("Proceso " + name + " en espera de E/S");
 
                     os.start();
@@ -118,8 +128,10 @@ public class Process extends Thread {
                             System.out.println("E/S del proceso " + name + " listo");
                             semaphore.acquire();
                             listaBloqueados.RemoveProcess(this);
+                            interfaz.actulizarTablaBorrar(interfaz.getModeloTablaBloqueados(), id);
                             listaListos.addProcess(this);
                             status = ProcessStatus.READY;
+                            interfaz.actualizarIntefazCrear(interfaz.getModeloTablaListos(), id, name, programCounter, status.name(), totalInstructions);
                             semaphore.release();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
@@ -127,7 +139,7 @@ public class Process extends Thread {
                     });
 
                     os.join();
-                    
+
                     ioThread.start();
 
                     return; // Salir del método run()

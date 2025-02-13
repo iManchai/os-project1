@@ -569,7 +569,7 @@
                         <StringItem index="0" value="FCFS"/>
                         <StringItem index="1" value="SJF"/>
                         <StringItem index="2" value="RR"/>
-                        <StringItem index="3" value="Item 4"/>
+                        <StringItem index="3" value="SRT"/>
                       </StringArray>
                     </Property>
                   </Properties>
@@ -868,7 +868,7 @@
                                       <Component id="Longitud1" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="LongitudProcessCPU1" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace pref="105" max="32767" attributes="0"/>
+                                  <EmptySpace pref="120" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1107,7 +1107,7 @@
                                       <Component id="Longitud2" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="LongitudProcessCPU2" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace pref="96" max="32767" attributes="0"/>
+                                  <EmptySpace pref="111" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1347,7 +1347,7 @@
                                       <Component id="Longitud3" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="LongitudProcessCPU3" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace pref="105" max="32767" attributes="0"/>
+                                  <EmptySpace pref="120" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1529,11 +1529,12 @@
                     <Component class="javax.swing.JTable" name="TablaListaDeListos">
                       <Properties>
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                          <Table columnCount="4" rowCount="0">
+                          <Table columnCount="5" rowCount="0">
                             <Column editable="false" title="ID" type="java.lang.Integer"/>
                             <Column editable="false" title="Nombre" type="java.lang.String"/>
                             <Column editable="false" title="PC" type="java.lang.Integer"/>
                             <Column editable="false" title="Estado" type="java.lang.String"/>
+                            <Column editable="false" title="Longitud" type="java.lang.Integer"/>
                           </Table>
                         </Property>
                         <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -1605,7 +1606,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jSeparator11" min="-2" pref="3" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jScrollPane8" pref="198" max="32767" attributes="0"/>
+                          <Component id="jScrollPane8" pref="201" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -1635,11 +1636,12 @@
                     <Component class="javax.swing.JTable" name="TablaBloqueados">
                       <Properties>
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                          <Table columnCount="4" rowCount="0">
+                          <Table columnCount="5" rowCount="0">
                             <Column editable="false" title="ID" type="java.lang.Integer"/>
                             <Column editable="false" title="Nombre" type="java.lang.String"/>
                             <Column editable="false" title="PC" type="java.lang.Integer"/>
                             <Column editable="false" title="Estado" type="java.lang.String"/>
+                            <Column editable="true" title="Longitud" type="java.lang.Integer"/>
                           </Table>
                         </Property>
                         <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
