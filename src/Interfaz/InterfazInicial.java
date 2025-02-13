@@ -29,6 +29,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     private CpuLabels cpu3Labels;
     ListaSimple listaListos = new ListaSimple();
     ListaSimple listaBloqueados = new ListaSimple();
+    ListaSimple listaTotalProcesos = new ListaSimple();
     Semaphore semaphoreList = new Semaphore(1);
     int cantidadCpus = 2;
     int velocidadReloj = 1000;
@@ -108,6 +109,17 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         }
 
         return true; // Indica que la validación fue exitosa
+    }
+    
+    public static boolean validarVelocidadReloj(JTextField textField) {
+        int velocidadReloj = Integer.parseInt(textField.getText());
+        
+        if (velocidadReloj <= 5000 && velocidadReloj >= 200) {
+            return true;
+        }  else {
+            JOptionPane.showMessageDialog(null, "El valor de la velocidad de reloj debe ser entre 200 y 5000", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
 
     /**
@@ -1554,7 +1566,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     private void AplicarConfiguraciónButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AplicarConfiguraciónButtonActionPerformed
         // TODO add your handling code here:
 
-        if (validarCampoEntero(CicloTextField, "Duracion de cada ciclo")) {
+        if (validarCampoEntero(CicloTextField, "Duracion de cada ciclo") && validarVelocidadReloj(CicloTextField)) {
             velocidadReloj = Integer.parseInt(CicloTextField.getText());
             cantidadCpus = Integer.parseInt(CantidadCpuSelect.getSelectedItem().toString());
             String politica = PoliticaPlanificacionSelect.getSelectedItem().toString();
@@ -1742,6 +1754,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
     @Override
     public void run() {
+        
         while (true) {
             if (isRunning) {
                 CantidadCpuSelect.setEnabled(false);
@@ -1760,6 +1773,8 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                 CantidadCpuSelect.setEnabled(true);
                 FinalizarSimulacionButton.setEnabled(false);
                 IniciarButton.setEnabled(true);
+                contadorGlobal = 0;
+                GlobalCounter.setText(Integer.toString(contadorGlobal));
             }
         }
     }
