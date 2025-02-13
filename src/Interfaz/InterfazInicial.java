@@ -39,9 +39,9 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     Semaphore semaphoreCpu1 = new Semaphore(1);
     Semaphore semaphoreCpu2 = new Semaphore(1);
     Semaphore semaphoreCpu3 = new Semaphore(1);
-    Cpu cpu1 = new Cpu(1, listaListos, semaphoreList, semaphoreCpu1);
-    Cpu cpu2 = new Cpu(2, listaListos, semaphoreList, semaphoreCpu2);
-    Cpu cpu3 = new Cpu(3, listaListos, semaphoreList, semaphoreCpu3);
+    Cpu cpu1 = new Cpu(1, listaListos, semaphoreList, semaphoreCpu1,velocidadReloj,this);
+    Cpu cpu2 = new Cpu(2, listaListos, semaphoreList, semaphoreCpu2,velocidadReloj,this);
+    Cpu cpu3 = new Cpu(3, listaListos, semaphoreList, semaphoreCpu3,velocidadReloj,this);
 
     public void setIDProcessCPU1(String id) {
         IDProcessCPU1.setText(id);

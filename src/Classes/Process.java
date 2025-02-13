@@ -48,9 +48,9 @@ public class Process extends Thread {
         this.tiempoEjecucionRR = tiempoEjecucionRR;
         this.tiempoEnCPU = tiempoEnCPU;
     }
-    
+
     public Process(int id, String name, int totalInstructions, boolean cpuBound, boolean ioBound,
-            ListaSimple listaListos, ListaSimple listaBloqueados, int velocidadReloj, InterfazInicial interfaz, int cpu, int tiempoEjecucionRR, int tiempoEnCPU ) {
+            ListaSimple listaListos, ListaSimple listaBloqueados, int velocidadReloj, InterfazInicial interfaz, int cpu, int tiempoEjecucionRR, int tiempoEnCPU) {
         this.id = id;
         this.name = name;
         this.programCounter = 0;
@@ -73,29 +73,21 @@ public class Process extends Thread {
     @Override
     public void run() {
         try {
+            Os os = new Os(0, "Os", 3, velocidadReloj, interfaz, cpu);
+            os.setSemaphore(semaphore);
             while (programCounter < totalInstructions && status != ProcessStatus.BLOCKED) {
-
-                Thread os = new Thread(() -> { // Hilo para el SO
-                    try {
-                        semaphore.acquire();
-                        interfaz.actualizarInterfazCPU(cpu, "0", "SO", "RUNNING", "0", "1");
-                        System.out.println("SO ejecutándose en el cpu:" + cpuName);
-                        Thread.sleep(velocidadReloj * 3);
-                        semaphore.release();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                });
 
                 semaphore.acquire();
 
                 if (tiempoEjecucionRR == 5 && tiempoEnCPU == 5) {
-                    os.start();
                     status = ProcessStatus.READY;
                     tiempoEnCPU = 0;
                     listaListos.addProcess(this);
                     System.out.println("Proceso " + name + " sale del CPU (Round Robin)" + cpuName);
                     semaphore.release();
+
+                    os.start();
+                    os.join();
                     return;
                 }
 
@@ -134,6 +126,8 @@ public class Process extends Thread {
                         }
                     });
 
+                    os.join();
+                    
                     ioThread.start();
 
                     return; // Salir del método run()
@@ -144,6 +138,9 @@ public class Process extends Thread {
                 status = ProcessStatus.FINISHED;
                 listaListos.RemoveProcess(this);
                 System.out.println("Proceso " + name + " finalizado.");
+                os.start();
+                os.join();
+
                 return;
             }
         } catch (InterruptedException e) {
