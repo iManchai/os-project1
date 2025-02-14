@@ -7,7 +7,6 @@ package Interfaz;
 import Classes.Cpu;
 import Classes.Process;
 import DataStructures.ListaSimple;
-import DataStructures.Nodo;
 import Planificacion.PlanificadorFCFS;
 import Planificacion.PlanificadorRR;
 import Planificacion.PlanificadorSJF;
@@ -23,7 +22,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.concurrent.Semaphore;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
@@ -91,7 +89,8 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         this.modeloTablaListos = modeloTablaListos;
     }
 
-    public void actulizarTablaBorrar(DefaultTableModel modeloTablaListos, int procesosCreados) {
+    // FUNCIONES AUXILIARES // 
+    public void actualizarTablasBorrar(DefaultTableModel modeloTablaListos, int procesosCreados) {
         for (int i = 0; i < modeloTablaListos.getRowCount(); i++) {
             int idProceso = (int) modeloTablaListos.getValueAt(i, 0);
 
@@ -102,7 +101,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         }
     }
 
-    public void actualizarIntefazCrear(DefaultTableModel modeloTablaListos, int procesosCreados, String nombreProceso, int programCounter, String status, int totalInstructions) {
+    public void actualizarTablasAñadir(DefaultTableModel modeloTablaListos, int procesosCreados, String nombreProceso, int programCounter, String status, int totalInstructions) {
         // No necesitas buscar si ya existe, simplemente añade la nueva fila
         Object[] nuevaFila = new Object[]{
             procesosCreados,
@@ -172,7 +171,6 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         }
     }
 
-    // FUNCIONES AUXILIARES //
     public static boolean validarCampoEntero(JTextField textField, String nombreCampo) {
         try {
             int valor = Integer.parseInt(textField.getText());
@@ -1596,24 +1594,60 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                 try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
                     Gson gson = new Gson();
                     JsonObject json = gson.fromJson(reader, JsonObject.class);
+
+                    procesosCreados = json.get("procesosCreados").getAsInt();
+                    cantidadCpus = json.get("cantindadCpus").getAsInt();
+                    velocidadReloj = json.get("velocidadReloj").getAsInt();
+                    planificadorEscogido = json.get("planificador").getAsString();
+
+                    if (planificadorEscogido == "FCFS") {
+                        cpu1.setPlanificador(new PlanificadorFCFS());
+                        cpu2.setPlanificador(new PlanificadorFCFS());
+                        cpu3.setPlanificador(new PlanificadorFCFS());
+
+                    } else if (planificadorEscogido == "SJF") {
+                        cpu1.setPlanificador(new PlanificadorSJF());
+                        cpu2.setPlanificador(new PlanificadorSJF());
+                        cpu3.setPlanificador(new PlanificadorSJF());
+                    } else if (planificadorEscogido == "RR") {
+                        cpu1.setPlanificador(new PlanificadorRR());
+                        cpu2.setPlanificador(new PlanificadorRR());
+                        cpu3.setPlanificador(new PlanificadorRR());
+                    } else if (planificadorEscogido == "SRT") {
+                        cpu1.setPlanificador(new PlanificadorSRT());
+                        cpu2.setPlanificador(new PlanificadorSRT());
+                        cpu3.setPlanificador(new PlanificadorSRT());
+                    }
+
+                    JsonArray procesosArray = json.get("procesos_listos").getAsJsonArray();
+
+                    for (JsonElement procesoElement : procesosArray) {
+                        JsonObject procesoJson = procesoElement.getAsJsonObject();
+
+                        // Elementos del proceso
+                        int id = procesoJson.get("id").getAsInt();
+                        String nombre = procesoJson.get("nombre").getAsString();
+                        int totalInstructions = procesoJson.get("totalInstructions").getAsInt();
+                        String status = procesoJson.get("status").getAsString();
+                        int programCounter = procesoJson.get("programCounter").getAsInt();
+                        boolean cpuBound = procesoJson.get("cpuBound").getAsBoolean();
+                        boolean ioBound = procesoJson.get("ioBound").getAsBoolean();
+                        int ciclosExcepcion = procesoJson.get("ciclosExcepcion").getAsInt();
+                        int ciclosIO = procesoJson.get("ciclosIO").getAsInt();
+
+                        Process proceso = new Process(id, nombre, totalInstructions, programCounter, cpuBound, ioBound, ciclosExcepcion, listaListos, listaBloqueados,
+                                velocidadReloj, ciclosIO, this, 0, 1, 0);
+                        listaListos.addProcess(proceso);
+
+                        actualizarTablasAñadir(modeloTablaListos, id, nombre, programCounter, status, totalInstructions);
+
+                    }
                     
-                cantidadCpus = json.get("cantindadCpus").getAsInt();
-                velocidadReloj = json.get("velocidadReloj").getAsInt();
-                planificadorEscogido = json.get("planificador").getAsString();
-
-                JsonArray procesosArray = json.get("procesos_listos").getAsJsonArray();
-
-                for (JsonElement procesoElement : procesosArray) {
-                    JsonObject procesoJson = procesoElement.getAsJsonObject();
-                    int id = procesoJson.get("id").getAsInt();
-                    String nombre = procesoJson.get("nombre").getAsString();
-                    int tiempoLlegada = procesoJson.get("tiempo_llegada").getAsInt();
-                    int tiempoServicio = procesoJson.get("tiempo_servicio").getAsInt();
-                    int prioridad = procesoJson.get("prioridad").getAsInt();
-
-//                    Process proceso = new Process(id, nombre, 0, );
-//                    listaListos.addProcess(proceso);
-                }
+                    CurrentCpus.setText(Integer.toString(cantidadCpus));
+                    CurrentCycle.setText(Integer.toString(velocidadReloj));
+                    CurrentPolicy.setText(planificadorEscogido);
+                    
+                    
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(this, "Error al leer el archivo: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -1677,7 +1711,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
                 Process process = new Process(procesosCreados, nombreProceso, longitudProceso, true, false, listaListos, listaBloqueados, velocidadReloj, this, 0, 1, 0);
                 listaListos.addProcess(process);
-                
+
                 System.out.println(process.getCiclosExcepcion());
 
                 Object[] nuevaFila = new Object[]{
@@ -1700,6 +1734,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         // TODO add your handling code here:
         isRunning = false;
         contadorGlobal = 0;
+        procesosCreados = 0;
     }//GEN-LAST:event_FinalizarSimulacionButtonActionPerformed
 
     private void AplicarConfiguraciónButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AplicarConfiguraciónButtonActionPerformed

@@ -72,12 +72,34 @@ public class Process extends Thread {
         this.tiempoEnCPU = tiempoEnCPU;
     }
 
+    // Cargar proceso de configuracion constructor
+    public Process(int id, String name, int totalInstructions, int programCounter, boolean cpuBound, boolean ioBound, int ciclosExcepcion,
+            ListaSimple listaListos, ListaSimple listaBloqueados, int velocidadReloj, int cicloES, InterfazInicial interfaz, int cpu, int tiempoEjecucionRR, int tiempoEnCPU) {
+        this.id = id;
+        this.name = name;
+        this.programCounter = programCounter;
+        this.status = ProcessStatus.READY;
+        this.totalInstructions = totalInstructions;
+        this.cpuBound = cpuBound;
+        this.ioBound = ioBound;
+        this.ciclosExcepcion = ciclosExcepcion;
+        this.listaListos = listaListos;
+        this.listaBloqueados = listaBloqueados;
+        this.semaphore = semaphore; // Semáforo compartido
+        this.duracion = totalInstructions - programCounter;
+        this.cpuName = cpuName;
+        this.velocidadReloj = velocidadReloj;
+        this.ciclosES = cicloES;
+        this.interfaz = interfaz;
+        this.cpu = cpu;
+        this.tiempoEjecucionRR = tiempoEjecucionRR;
+        this.tiempoEnCPU = tiempoEnCPU;
+    }
+
     @Override
     public void run() {
 
-
-            interfaz.actulizarTablaBorrar(interfaz.getModeloTablaListos(), id);
-
+        interfaz.actualizarTablasBorrar(interfaz.getModeloTablaListos(), id);
 
         try {
             Os os = new Os(0, "Os", 3, velocidadReloj, interfaz, cpu);
@@ -93,7 +115,7 @@ public class Process extends Thread {
                     tiempoEnCPU = 0;
                     listaListos.addProcess(this);
                     System.out.println("Proceso " + name + " sale del CPU (Round Robin)" + cpuName);
-                    interfaz.actualizarIntefazCrear(interfaz.getModeloTablaListos(), id, name, programCounter, status.name(), totalInstructions);
+                    interfaz.actualizarTablasAñadir(interfaz.getModeloTablaListos(), id, name, programCounter, status.name(), totalInstructions);
                     semaphore.release();
 
                     os.start();
@@ -116,10 +138,10 @@ public class Process extends Thread {
 
                 if (ioBound && programCounter % ciclosExcepcion == 0) {
                     status = ProcessStatus.BLOCKED;
-                    
+
                     tiempoEnCPU = 0;
                     listaBloqueados.addProcess(this);
-                    interfaz.actualizarIntefazCrear(interfaz.getModeloTablaBloqueados(), id, name, programCounter, status.name(), totalInstructions);
+                    interfaz.actualizarTablasAñadir(interfaz.getModeloTablaBloqueados(), id, name, programCounter, status.name(), totalInstructions);
                     System.out.println("Proceso " + name + " en espera de E/S");
 
                     os.start();
@@ -130,10 +152,10 @@ public class Process extends Thread {
                             System.out.println("E/S del proceso " + name + " listo");
                             semaphore.acquire();
                             listaBloqueados.RemoveProcess(this);
-                            interfaz.actulizarTablaBorrar(interfaz.getModeloTablaBloqueados(), id);
+                            interfaz.actualizarTablasBorrar(interfaz.getModeloTablaBloqueados(), id);
                             listaListos.addProcess(this);
                             status = ProcessStatus.READY;
-                            interfaz.actualizarIntefazCrear(interfaz.getModeloTablaListos(), id, name, programCounter, status.name(), totalInstructions);
+                            interfaz.actualizarTablasAñadir(interfaz.getModeloTablaListos(), id, name, programCounter, status.name(), totalInstructions);
                             semaphore.release();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
