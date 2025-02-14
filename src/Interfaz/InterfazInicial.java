@@ -12,12 +12,22 @@ import Planificacion.PlanificadorFCFS;
 import Planificacion.PlanificadorRR;
 import Planificacion.PlanificadorSJF;
 import Planificacion.PlanificadorSRT;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.concurrent.Semaphore;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -72,10 +82,6 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     public void setModeloTablaBloqueados(DefaultTableModel modeloTablaBloqueados) {
         this.modeloTablaBloqueados = modeloTablaBloqueados;
     }
-    
-    
-    
-    
 
     public DefaultTableModel getModeloTablaListos() {
         return modeloTablaListos;
@@ -84,96 +90,98 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     public void setModeloTablaListos(DefaultTableModel modeloTablaListos) {
         this.modeloTablaListos = modeloTablaListos;
     }
-    
-    
 
-    
-public void actulizarTablaBorrar(DefaultTableModel modeloTablaListos, int procesosCreados) {
-    for (int i = 0; i < modeloTablaListos.getRowCount(); i++) {
-        int idProceso = (int) modeloTablaListos.getValueAt(i, 0);
+    public void actulizarTablaBorrar(DefaultTableModel modeloTablaListos, int procesosCreados) {
+        for (int i = 0; i < modeloTablaListos.getRowCount(); i++) {
+            int idProceso = (int) modeloTablaListos.getValueAt(i, 0);
 
-        if (idProceso == procesosCreados) {
-            modeloTablaListos.removeRow(i);
-            return; // Importante: Salir después de borrar
+            if (idProceso == procesosCreados) {
+                modeloTablaListos.removeRow(i);
+                return; // Importante: Salir después de borrar
+            }
         }
     }
-}
 
-public void actualizarIntefazCrear(DefaultTableModel modeloTablaListos, int procesosCreados, String nombreProceso, int programCounter, String status, int totalInstructions) {
-    // No necesitas buscar si ya existe, simplemente añade la nueva fila
-    Object[] nuevaFila = new Object[]{
-        procesosCreados,
-        nombreProceso,
-        programCounter,
-        status,
-        totalInstructions
-    };
-    modeloTablaListos.addRow(nuevaFila);
-}
-
-public void actualizarIntefaz(DefaultTableModel modeloTablaListos, int procesosCreados, String nombreProceso, int programCounter, String status, int totalInstructions) {
-
-    
-    for (int i = 0; i < modeloTablaListos.getRowCount(); i++) {
-        int idProceso = (int) modeloTablaListos.getValueAt(i, 0);
-
-        if (idProceso == procesosCreados) {
-            System.out.println("actualizar");
-            modeloTablaListos.setValueAt(programCounter, i , 2);
-            modeloTablaListos.setValueAt(status, i , 3);
-            modeloTablaListos.setValueAt(totalInstructions, i , 4);
-            return; 
-        }
+    public void actualizarIntefazCrear(DefaultTableModel modeloTablaListos, int procesosCreados, String nombreProceso, int programCounter, String status, int totalInstructions) {
+        // No necesitas buscar si ya existe, simplemente añade la nueva fila
+        Object[] nuevaFila = new Object[]{
+            procesosCreados,
+            nombreProceso,
+            programCounter,
+            status,
+            totalInstructions
+        };
+        modeloTablaListos.addRow(nuevaFila);
     }
+
+    public void actualizarIntefaz(DefaultTableModel modeloTablaListos, int procesosCreados, String nombreProceso, int programCounter, String status, int totalInstructions) {
+
+        for (int i = 0; i < modeloTablaListos.getRowCount(); i++) {
+            int idProceso = (int) modeloTablaListos.getValueAt(i, 0);
+
+            if (idProceso == procesosCreados) {
+                System.out.println("actualizar");
+                modeloTablaListos.setValueAt(programCounter, i, 2);
+                modeloTablaListos.setValueAt(status, i, 3);
+                modeloTablaListos.setValueAt(totalInstructions, i, 4);
+                return;
+            }
+        }
 
     }
 
     public void actualizarInterfazCPU(int cpuId, String id, String estado, String pc, String name, String longitud) {
-    CpuLabels labels = null;
-    switch (cpuId) {
-        case 1:
-            labels = cpu1Labels;
-            break;
-        case 2:
-            labels = cpu2Labels;
-            break;
-        case 3:
-            labels = cpu3Labels;
-            break;
+        CpuLabels labels = null;
+        switch (cpuId) {
+            case 1:
+                labels = cpu1Labels;
+                break;
+            case 2:
+                labels = cpu2Labels;
+                break;
+            case 3:
+                labels = cpu3Labels;
+                break;
+        }
+
+        if (labels != null) {
+            CpuLabels finalLabels = labels;
+            SwingUtilities.invokeLater(() -> {
+                finalLabels.idLabel.setText(id);
+                finalLabels.nameLabel.setText(name);
+                finalLabels.estateLabel.setText(estado);
+                finalLabels.pcLabel.setText(pc);
+                finalLabels.longitud.setText(longitud);
+
+                if (finalLabels.nameLabel.getText().equalsIgnoreCase("OS") || finalLabels.nameLabel.getText().equalsIgnoreCase("system32")) {
+                    finalLabels.idLabel.setForeground(Color.CYAN);
+                    finalLabels.nameLabel.setForeground(Color.CYAN);
+                    finalLabels.estateLabel.setForeground(Color.CYAN);
+                    finalLabels.pcLabel.setForeground(Color.CYAN);
+                    finalLabels.longitud.setForeground(Color.CYAN);
+                } else {
+                    finalLabels.idLabel.setForeground(Color.BLACK);
+                    finalLabels.nameLabel.setForeground(Color.BLACK);
+                    finalLabels.estateLabel.setForeground(Color.BLACK);
+                    finalLabels.pcLabel.setForeground(Color.BLACK);
+                    finalLabels.longitud.setForeground(Color.BLACK);
+                }
+            });
+        } else {
+            System.err.println("ID de CPU inválido: " + cpuId);
+        }
     }
 
-    if (labels != null) {
-        CpuLabels finalLabels = labels;
-        SwingUtilities.invokeLater(() -> {
-            finalLabels.idLabel.setText(id);
-            finalLabels.nameLabel.setText(name);
-            finalLabels.estateLabel.setText(estado);
-            finalLabels.pcLabel.setText(pc);
-            finalLabels.longitud.setText(longitud);
-
-            if (finalLabels.nameLabel.getText().equalsIgnoreCase("OS") || finalLabels.nameLabel.getText().equalsIgnoreCase("system32")) {
-                finalLabels.idLabel.setForeground(Color.CYAN);
-                finalLabels.nameLabel.setForeground(Color.CYAN);
-                finalLabels.estateLabel.setForeground(Color.CYAN);
-                finalLabels.pcLabel.setForeground(Color.CYAN);
-                finalLabels.longitud.setForeground(Color.CYAN);
-            } else {
-                finalLabels.idLabel.setForeground(Color.BLACK);
-                finalLabels.nameLabel.setForeground(Color.BLACK);
-                finalLabels.estateLabel.setForeground(Color.BLACK);
-                finalLabels.pcLabel.setForeground(Color.BLACK);
-                finalLabels.longitud.setForeground(Color.BLACK);
-            }
-        });
-    } else {
-        System.err.println("ID de CPU inválido: " + cpuId);
-    }
-}
-
+    // FUNCIONES AUXILIARES //
     public static boolean validarCampoEntero(JTextField textField, String nombreCampo) {
         try {
-            Integer.parseInt(textField.getText());
-            return true;
+            int valor = Integer.parseInt(textField.getText());
+            if (valor > 0) {
+                return true;
+            } else {
+                JOptionPane.showMessageDialog(null, "El campo: " + nombreCampo + " debe ser un entero positivo mayor que 0", "ERROR", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(null, "El campo: " + nombreCampo + " debe ser un entero", "ERROR", JOptionPane.ERROR_MESSAGE);
             return false;
@@ -242,7 +250,7 @@ public void actualizarIntefaz(DefaultTableModel modeloTablaListos, int procesosC
         CargarButton = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
-        IniciarBoton1 = new javax.swing.JButton();
+        GuardarConfigButton = new javax.swing.JButton();
         FinalizarSimulacionButton = new javax.swing.JButton();
         jSeparator7 = new javax.swing.JSeparator();
         SeccionProcesos = new javax.swing.JPanel();
@@ -381,13 +389,13 @@ public void actualizarIntefaz(DefaultTableModel modeloTablaListos, int procesosC
 
         jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
-        IniciarBoton1.setBackground(new java.awt.Color(0, 139, 252));
-        IniciarBoton1.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
-        IniciarBoton1.setForeground(new java.awt.Color(0, 0, 0));
-        IniciarBoton1.setText("GUARDAR CONFIGURACIÓN");
-        IniciarBoton1.addActionListener(new java.awt.event.ActionListener() {
+        GuardarConfigButton.setBackground(new java.awt.Color(0, 139, 252));
+        GuardarConfigButton.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
+        GuardarConfigButton.setForeground(new java.awt.Color(0, 0, 0));
+        GuardarConfigButton.setText("GUARDAR CONFIGURACIÓN");
+        GuardarConfigButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                IniciarBoton1ActionPerformed(evt);
+                GuardarConfigButtonActionPerformed(evt);
             }
         });
 
@@ -791,7 +799,7 @@ public void actualizarIntefaz(DefaultTableModel modeloTablaListos, int procesosC
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Longitud1)
                     .addComponent(LongitudProcessCPU1))
-                .addContainerGap(120, Short.MAX_VALUE))
+                .addContainerGap(105, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout CPU1Layout = new javax.swing.GroupLayout(CPU1);
@@ -927,7 +935,7 @@ public void actualizarIntefaz(DefaultTableModel modeloTablaListos, int procesosC
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Longitud2)
                     .addComponent(LongitudProcessCPU2))
-                .addContainerGap(111, Short.MAX_VALUE))
+                .addContainerGap(96, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout CPU2Layout = new javax.swing.GroupLayout(CPU2);
@@ -1063,7 +1071,7 @@ public void actualizarIntefaz(DefaultTableModel modeloTablaListos, int procesosC
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Longitud3)
                     .addComponent(LongitudProcessCPU3))
-                .addContainerGap(120, Short.MAX_VALUE))
+                .addContainerGap(105, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout CPU3Layout = new javax.swing.GroupLayout(CPU3);
@@ -1233,7 +1241,7 @@ public void actualizarIntefaz(DefaultTableModel modeloTablaListos, int procesosC
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator11, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1447,7 +1455,7 @@ public void actualizarIntefaz(DefaultTableModel modeloTablaListos, int procesosC
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(FinalizarSimulacionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(IniciarBoton1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(GuardarConfigButton, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jSeparator12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1484,7 +1492,7 @@ public void actualizarIntefaz(DefaultTableModel modeloTablaListos, int procesosC
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(CargarButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(IniciarButton)
-                        .addComponent(IniciarBoton1)
+                        .addComponent(GuardarConfigButton)
                         .addComponent(FinalizarSimulacionButton))
                     .addComponent(jSeparator12)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -1570,11 +1578,54 @@ public void actualizarIntefaz(DefaultTableModel modeloTablaListos, int procesosC
 
     private void CargarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CargarButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_CargarButtonActionPerformed
+        /**
+         * Buscador de archivos Accede todos los documentos del ordenador
+         */
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // Si quieres permitir seleccionar directorios
 
-    private void IniciarBoton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IniciarBoton1ActionPerformed
+        FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("JSON Files", "json");
+        fileChooser.setFileFilter(imgFilter);
+
+        int result = fileChooser.showOpenDialog(this); // 'this' asumiendo que este código está dentro de un componente Swing
+
+        if (result == JFileChooser.APPROVE_OPTION) { // Verifica si el usuario seleccionó un archivo
+            File fileName = fileChooser.getSelectedFile();
+
+            if (fileName.isFile()) { // Asegúrate de que es un archivo y no un directorio (si permites ambos)
+                try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+                    Gson gson = new Gson();
+                    JsonObject json = gson.fromJson(reader, JsonObject.class);
+                    
+                cantidadCpus = json.get("cantindadCpus").getAsInt();
+                velocidadReloj = json.get("velocidadReloj").getAsInt();
+                planificadorEscogido = json.get("planificador").getAsString();
+
+                JsonArray procesosArray = json.get("procesos_listos").getAsJsonArray();
+
+                for (JsonElement procesoElement : procesosArray) {
+                    JsonObject procesoJson = procesoElement.getAsJsonObject();
+                    int id = procesoJson.get("id").getAsInt();
+                    String nombre = procesoJson.get("nombre").getAsString();
+                    int tiempoLlegada = procesoJson.get("tiempo_llegada").getAsInt();
+                    int tiempoServicio = procesoJson.get("tiempo_servicio").getAsInt();
+                    int prioridad = procesoJson.get("prioridad").getAsInt();
+
+//                    Process proceso = new Process(id, nombre, 0, );
+//                    listaListos.addProcess(proceso);
+                }
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(this, "Error al leer el archivo: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else if (fileName.isDirectory()) {
+                JOptionPane.showMessageDialog(this, "Seleccionaste un directorio.  Por favor, selecciona un archivo JSON.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+    }//GEN-LAST:event_CargarButtonActionPerformed
+    }
+
+    private void GuardarConfigButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarConfigButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_IniciarBoton1ActionPerformed
+    }//GEN-LAST:event_GuardarConfigButtonActionPerformed
 
     private void CantidadCpuSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CantidadCpuSelectActionPerformed
         // TODO add your handling code here:
@@ -1599,7 +1650,7 @@ public void actualizarIntefaz(DefaultTableModel modeloTablaListos, int procesosC
                     && validarCampoEntero(LongitudTextField, "Longitud")
                     && validarCampoEntero(CiclosTerminarIOTextField, "Ciclos para terminar E/S")
                     && validarCampoStringNoVacio(NombreProcesoTextField, "Nombre del proceso")) {
-                
+
                 int cicloLlamarIO = Integer.parseInt(CiclosLlamarIOTextField.getText());
                 int cicloTerminarIO = Integer.parseInt(CiclosTerminarIOTextField.getText());
                 int longitudProceso = Integer.parseInt(LongitudTextField.getText());
@@ -1626,14 +1677,15 @@ public void actualizarIntefaz(DefaultTableModel modeloTablaListos, int procesosC
 
                 Process process = new Process(procesosCreados, nombreProceso, longitudProceso, true, false, listaListos, listaBloqueados, velocidadReloj, this, 0, 1, 0);
                 listaListos.addProcess(process);
+                
+                System.out.println(process.getCiclosExcepcion());
 
                 Object[] nuevaFila = new Object[]{
                     procesosCreados,
                     nombreProceso,
                     process.getProgramCounter(),
                     process.getStatus().name(),
-                    process.getTotalInstructions(),
-                };
+                    process.getTotalInstructions(),};
 
                 modeloTablaListos.addRow(nuevaFila);
             }
@@ -1752,13 +1804,13 @@ public void actualizarIntefaz(DefaultTableModel modeloTablaListos, int procesosC
     private javax.swing.JLabel EstateProcessCPU3;
     private javax.swing.JButton FinalizarSimulacionButton;
     private javax.swing.JLabel GlobalCounter;
+    private javax.swing.JButton GuardarConfigButton;
     private javax.swing.JLabel IDProcessCPU1;
     private javax.swing.JLabel IDProcessCPU2;
     private javax.swing.JLabel IDProcessCPU3;
     private javax.swing.JLabel IdProceso1;
     private javax.swing.JLabel IdProceso2;
     private javax.swing.JLabel IdProceso3;
-    private javax.swing.JButton IniciarBoton1;
     private javax.swing.JButton IniciarButton;
     private javax.swing.JLabel Longitud1;
     private javax.swing.JLabel Longitud2;
@@ -1854,6 +1906,7 @@ public void actualizarIntefaz(DefaultTableModel modeloTablaListos, int procesosC
                 CantidadCpuSelect.setEnabled(false);
                 FinalizarSimulacionButton.setEnabled(true);
                 IniciarButton.setEnabled(false);
+                CargarButton.setEnabled(false);
                 try {
                     // MANEJO DEL CONTADOR GLOBAL EN LA INTERFAZ
                     Thread.sleep(velocidadReloj);
@@ -1869,6 +1922,7 @@ public void actualizarIntefaz(DefaultTableModel modeloTablaListos, int procesosC
                 IniciarButton.setEnabled(true);
                 contadorGlobal = 0;
                 GlobalCounter.setText(Integer.toString(contadorGlobal));
+                CargarButton.setEnabled(true);
             }
         }
     }

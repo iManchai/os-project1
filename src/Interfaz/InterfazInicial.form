@@ -68,7 +68,7 @@
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Component id="FinalizarSimulacionButton" min="-2" pref="172" max="-2" attributes="0"/>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="IniciarBoton1" min="-2" pref="172" max="-2" attributes="0"/>
+                                      <Component id="GuardarConfigButton" min="-2" pref="172" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="jSeparator12" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
@@ -115,7 +115,7 @@
                           <Group type="103" alignment="1" groupAlignment="3" attributes="0">
                               <Component id="CargarButton" alignment="3" max="32767" attributes="0"/>
                               <Component id="IniciarButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="IniciarBoton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GuardarConfigButton" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="FinalizarSimulacionButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Component id="jSeparator12" max="32767" attributes="0"/>
@@ -208,7 +208,7 @@
                 <Property name="orientation" type="int" value="1"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="IniciarBoton1">
+            <Component class="javax.swing.JButton" name="GuardarConfigButton">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="fc" green="8b" red="0" type="rgb"/>
@@ -222,7 +222,7 @@
                 <Property name="text" type="java.lang.String" value="GUARDAR CONFIGURACI&#xd3;N"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="IniciarBoton1ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="GuardarConfigButtonActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="FinalizarSimulacionButton">

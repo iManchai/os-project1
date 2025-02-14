@@ -26,6 +26,7 @@ public class Process extends Thread {
     private int tiempoEjecucionRR;
     private int tiempoEnCPU;
 
+    // IO bound constructor
     public Process(int id, String name, int totalInstructions, boolean cpuBound, boolean ioBound, int ciclosExcepcion,
             ListaSimple listaListos, ListaSimple listaBloqueados, int velocidadReloj, int cicloES, InterfazInicial interfaz, int cpu, int tiempoEjecucionRR, int tiempoEnCPU) {
         this.id = id;
@@ -49,6 +50,7 @@ public class Process extends Thread {
         this.tiempoEnCPU = tiempoEnCPU;
     }
 
+    // Cpu bound constructor
     public Process(int id, String name, int totalInstructions, boolean cpuBound, boolean ioBound,
             ListaSimple listaListos, ListaSimple listaBloqueados, int velocidadReloj, InterfazInicial interfaz, int cpu, int tiempoEjecucionRR, int tiempoEnCPU) {
         this.id = id;
