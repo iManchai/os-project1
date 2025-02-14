@@ -12,7 +12,9 @@ import Planificacion.PlanificadorFCFS;
 import Planificacion.PlanificadorRR;
 import Planificacion.PlanificadorSJF;
 import Planificacion.PlanificadorSRT;
+import java.awt.Color;
 import java.util.concurrent.Semaphore;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
@@ -127,33 +129,46 @@ public void actualizarIntefaz(DefaultTableModel modeloTablaListos, int procesosC
     }
 
     public void actualizarInterfazCPU(int cpuId, String id, String estado, String pc, String name, String longitud) {
-        CpuLabels labels = null;
-        switch (cpuId) {
-            case 1:
-                labels = cpu1Labels;
-                break;
-            case 2:
-                labels = cpu2Labels;
-                break;
-            case 3:
-                labels = cpu3Labels;
-                break;
-        }
-
-        if (labels != null) {
-            CpuLabels finalLabels = labels;
-            SwingUtilities.invokeLater(() -> {
-                finalLabels.idLabel.setText(id);
-                finalLabels.nameLabel.setText(name);
-                finalLabels.estateLabel.setText(estado);
-                finalLabels.pcLabel.setText(pc);
-                finalLabels.longitud.setText(longitud);
-                // ... actualizar otros JLabels usando 'labels'
-            });
-        } else {
-            System.err.println("ID de CPU inválido: " + cpuId);
-        }
+    CpuLabels labels = null;
+    switch (cpuId) {
+        case 1:
+            labels = cpu1Labels;
+            break;
+        case 2:
+            labels = cpu2Labels;
+            break;
+        case 3:
+            labels = cpu3Labels;
+            break;
     }
+
+    if (labels != null) {
+        CpuLabels finalLabels = labels;
+        SwingUtilities.invokeLater(() -> {
+            finalLabels.idLabel.setText(id);
+            finalLabels.nameLabel.setText(name);
+            finalLabels.estateLabel.setText(estado);
+            finalLabels.pcLabel.setText(pc);
+            finalLabels.longitud.setText(longitud);
+
+            if (finalLabels.nameLabel.getText().equalsIgnoreCase("OS") || finalLabels.nameLabel.getText().equalsIgnoreCase("system32")) {
+                finalLabels.idLabel.setForeground(Color.CYAN);
+                finalLabels.nameLabel.setForeground(Color.CYAN);
+                finalLabels.estateLabel.setForeground(Color.CYAN);
+                finalLabels.pcLabel.setForeground(Color.CYAN);
+                finalLabels.longitud.setForeground(Color.CYAN);
+            } else {
+                finalLabels.idLabel.setForeground(Color.BLACK);
+                finalLabels.nameLabel.setForeground(Color.BLACK);
+                finalLabels.estateLabel.setForeground(Color.BLACK);
+                finalLabels.pcLabel.setForeground(Color.BLACK);
+                finalLabels.longitud.setForeground(Color.BLACK);
+            }
+        });
+    } else {
+        System.err.println("ID de CPU inválido: " + cpuId);
+    }
+}
 
     public static boolean validarCampoEntero(JTextField textField, String nombreCampo) {
         try {
@@ -1584,6 +1599,7 @@ public void actualizarIntefaz(DefaultTableModel modeloTablaListos, int procesosC
                     && validarCampoEntero(LongitudTextField, "Longitud")
                     && validarCampoEntero(CiclosTerminarIOTextField, "Ciclos para terminar E/S")
                     && validarCampoStringNoVacio(NombreProcesoTextField, "Nombre del proceso")) {
+                
                 int cicloLlamarIO = Integer.parseInt(CiclosLlamarIOTextField.getText());
                 int cicloTerminarIO = Integer.parseInt(CiclosTerminarIOTextField.getText());
                 int longitudProceso = Integer.parseInt(LongitudTextField.getText());
@@ -1615,7 +1631,9 @@ public void actualizarIntefaz(DefaultTableModel modeloTablaListos, int procesosC
                     procesosCreados,
                     nombreProceso,
                     process.getProgramCounter(),
-                    process.getStatus().name()};
+                    process.getStatus().name(),
+                    process.getTotalInstructions(),
+                };
 
                 modeloTablaListos.addRow(nuevaFila);
             }

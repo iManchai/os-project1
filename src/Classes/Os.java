@@ -45,14 +45,13 @@ public class Os extends Thread {
 
                 semaphore.acquire();
 
-                interfaz.actualizarInterfazCPU(cpu, String.valueOf(id), name, "RUNNING", String.valueOf(programCounter), String.valueOf(totalInstructions));
+                interfaz.actualizarInterfazCPU(cpu, String.valueOf(id), "RUNNING", String.valueOf(programCounter), name, String.valueOf(totalInstructions));
 
                 System.out.println(name + " ejecutando instrucción " + programCounter + " en el cpu:" + cpuName);
                 System.out.println("siguiente iteración-------------->");
                 Thread.sleep(velocidadReloj);
 
                 programCounter++;
-
                 semaphore.release();
 
             }

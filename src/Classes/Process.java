@@ -99,7 +99,7 @@ public class Process extends Thread {
                     return;
                 }
 
-                interfaz.actualizarInterfazCPU(cpu, String.valueOf(id), name, status.name(), String.valueOf(programCounter), String.valueOf(totalInstructions));
+                interfaz.actualizarInterfazCPU(cpu, String.valueOf(id), status.name(), String.valueOf(programCounter), name, String.valueOf(totalInstructions));
 
                 System.out.println(name + " ejecutando instrucción " + programCounter + " en el cpu:" + cpuName);
                 listaListos.printlist("listos");
