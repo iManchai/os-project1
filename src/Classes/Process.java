@@ -1,6 +1,7 @@
 package Classes;
 
 import DataStructures.ListaSimple;
+import DataStructures.Nodo;
 import java.util.concurrent.Semaphore;
 import Interfaz.InterfazInicial;
 
@@ -25,6 +26,7 @@ public class Process extends Thread {
     private int cpu;
     private int tiempoEjecucionRR;
     private int tiempoEnCPU;
+    private int tiempoEspera;
 
     public Process(int id, String name, int totalInstructions, boolean cpuBound, boolean ioBound, int ciclosExcepcion,
             ListaSimple listaListos, ListaSimple listaBloqueados, int velocidadReloj, int cicloES, InterfazInicial interfaz, int cpu, int tiempoEjecucionRR, int tiempoEnCPU) {
@@ -47,6 +49,7 @@ public class Process extends Thread {
         this.cpu = cpu;
         this.tiempoEjecucionRR = tiempoEjecucionRR;
         this.tiempoEnCPU = tiempoEnCPU;
+        this.tiempoEspera = tiempoEspera;
     }
 
     public Process(int id, String name, int totalInstructions, boolean cpuBound, boolean ioBound,
@@ -68,6 +71,7 @@ public class Process extends Thread {
         this.cpu = cpu;
         this.tiempoEjecucionRR = tiempoEjecucionRR;
         this.tiempoEnCPU = tiempoEnCPU;
+        this.tiempoEspera = tiempoEspera;
     }
 
     @Override
@@ -76,9 +80,58 @@ public class Process extends Thread {
         interfaz.actulizarTablaBorrar(interfaz.getModeloTablaListos(), id);
 
         try {
+
             Os os = new Os(0, "Os", 3, velocidadReloj, interfaz, cpu);
             os.setSemaphore(semaphore);
             while (programCounter < totalInstructions && status != ProcessStatus.BLOCKED) {
+
+                /////Actulizar la grafica
+                if (programCounter == 0) {
+
+                    int utlizacionSistema = interfaz.getUtilizacionSistema();
+                    utlizacionSistema++;
+                    interfaz.setUtilizacionSistema(utlizacionSistema);
+                    interfaz.getDataset().addValue(utlizacionSistema, "Ejecutando proceso", String.valueOf(interfaz.getContadorGlobal()));
+
+                }
+
+                //////crear metodo para SRT
+               
+                if (interfaz.getPlanificadorEscogido() == "SRT" && !listaListos.isEmpty()) {
+
+                    Process procesoMasCorto = null;
+                    Nodo nodoActual = listaListos.getpFirst();
+
+                    while (nodoActual != null) {
+
+                        Process procesoActual = (Process) nodoActual.getInfo();
+
+                        if (procesoActual.getStatus() == Process.ProcessStatus.READY) {
+                            if (procesoMasCorto == null || procesoActual.getDuracion() - procesoActual.getProgramCounter() < procesoMasCorto.getDuracion() - procesoMasCorto.getProgramCounter()) {
+                                procesoMasCorto = procesoActual;
+                            }
+                        }
+                        nodoActual = nodoActual.getpNext();
+                    }
+
+                    if (this.duracion - this.programCounter > procesoMasCorto.getDuracion() - procesoMasCorto.getProgramCounter()) {
+
+                        status = ProcessStatus.READY;
+                        tiempoEnCPU = 0;
+                        listaListos.addProcess(this);
+                        interfaz.actualizarIntefazCrear(interfaz.getModeloTablaListos(), id, name, programCounter, status.name(), totalInstructions);
+
+                        ///actualizar grafica
+                        int utlizacionSistema = interfaz.getUtilizacionSistema();
+                        utlizacionSistema--;
+                        interfaz.setUtilizacionSistema(utlizacionSistema);
+                        interfaz.getDataset().addValue(utlizacionSistema, "Ejecutando proceso", String.valueOf(interfaz.getContadorGlobal()));
+
+                        return;
+
+                    }
+
+                }
 
                 semaphore.acquire();
 
@@ -94,6 +147,13 @@ public class Process extends Thread {
 
                     os.start();
                     os.join();
+
+                    ///actualizar grafica
+                    int utlizacionSistema = interfaz.getUtilizacionSistema();
+                    utlizacionSistema--;
+                    interfaz.setUtilizacionSistema(utlizacionSistema);
+                    interfaz.getDataset().addValue(utlizacionSistema, "Ejecutando proceso", String.valueOf(interfaz.getContadorGlobal()));
+
                     return;
                 }
 
@@ -112,6 +172,12 @@ public class Process extends Thread {
 
                 if (ioBound && programCounter % ciclosExcepcion == 0) {
                     status = ProcessStatus.BLOCKED;
+
+                    ///actualizar grafica
+                    int utlizacionSistema = interfaz.getUtilizacionSistema();
+                    utlizacionSistema--;
+                    interfaz.setUtilizacionSistema(utlizacionSistema);
+                    interfaz.getDataset().addValue(utlizacionSistema, "Ejecutando proceso", String.valueOf(interfaz.getContadorGlobal()));
 
                     tiempoEnCPU = 0;
                     listaBloqueados.addProcess(this);
@@ -149,6 +215,14 @@ public class Process extends Thread {
                 interfaz.actualizarIntefazCrear(interfaz.getModeloTablaFinalizadoSistema(), id, name, programCounter, status.name(), totalInstructions);
                 interfaz.AgregarListaFinalizadosCpu(cpu, id, name, programCounter, name, totalInstructions);
 
+                ///actualizar grafica
+                int utlizacionSistema = interfaz.getUtilizacionSistema();
+                utlizacionSistema--;
+                interfaz.setUtilizacionSistema(utlizacionSistema);
+                interfaz.getDataset().addValue(utlizacionSistema, "Ejecutando proceso", String.valueOf(interfaz.getContadorGlobal()));
+                
+                
+                
                 listaListos.RemoveProcess(this);
 
                 System.out.println("Proceso " + name + " finalizado.");
@@ -164,6 +238,14 @@ public class Process extends Thread {
     }
 
     // Getters y setters
+    public int getTiempoEspera() {
+        return tiempoEspera;
+    }
+
+    public void setTiempoEspera(int tiempoEspera) {
+        this.tiempoEspera = tiempoEspera;
+    }
+
     public int getTiempoEjecucionRR() {
         return tiempoEjecucionRR;
     }
