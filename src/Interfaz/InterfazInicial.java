@@ -28,8 +28,12 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     private CpuLabels cpu1Labels;
     private CpuLabels cpu2Labels;
     private CpuLabels cpu3Labels;
+    private DefaultTableModel modeloTablaFinalizadoSistema;
     private DefaultTableModel modeloTablaListos;
     private DefaultTableModel modeloTablaBloqueados;
+    private DefaultTableModel modeloTablaFinalizadoSistemaCP1;
+    private DefaultTableModel modeloTablaFinalizadoSistemaCP2;
+    private DefaultTableModel modeloTablaFinalizadoSistemaCP3;
     ListaSimple listaListos = new ListaSimple();
     ListaSimple listaBloqueados = new ListaSimple();
     ListaSimple listaTotalProcesos = new ListaSimple();
@@ -70,10 +74,32 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     public void setModeloTablaBloqueados(DefaultTableModel modeloTablaBloqueados) {
         this.modeloTablaBloqueados = modeloTablaBloqueados;
     }
-    
-    
-    
-    
+
+    public DefaultTableModel getModeloTablaFinalizadoSistema() {
+        return modeloTablaFinalizadoSistema;
+    }
+
+    public void setModeloTablaFinalizadoSistema(DefaultTableModel modeloTablaFinalizadoSistema) {
+        this.modeloTablaFinalizadoSistema = modeloTablaFinalizadoSistema;
+    }
+
+    public void AgregarListaFinalizadosCpu(int cpu, int procesosCreados, String nombreProceso, int programCounter, String status, int totalInstructions) {
+
+        if (cpu == 1) {
+
+            actualizarIntefazCrear(modeloTablaFinalizadoSistemaCP1, procesosCreados, nombreProceso, programCounter, status, totalInstructions);
+
+        }
+        if (cpu == 2) {
+            actualizarIntefazCrear(modeloTablaFinalizadoSistemaCP2, procesosCreados, nombreProceso, programCounter, status, totalInstructions);
+
+        }
+        if (cpu == 3) {
+            actualizarIntefazCrear(modeloTablaFinalizadoSistemaCP3, procesosCreados, nombreProceso, programCounter, status, totalInstructions);
+
+        }
+
+    }
 
     public DefaultTableModel getModeloTablaListos() {
         return modeloTablaListos;
@@ -82,47 +108,43 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     public void setModeloTablaListos(DefaultTableModel modeloTablaListos) {
         this.modeloTablaListos = modeloTablaListos;
     }
-    
-    
 
-    
-public void actulizarTablaBorrar(DefaultTableModel modeloTablaListos, int procesosCreados) {
-    for (int i = 0; i < modeloTablaListos.getRowCount(); i++) {
-        int idProceso = (int) modeloTablaListos.getValueAt(i, 0);
+    public void actulizarTablaBorrar(DefaultTableModel modeloTablaListos, int procesosCreados) {
+        for (int i = 0; i < modeloTablaListos.getRowCount(); i++) {
+            int idProceso = (int) modeloTablaListos.getValueAt(i, 0);
 
-        if (idProceso == procesosCreados) {
-            modeloTablaListos.removeRow(i);
-            return; // Importante: Salir después de borrar
+            if (idProceso == procesosCreados) {
+                modeloTablaListos.removeRow(i);
+                return; // Importante: Salir después de borrar
+            }
         }
     }
-}
 
-public void actualizarIntefazCrear(DefaultTableModel modeloTablaListos, int procesosCreados, String nombreProceso, int programCounter, String status, int totalInstructions) {
-    // No necesitas buscar si ya existe, simplemente añade la nueva fila
-    Object[] nuevaFila = new Object[]{
-        procesosCreados,
-        nombreProceso,
-        programCounter,
-        status,
-        totalInstructions
-    };
-    modeloTablaListos.addRow(nuevaFila);
-}
-
-public void actualizarIntefaz(DefaultTableModel modeloTablaListos, int procesosCreados, String nombreProceso, int programCounter, String status, int totalInstructions) {
-
-    
-    for (int i = 0; i < modeloTablaListos.getRowCount(); i++) {
-        int idProceso = (int) modeloTablaListos.getValueAt(i, 0);
-
-        if (idProceso == procesosCreados) {
-            System.out.println("actualizar");
-            modeloTablaListos.setValueAt(programCounter, i , 2);
-            modeloTablaListos.setValueAt(status, i , 3);
-            modeloTablaListos.setValueAt(totalInstructions, i , 4);
-            return; 
-        }
+    public void actualizarIntefazCrear(DefaultTableModel modeloTablaListos, int procesosCreados, String nombreProceso, int programCounter, String status, int totalInstructions) {
+        // No necesitas buscar si ya existe, simplemente añade la nueva fila
+        Object[] nuevaFila = new Object[]{
+            procesosCreados,
+            nombreProceso,
+            programCounter,
+            status,
+            totalInstructions
+        };
+        modeloTablaListos.addRow(nuevaFila);
     }
+
+    public void actualizarIntefaz(DefaultTableModel modeloTablaListos, int procesosCreados, String nombreProceso, int programCounter, String status, int totalInstructions) {
+
+        for (int i = 0; i < modeloTablaListos.getRowCount(); i++) {
+            int idProceso = (int) modeloTablaListos.getValueAt(i, 0);
+
+            if (idProceso == procesosCreados) {
+                System.out.println("actualizar");
+                modeloTablaListos.setValueAt(programCounter, i, 2);
+                modeloTablaListos.setValueAt(status, i, 3);
+                modeloTablaListos.setValueAt(totalInstructions, i, 4);
+                return;
+            }
+        }
 
     }
 
@@ -194,8 +216,12 @@ public void actualizarIntefaz(DefaultTableModel modeloTablaListos, int procesosC
      */
     public InterfazInicial() {
         initComponents();
+        modeloTablaFinalizadoSistema = (DefaultTableModel) EndedProcessesSystem.getModel();
         modeloTablaListos = (DefaultTableModel) TablaListaDeListos.getModel();
         modeloTablaBloqueados = (DefaultTableModel) TablaBloqueados.getModel();
+        modeloTablaFinalizadoSistemaCP1 = (DefaultTableModel) EndedProcessesCPU1.getModel();
+        modeloTablaFinalizadoSistemaCP2 = (DefaultTableModel) EndedProcessesCPU2.getModel();
+        modeloTablaFinalizadoSistemaCP3 = (DefaultTableModel) EndedProcessesCPU3.getModel();
         cpu1Labels = new CpuLabels(IDProcessCPU1, NameProcessCPU1, EstateProcessCPU1, PcCPU1, LongitudProcessCPU1);
         cpu2Labels = new CpuLabels(IDProcessCPU2, NameProcessCPU2, EstateProcessCPU2, PcCPU2, LongitudProcessCPU2);
         cpu3Labels = new CpuLabels(IDProcessCPU3, NameProcessCPU3, EstateProcessCPU3, PcCPU3, LongitudProcessCPU3);
@@ -1237,14 +1263,14 @@ public void actualizarIntefaz(DefaultTableModel modeloTablaListos, int procesosC
 
             },
             new String [] {
-                "ID", "Nombre", "PC", "Estado"
+                "ID", "Nombre", "PC", "Estado", "Longitud"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {

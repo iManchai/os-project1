@@ -73,9 +73,7 @@ public class Process extends Thread {
     @Override
     public void run() {
 
-
-            interfaz.actulizarTablaBorrar(interfaz.getModeloTablaListos(), id);
-
+        interfaz.actulizarTablaBorrar(interfaz.getModeloTablaListos(), id);
 
         try {
             Os os = new Os(0, "Os", 3, velocidadReloj, interfaz, cpu);
@@ -114,7 +112,7 @@ public class Process extends Thread {
 
                 if (ioBound && programCounter % ciclosExcepcion == 0) {
                     status = ProcessStatus.BLOCKED;
-                    
+
                     tiempoEnCPU = 0;
                     listaBloqueados.addProcess(this);
                     interfaz.actualizarIntefazCrear(interfaz.getModeloTablaBloqueados(), id, name, programCounter, status.name(), totalInstructions);
@@ -129,9 +127,9 @@ public class Process extends Thread {
                             semaphore.acquire();
                             listaBloqueados.RemoveProcess(this);
                             interfaz.actulizarTablaBorrar(interfaz.getModeloTablaBloqueados(), id);
-                            listaListos.addProcess(this);
                             status = ProcessStatus.READY;
                             interfaz.actualizarIntefazCrear(interfaz.getModeloTablaListos(), id, name, programCounter, status.name(), totalInstructions);
+                            listaListos.addProcess(this);
                             semaphore.release();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
@@ -148,7 +146,11 @@ public class Process extends Thread {
 
             if (programCounter == totalInstructions) {
                 status = ProcessStatus.FINISHED;
+                interfaz.actualizarIntefazCrear(interfaz.getModeloTablaFinalizadoSistema(), id, name, programCounter, status.name(), totalInstructions);
+                interfaz.AgregarListaFinalizadosCpu(cpu, id, name, programCounter, name, totalInstructions);
+
                 listaListos.RemoveProcess(this);
+
                 System.out.println("Proceso " + name + " finalizado.");
                 os.start();
                 os.join();

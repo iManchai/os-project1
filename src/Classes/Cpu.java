@@ -36,9 +36,11 @@ public class Cpu extends Thread {  // Extiende Thread para manejar concurrencia
                 
                 System.out.println("Ejecutando el bucle de nuevo");
                 
-                
+                listaProcesos.printlist("hola");
                 interfaz.actualizarInterfazCPU(id, "0", "system32", "Running", "0", "none");
                 if (!listaProcesos.isEmpty()) {
+                    
+                    
                     
                     
                    
