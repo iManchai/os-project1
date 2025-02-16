@@ -1,0 +1,85 @@
+{
+  "procesosCreados": 10,
+  "cantidadCpus": 2,
+  "velocidadReloj": 3000,
+  "planificador": "FCFS",
+  "procesos_listos": [
+    {
+      "id": 3,
+      "nombre": "P3",
+      "totalInstructions": 30,
+      "status": "READY",
+      "programCounter": 0,
+      "cpuBound": true,
+      "ioBound": false,
+      "ciclosExcepcion": 0,
+      "ciclosIO": 0
+    },
+    {
+      "id": 4,
+      "nombre": "P4",
+      "totalInstructions": 30,
+      "status": "READY",
+      "programCounter": 0,
+      "cpuBound": true,
+      "ioBound": false,
+      "ciclosExcepcion": 0,
+      "ciclosIO": 0
+    },
+    {
+      "id": 5,
+      "nombre": "P5",
+      "totalInstructions": 30,
+      "status": "READY",
+      "programCounter": 0,
+      "cpuBound": true,
+      "ioBound": false,
+      "ciclosExcepcion": 0,
+      "ciclosIO": 0
+    },
+    {
+      "id": 6,
+      "nombre": "P6",
+      "totalInstructions": 30,
+      "status": "READY",
+      "programCounter": 0,
+      "cpuBound": true,
+      "ioBound": false,
+      "ciclosExcepcion": 0,
+      "ciclosIO": 0
+    },
+    {
+      "id": 7,
+      "nombre": "P7",
+      "totalInstructions": 30,
+      "status": "READY",
+      "programCounter": 0,
+      "cpuBound": true,
+      "ioBound": false,
+      "ciclosExcepcion": 0,
+      "ciclosIO": 0
+    },
+    {
+      "id": 8,
+      "nombre": "P8",
+      "totalInstructions": 30,
+      "status": "READY",
+      "programCounter": 0,
+      "cpuBound": true,
+      "ioBound": false,
+      "ciclosExcepcion": 0,
+      "ciclosIO": 0
+    },
+    {
+      "id": 9,
+      "nombre": "P9",
+      "totalInstructions": 30,
+      "status": "READY",
+      "programCounter": 0,
+      "cpuBound": true,
+      "ioBound": false,
+      "ciclosExcepcion": 0,
+      "ciclosIO": 0
+    }
+  ]
+}

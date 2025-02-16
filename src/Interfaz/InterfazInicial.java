@@ -1583,6 +1583,10 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
          * Buscador de archivos Accede todos los documentos del ordenador
          */
         JFileChooser fileChooser = new JFileChooser();
+        String projectRoot = System.getProperty("user.dir");
+        fileChooser.setCurrentDirectory(new File(projectRoot));
+        
+        
         fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // Si quieres permitir seleccionar directorios
 
         FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("JSON Files", "json");
@@ -1599,7 +1603,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                     JsonObject json = gson.fromJson(reader, JsonObject.class);
 
                     procesosCreados = json.get("procesosCreados").getAsInt();
-                    cantidadCpus = json.get("cantindadCpus").getAsInt();
+                    cantidadCpus = json.get("cantidadCpus").getAsInt();
                     velocidadReloj = json.get("velocidadReloj").getAsInt();
                     planificadorEscogido = json.get("planificador").getAsString();
 
@@ -1691,9 +1695,11 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
             Gson gson = new GsonBuilder().setPrettyPrinting().create(); 
             String jsonString = gson.toJson(json);
             
-            FileWriter writer = new FileWriter("Configuracion");
-            writer.write(jsonString);
-            JOptionPane.showConfirmDialog(null, "Se guardo la configuracion actual con exito");
+            try (FileWriter writer = new FileWriter("Configuracion.json")) {
+            gson.toJson(json, writer); // Directly write to the file using Gson
+            //writer.write(jsonString);  No need to write the string manually
+            JOptionPane.showMessageDialog(null, "Configuración guardada con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Hubo un error de E/S", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
