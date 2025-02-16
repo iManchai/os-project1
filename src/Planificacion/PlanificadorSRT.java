@@ -1,4 +1,4 @@
-package Planificacion;
+package Planificacion;   //// esta mal debe expulsar a un proceso si es mas corto 
 
 import Classes.Process;
 import DataStructures.ListaSimple;
@@ -22,7 +22,7 @@ public class PlanificadorSRT implements Planificador {
             
 
             if (procesoActual.getStatus() == Process.ProcessStatus.READY) {
-                if (procesoMasCorto == null || procesoActual.getDuracion() - procesoActual.getProgramCounter() < procesoMasCorto.getDuracion()) {
+                if (procesoMasCorto == null || procesoActual.getDuracion() - procesoActual.getProgramCounter() < procesoMasCorto.getDuracion() - procesoMasCorto.getProgramCounter()) {
                     procesoMasCorto = procesoActual;
                 }
             }

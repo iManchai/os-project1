@@ -4,11 +4,16 @@
  */
 package Interfaz;
 
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 import Classes.Cpu;
 import Classes.Process;
 import DataStructures.ListaSimple;
 import DataStructures.Nodo;
 import Planificacion.PlanificadorFCFS;
+import Planificacion.PlanificadorHrrn;
 import Planificacion.PlanificadorRR;
 import Planificacion.PlanificadorSJF;
 import Planificacion.PlanificadorSRT;
@@ -23,6 +28,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.awt.BorderLayout;
 import java.util.concurrent.Semaphore;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -30,6 +36,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import org.jfree.chart.ChartPanel;
 
 /**
  *
@@ -38,16 +45,23 @@ import javax.swing.table.DefaultTableModel;
 public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
     public static boolean isRunning = false;
+
     private CpuLabels cpu1Labels;
     private CpuLabels cpu2Labels;
     private CpuLabels cpu3Labels;
+    private DefaultTableModel modeloTablaFinalizadoSistema;
     private DefaultTableModel modeloTablaListos;
     private DefaultTableModel modeloTablaBloqueados;
+    private DefaultTableModel modeloTablaFinalizadoSistemaCP1;
+    private DefaultTableModel modeloTablaFinalizadoSistemaCP2;
+    private DefaultTableModel modeloTablaFinalizadoSistemaCP3;
+    private int utilizacionSistema = 0;
     ListaSimple listaListos = new ListaSimple();
     ListaSimple listaBloqueados = new ListaSimple();
     ListaSimple listaTotalProcesos = new ListaSimple();
     Semaphore semaphoreList = new Semaphore(1);
 
+    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
     int cantidadCpus = 2;
     int velocidadReloj = 1000;
     int procesosCreados = 1;
@@ -59,6 +73,50 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     Cpu cpu1 = new Cpu(1, listaListos, semaphoreList, semaphoreCpu1, velocidadReloj, this);
     Cpu cpu2 = new Cpu(2, listaListos, semaphoreList, semaphoreCpu2, velocidadReloj, this);
     Cpu cpu3 = new Cpu(3, listaListos, semaphoreList, semaphoreCpu3, velocidadReloj, this);
+    private ChartPanel frame;
+
+    public int getUtilizacionSistema() {
+        return utilizacionSistema;
+    }
+
+    public void setUtilizacionSistema(int utilizacionSistema) {
+        this.utilizacionSistema = utilizacionSistema;
+    }
+
+    public DefaultCategoryDataset getDataset() {
+        return dataset;
+    }
+
+    public void setDataset(DefaultCategoryDataset dataset) {
+        this.dataset = dataset;
+    }
+
+    JFreeChart chart = ChartFactory.createLineChart(
+            "Progreso del Proceso", // Título del gráfico
+            "Ciclos", // Etiqueta del eje X
+            "Valor", // Etiqueta del eje Y
+            dataset, // Dataset
+            PlotOrientation.VERTICAL, // Orientación del gráfico
+            true, // Incluir leyenda
+            true, // Incluir tooltips
+            false // Incluir URLs
+    );
+
+    public String getPlanificadorEscogido() {
+        return planificadorEscogido;
+    }
+
+    public void setPlanificadorEscogido(String planificadorEscogido) {
+        this.planificadorEscogido = planificadorEscogido;
+    }
+
+    public int getContadorGlobal() {
+        return contadorGlobal;
+    }
+
+    public void setContadorGlobal(int contadorGlobal) {
+        this.contadorGlobal = contadorGlobal;
+    }
 
     public void setIDProcessCPU1(String id) {
         IDProcessCPU1.setText(id);
@@ -82,6 +140,31 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
     public void setModeloTablaBloqueados(DefaultTableModel modeloTablaBloqueados) {
         this.modeloTablaBloqueados = modeloTablaBloqueados;
+    }
+    public DefaultTableModel getModeloTablaFinalizadoSistema() {
+        return modeloTablaFinalizadoSistema;
+    }
+
+    public void setModeloTablaFinalizadoSistema(DefaultTableModel modeloTablaFinalizadoSistema) {
+        this.modeloTablaFinalizadoSistema = modeloTablaFinalizadoSistema;
+    }
+
+    public void AgregarListaFinalizadosCpu(int cpu, int procesosCreados, String nombreProceso, int programCounter, String status, int totalInstructions) {
+
+        if (cpu == 1) {
+
+            actualizarTablasAñadir(modeloTablaFinalizadoSistemaCP1, procesosCreados, nombreProceso, programCounter, status, totalInstructions);
+
+        }
+        if (cpu == 2) {
+            actualizarTablasAñadir(modeloTablaFinalizadoSistemaCP2, procesosCreados, nombreProceso, programCounter, status, totalInstructions);
+
+        }
+        if (cpu == 3) {
+            actualizarTablasAñadir(modeloTablaFinalizadoSistemaCP3, procesosCreados, nombreProceso, programCounter, status, totalInstructions);
+
+        }
+
     }
 
     public DefaultTableModel getModeloTablaListos() {
@@ -218,8 +301,12 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
      */
     public InterfazInicial() {
         initComponents();
+        modeloTablaFinalizadoSistema = (DefaultTableModel) EndedProcessesSystem.getModel();
         modeloTablaListos = (DefaultTableModel) TablaListaDeListos.getModel();
         modeloTablaBloqueados = (DefaultTableModel) TablaBloqueados.getModel();
+        modeloTablaFinalizadoSistemaCP1 = (DefaultTableModel) EndedProcessesCPU1.getModel();
+        modeloTablaFinalizadoSistemaCP2 = (DefaultTableModel) EndedProcessesCPU2.getModel();
+        modeloTablaFinalizadoSistemaCP3 = (DefaultTableModel) EndedProcessesCPU3.getModel();
         cpu1Labels = new CpuLabels(IDProcessCPU1, NameProcessCPU1, EstateProcessCPU1, PcCPU1, LongitudProcessCPU1);
         cpu2Labels = new CpuLabels(IDProcessCPU2, NameProcessCPU2, EstateProcessCPU2, PcCPU2, LongitudProcessCPU2);
         cpu3Labels = new CpuLabels(IDProcessCPU3, NameProcessCPU3, EstateProcessCPU3, PcCPU3, LongitudProcessCPU3);
@@ -229,10 +316,27 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         CurrentCycle.setText(Integer.toString(velocidadReloj));
         GlobalCounter.setText(Integer.toString(contadorGlobal));
         CurrentPolicy.setText(planificadorEscogido);
+        
+        
+        frame = new ChartPanel(chart);
+        
+        
+         jPanel5.setLayout(new BorderLayout());
+        jPanel5.add(frame, BorderLayout.NORTH);
 
-        // Inicializamos el Jframe como un Thread.
+        
+
+
+
+        
+        
+        
+        
+        
+
         Thread t = new Thread(this);
         t.start();
+
     }
 
     /**
@@ -549,7 +653,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("POLITICA DE PLANIFICACIÓN");
 
-        PoliticaPlanificacionSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SJF", "RR", "SRT" }));
+        PoliticaPlanificacionSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SJF", "RR", "SRT", "HRRN" }));
         PoliticaPlanificacionSelect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 PoliticaPlanificacionSelectActionPerformed(evt);
@@ -1261,14 +1365,14 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
             },
             new String [] {
-                "ID", "Nombre", "PC", "Estado"
+                "ID", "Nombre", "PC", "Estado", "Longitud"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -1527,6 +1631,16 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         jTabbedPane2.addTab("SIMULACIÓN", jPanel1);
 
         jPanel5.setBackground(new java.awt.Color(187, 187, 187));
+        jPanel5.addContainerListener(new java.awt.event.ContainerAdapter() {
+            public void componentAdded(java.awt.event.ContainerEvent evt) {
+                jPanel5ComponentAdded(evt);
+            }
+        });
+        jPanel5.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                jPanel5ComponentShown(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -1791,11 +1905,11 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         if (validarCampoEntero(CicloTextField, "Duracion de cada ciclo") && validarVelocidadReloj(CicloTextField)) {
             velocidadReloj = Integer.parseInt(CicloTextField.getText());
             cantidadCpus = Integer.parseInt(CantidadCpuSelect.getSelectedItem().toString());
-            String politica = PoliticaPlanificacionSelect.getSelectedItem().toString();
+            planificadorEscogido = PoliticaPlanificacionSelect.getSelectedItem().toString();
 
             CurrentCpus.setText(CantidadCpuSelect.getSelectedItem().toString());
             CurrentCycle.setText(CicloTextField.getText());
-            CurrentPolicy.setText(politica);
+            CurrentPolicy.setText(planificadorEscogido);
 
             if (planificadorEscogido == "FCFS") {
                 cpu1.setPlanificador(new PlanificadorFCFS());
@@ -1803,12 +1917,12 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                 cpu3.setPlanificador(new PlanificadorFCFS());
 
             }
-            if ("SJF".equals(politica)) {
+            if (planificadorEscogido == "SJF") {
                 cpu1.setPlanificador(new PlanificadorSJF());
                 cpu2.setPlanificador(new PlanificadorSJF());
                 cpu3.setPlanificador(new PlanificadorSJF());
             }
-            if ("RR".equals(politica)) {
+            if (planificadorEscogido == "RR") {
 
                 cpu1.setPlanificador(new PlanificadorRR());
                 cpu2.setPlanificador(new PlanificadorRR());
@@ -1818,6 +1932,13 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                 cpu1.setPlanificador(new PlanificadorSRT());
                 cpu2.setPlanificador(new PlanificadorSRT());
                 cpu3.setPlanificador(new PlanificadorSRT());
+            }
+            if (planificadorEscogido == "HRRN") {
+
+                cpu1.setPlanificador(new PlanificadorHrrn());
+                cpu2.setPlanificador(new PlanificadorHrrn());
+                cpu3.setPlanificador(new PlanificadorHrrn());
+
             } else {
 
             }
@@ -1852,6 +1973,19 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     private void PoliticaPlanificacionSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PoliticaPlanificacionSelectActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_PoliticaPlanificacionSelectActionPerformed
+
+    private void jPanel5ComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_jPanel5ComponentAdded
+        // TODO add your handling code here:
+        
+        
+
+        
+        
+    }//GEN-LAST:event_jPanel5ComponentAdded
+
+    private void jPanel5ComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jPanel5ComponentShown
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jPanel5ComponentShown
 
     /**
      * @param args the command line arguments
@@ -1986,15 +2120,27 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
         while (true) {
             if (isRunning) {
+                this.getDataset().addValue(utilizacionSistema, "Ejecutando proceso", String.valueOf(this.getContadorGlobal()));
                 CantidadCpuSelect.setEnabled(false);
                 FinalizarSimulacionButton.setEnabled(true);
                 IniciarButton.setEnabled(false);
                 CargarButton.setEnabled(false);
                 GuardarConfigButton.setEnabled(true);
+
+                for (Nodo process = listaListos.getpFirst(); process != null; process = process.getpNext()) {
+                    Process procesoActual = (Process) process.getInfo();
+
+                    int valorTiempoActual = procesoActual.getTiempoEspera();
+                    procesoActual.setTiempoEspera(valorTiempoActual + 1);
+
+                    System.out.println(valorTiempoActual + " del proceso" + procesoActual.getNameProcess());
+
+                }
                 try {
                     // MANEJO DEL CONTADOR GLOBAL EN LA INTERFAZ
                     Thread.sleep(velocidadReloj);
                     contadorGlobal++;
+
                     GlobalCounter.setText(Integer.toString(contadorGlobal));
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();

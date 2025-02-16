@@ -565,11 +565,12 @@
                 <Component class="javax.swing.JComboBox" name="PoliticaPlanificacionSelect">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="4">
+                      <StringArray count="5">
                         <StringItem index="0" value="FCFS"/>
                         <StringItem index="1" value="SJF"/>
                         <StringItem index="2" value="RR"/>
                         <StringItem index="3" value="SRT"/>
+                        <StringItem index="4" value="HRRN"/>
                       </StringArray>
                     </Property>
                   </Properties>
@@ -1747,11 +1748,12 @@
                         <Component class="javax.swing.JTable" name="EndedProcessesSystem">
                           <Properties>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="4" rowCount="0">
+                              <Table columnCount="5" rowCount="0">
                                 <Column editable="false" title="ID" type="java.lang.Integer"/>
                                 <Column editable="false" title="Nombre" type="java.lang.String"/>
                                 <Column editable="false" title="PC" type="java.lang.Integer"/>
                                 <Column editable="false" title="Estado" type="java.lang.String"/>
+                                <Column editable="false" title="Longitud" type="java.lang.Integer"/>
                               </Table>
                             </Property>
                             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -2053,6 +2055,10 @@
               <Color blue="bb" green="bb" red="bb" type="rgb"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="componentAdded" listener="java.awt.event.ContainerListener" parameters="java.awt.event.ContainerEvent" handler="jPanel5ComponentAdded"/>
+            <EventHandler event="componentShown" listener="java.awt.event.ComponentListener" parameters="java.awt.event.ComponentEvent" handler="jPanel5ComponentShown"/>
+          </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="ESTADISTICAS">
