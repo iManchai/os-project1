@@ -14,21 +14,22 @@ public class Process extends Thread {
     private boolean cpuBound;
     private boolean ioBound;
     private int ciclosExcepcion;
+    private int ciclosES;
     private ListaSimple listaListos;
     private ListaSimple listaBloqueados;
+    private ListaSimple listaTotalProcesos;
     private Semaphore semaphore; // Semáforo para sincronización
     private int duracion;
     private String cpuName;
     private int velocidadReloj;
-    private int ciclosES;
     private InterfazInicial interfaz;
     private int cpu;
-    private int tiempoEjecucionRR;
+    private int tiempoEjecucionRR; 
     private int tiempoEnCPU;
 
     // IO bound constructor
     public Process(int id, String name, int totalInstructions, boolean cpuBound, boolean ioBound, int ciclosExcepcion,
-            ListaSimple listaListos, ListaSimple listaBloqueados, int velocidadReloj, int cicloES, InterfazInicial interfaz, int cpu, int tiempoEjecucionRR, int tiempoEnCPU) {
+            ListaSimple listaListos, ListaSimple listaBloqueados, ListaSimple listaTotalProcesos, int velocidadReloj, int cicloES, InterfazInicial interfaz, int cpu, int tiempoEjecucionRR, int tiempoEnCPU) {
         this.id = id;
         this.name = name;
         this.programCounter = 0;
@@ -39,6 +40,7 @@ public class Process extends Thread {
         this.ciclosExcepcion = ciclosExcepcion;
         this.listaListos = listaListos;
         this.listaBloqueados = listaBloqueados;
+        this.listaTotalProcesos = listaTotalProcesos;
         this.semaphore = semaphore; // Semáforo compartido
         this.duracion = totalInstructions - programCounter;
         this.cpuName = cpuName;
@@ -52,7 +54,7 @@ public class Process extends Thread {
 
     // Cpu bound constructor
     public Process(int id, String name, int totalInstructions, boolean cpuBound, boolean ioBound,
-            ListaSimple listaListos, ListaSimple listaBloqueados, int velocidadReloj, InterfazInicial interfaz, int cpu, int tiempoEjecucionRR, int tiempoEnCPU) {
+            ListaSimple listaListos, ListaSimple listaBloqueados, ListaSimple listaTotalProcesos, int velocidadReloj, InterfazInicial interfaz, int cpu, int tiempoEjecucionRR, int tiempoEnCPU) {
         this.id = id;
         this.name = name;
         this.programCounter = 0;
@@ -62,6 +64,7 @@ public class Process extends Thread {
         this.ioBound = ioBound;
         this.listaListos = listaListos;
         this.listaBloqueados = listaBloqueados;
+        this.listaTotalProcesos = listaTotalProcesos;
         this.semaphore = semaphore; // Semáforo compartido
         this.duracion = totalInstructions - programCounter;
         this.cpuName = cpuName;
@@ -74,7 +77,7 @@ public class Process extends Thread {
 
     // Cargar proceso de configuracion constructor
     public Process(int id, String name, int totalInstructions, int programCounter, boolean cpuBound, boolean ioBound, int ciclosExcepcion,
-            ListaSimple listaListos, ListaSimple listaBloqueados, int velocidadReloj, int cicloES, InterfazInicial interfaz, int cpu, int tiempoEjecucionRR, int tiempoEnCPU) {
+            ListaSimple listaListos, ListaSimple listaBloqueados, ListaSimple listaTotalProcesos, int velocidadReloj, int cicloES, InterfazInicial interfaz, int cpu, int tiempoEjecucionRR, int tiempoEnCPU) {
         this.id = id;
         this.name = name;
         this.programCounter = programCounter;
@@ -85,6 +88,7 @@ public class Process extends Thread {
         this.ciclosExcepcion = ciclosExcepcion;
         this.listaListos = listaListos;
         this.listaBloqueados = listaBloqueados;
+        this.listaTotalProcesos = listaTotalProcesos;
         this.semaphore = semaphore; // Semáforo compartido
         this.duracion = totalInstructions - programCounter;
         this.cpuName = cpuName;
@@ -173,6 +177,7 @@ public class Process extends Thread {
             if (programCounter == totalInstructions) {
                 status = ProcessStatus.FINISHED;
                 listaListos.RemoveProcess(this);
+                listaTotalProcesos.RemoveProcess(this);
                 System.out.println("Proceso " + name + " finalizado.");
                 os.start();
                 os.join();
@@ -310,4 +315,9 @@ public class Process extends Thread {
         this.cpu = cpu;
     }
 
+    public int getCiclosES() {
+        return ciclosES;
+    }
+
+    
 }
