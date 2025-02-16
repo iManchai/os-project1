@@ -83,10 +83,9 @@ public class Process extends Thread {
 
             Os os = new Os(0, "Os", 3, velocidadReloj, interfaz, cpu);
             os.setSemaphore(semaphore);
-            while (programCounter < totalInstructions && status != ProcessStatus.BLOCKED) {
-
-                /////Actulizar la grafica
-                if (programCounter == 0) {
+            
+                            /////Actulizar la grafica
+                if (programCounter >= 0) {
 
                     int utlizacionSistema = interfaz.getUtilizacionSistema();
                     utlizacionSistema++;
@@ -94,6 +93,10 @@ public class Process extends Thread {
                     interfaz.getDataset().addValue(utlizacionSistema, "Ejecutando proceso", String.valueOf(interfaz.getContadorGlobal()));
 
                 }
+            
+            while (programCounter < totalInstructions && status != ProcessStatus.BLOCKED) {
+
+
 
                 //////crear metodo para SRT
                
@@ -144,16 +147,18 @@ public class Process extends Thread {
                     System.out.println("Proceso " + name + " sale del CPU (Round Robin)" + cpuName);
                     interfaz.actualizarIntefazCrear(interfaz.getModeloTablaListos(), id, name, programCounter, status.name(), totalInstructions);
                     semaphore.release();
-
-                    os.start();
-                    os.join();
-
-                    ///actualizar grafica
+                    
+                     ///actualizar grafica
                     int utlizacionSistema = interfaz.getUtilizacionSistema();
                     utlizacionSistema--;
                     interfaz.setUtilizacionSistema(utlizacionSistema);
                     interfaz.getDataset().addValue(utlizacionSistema, "Ejecutando proceso", String.valueOf(interfaz.getContadorGlobal()));
 
+
+                    os.start();
+                    os.join();
+
+                   
                     return;
                 }
 
