@@ -7,11 +7,13 @@ package Interfaz;
 import Classes.Cpu;
 import Classes.Process;
 import DataStructures.ListaSimple;
+import DataStructures.Nodo;
 import Planificacion.PlanificadorFCFS;
 import Planificacion.PlanificadorRR;
 import Planificacion.PlanificadorSJF;
 import Planificacion.PlanificadorSRT;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -19,6 +21,7 @@ import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.concurrent.Semaphore;
 import javax.swing.JFileChooser;
@@ -1600,20 +1603,19 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                     velocidadReloj = json.get("velocidadReloj").getAsInt();
                     planificadorEscogido = json.get("planificador").getAsString();
 
-                    if (planificadorEscogido == "FCFS") {
+                    if ("FCFS".equals(planificadorEscogido)) {
                         cpu1.setPlanificador(new PlanificadorFCFS());
                         cpu2.setPlanificador(new PlanificadorFCFS());
                         cpu3.setPlanificador(new PlanificadorFCFS());
-
-                    } else if (planificadorEscogido == "SJF") {
+                    } else if ("SJF".equals(planificadorEscogido)) {
                         cpu1.setPlanificador(new PlanificadorSJF());
                         cpu2.setPlanificador(new PlanificadorSJF());
                         cpu3.setPlanificador(new PlanificadorSJF());
-                    } else if (planificadorEscogido == "RR") {
+                    } else if ("RR".equals(planificadorEscogido)) {
                         cpu1.setPlanificador(new PlanificadorRR());
                         cpu2.setPlanificador(new PlanificadorRR());
                         cpu3.setPlanificador(new PlanificadorRR());
-                    } else if (planificadorEscogido == "SRT") {
+                    } else if ("SRT".equals(planificadorEscogido)) {
                         cpu1.setPlanificador(new PlanificadorSRT());
                         cpu2.setPlanificador(new PlanificadorSRT());
                         cpu3.setPlanificador(new PlanificadorSRT());
@@ -1636,18 +1638,17 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                         int ciclosIO = procesoJson.get("ciclosIO").getAsInt();
 
                         Process proceso = new Process(id, nombre, totalInstructions, programCounter, cpuBound, ioBound, ciclosExcepcion, listaListos, listaBloqueados,
-                                velocidadReloj, ciclosIO, this, 0, 1, 0);
+                                listaTotalProcesos, velocidadReloj, ciclosIO, this, 0, 1, 0);
                         listaListos.addProcess(proceso);
 
                         actualizarTablasAñadir(modeloTablaListos, id, nombre, programCounter, status, totalInstructions);
 
                     }
-                    
+
                     CurrentCpus.setText(Integer.toString(cantidadCpus));
                     CurrentCycle.setText(Integer.toString(velocidadReloj));
                     CurrentPolicy.setText(planificadorEscogido);
-                    
-                    
+
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(this, "Error al leer el archivo: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -1659,6 +1660,43 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
     private void GuardarConfigButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarConfigButtonActionPerformed
         // TODO add your handling code here:
+        try {
+
+            JsonObject json = new JsonObject();
+            json.addProperty("procesosCreados", procesosCreados);
+            json.addProperty("cantidadCpus", cantidadCpus);
+            json.addProperty("velocidadReloj", velocidadReloj);
+            json.addProperty("planificador", planificadorEscogido);
+
+            JsonArray procesosArray = new JsonArray();
+            for (Nodo nodo = listaListos.getpFirst(); nodo != null; nodo = nodo.getpNext()) {
+                Process proceso = (Process) nodo.getInfo();
+                JsonObject procesoJson = new JsonObject();
+
+                procesoJson.addProperty("id", proceso.getIdProcess());
+                procesoJson.addProperty("nombre", proceso.getNameProcess());
+                procesoJson.addProperty("totalInstructions", proceso.getTotalInstructions());
+                procesoJson.addProperty("status", proceso.getStatus().name());
+                procesoJson.addProperty("programCounter", proceso.getProgramCounter());
+                procesoJson.addProperty("cpuBound", proceso.isCpuBound());
+                procesoJson.addProperty("ioBound", proceso.isIoBound());
+                procesoJson.addProperty("ciclosExcepcion", proceso.getCiclosExcepcion());
+                procesoJson.addProperty("ciclosIO", proceso.getCiclosES());
+                procesosArray.add(procesoJson);
+
+            }
+            
+            json.add("procesos_listos", procesosArray);
+            
+            Gson gson = new GsonBuilder().setPrettyPrinting().create(); 
+            String jsonString = gson.toJson(json);
+            
+            FileWriter writer = new FileWriter("Configuracion");
+            writer.write(jsonString);
+            JOptionPane.showConfirmDialog(null, "Se guardo la configuracion actual con exito");
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Hubo un error de E/S", "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_GuardarConfigButtonActionPerformed
 
     private void CantidadCpuSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CantidadCpuSelectActionPerformed
@@ -1690,8 +1728,10 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                 int longitudProceso = Integer.parseInt(LongitudTextField.getText());
                 String nombreProceso = NombreProcesoTextField.getText();
 
-                Process process = new Process(procesosCreados, nombreProceso, longitudProceso, false, true, cicloLlamarIO, listaListos, listaBloqueados, velocidadReloj, cicloTerminarIO, this, 0, 1, 0);
+                Process process = new Process(procesosCreados, nombreProceso, longitudProceso, false, true, cicloLlamarIO, listaListos, listaBloqueados,
+                        listaTotalProcesos, velocidadReloj, cicloTerminarIO, this, 0, 1, 0);
                 listaListos.addProcess(process);
+                listaTotalProcesos.addProcess(process);
 
                 // Agregar a la tabla de listos en la interfaz
                 Object[] nuevaFila = new Object[]{
@@ -1709,8 +1749,10 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                 int longitudProceso = Integer.parseInt(LongitudTextField.getText());
                 String nombreProceso = NombreProcesoTextField.getText();
 
-                Process process = new Process(procesosCreados, nombreProceso, longitudProceso, true, false, listaListos, listaBloqueados, velocidadReloj, this, 0, 1, 0);
+                Process process = new Process(procesosCreados, nombreProceso, longitudProceso, true, false, listaListos, listaBloqueados,
+                        listaTotalProcesos, velocidadReloj, this, 0, 1, 0);
                 listaListos.addProcess(process);
+                listaTotalProcesos.addProcess(process);
 
                 System.out.println(process.getCiclosExcepcion());
 
@@ -1942,6 +1984,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                 FinalizarSimulacionButton.setEnabled(true);
                 IniciarButton.setEnabled(false);
                 CargarButton.setEnabled(false);
+                GuardarConfigButton.setEnabled(true);
                 try {
                     // MANEJO DEL CONTADOR GLOBAL EN LA INTERFAZ
                     Thread.sleep(velocidadReloj);
@@ -1958,6 +2001,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                 contadorGlobal = 0;
                 GlobalCounter.setText(Integer.toString(contadorGlobal));
                 CargarButton.setEnabled(true);
+                GuardarConfigButton.setEnabled(false);
             }
         }
     }
