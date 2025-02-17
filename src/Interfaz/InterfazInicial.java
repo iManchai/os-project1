@@ -44,37 +44,36 @@ import org.jfree.chart.ChartPanel;
  */
 public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
-    public static boolean isRunning = false;
-
-    private CpuLabels cpu1Labels;
-    private CpuLabels cpu2Labels;
-    private CpuLabels cpu3Labels;
-    private DefaultTableModel modeloTablaFinalizadoSistema;
-    private DefaultTableModel modeloTablaListos;
-    private DefaultTableModel modeloTablaBloqueados;
-    private DefaultTableModel modeloTablaFinalizadoSistemaCP1;
-    private DefaultTableModel modeloTablaFinalizadoSistemaCP2;
-    private DefaultTableModel modeloTablaFinalizadoSistemaCP3;
-    private int utilizacionSistema = 0;
-    ListaSimple listaListos = new ListaSimple();
-    ListaSimple listaBloqueados = new ListaSimple();
-    ListaSimple listaTotalProcesos = new ListaSimple();
-    Semaphore semaphoreList = new Semaphore(1);
-
-    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-    int cantidadCpus = 2;
-    int velocidadReloj = 1000;
-    int procesosCreados = 1;
-    int contadorGlobal = 0;
-    String planificadorEscogido = "FCFS";
-    Semaphore semaphoreCpu1 = new Semaphore(1);
-    Semaphore semaphoreCpu2 = new Semaphore(1);
-    Semaphore semaphoreCpu3 = new Semaphore(1);
-    Cpu cpu1 = new Cpu(1, listaListos, semaphoreList, semaphoreCpu1, velocidadReloj, this);
-    Cpu cpu2 = new Cpu(2, listaListos, semaphoreList, semaphoreCpu2, velocidadReloj, this);
-    Cpu cpu3 = new Cpu(3, listaListos, semaphoreList, semaphoreCpu3, velocidadReloj, this);
+    public static boolean isRunning = false; // Estado de la simulacion
+    private CpuLabels cpu1Labels; // Etiquetas (Labels) de la interfaz gráfica para mostrar información del CPU 1.
+    private CpuLabels cpu2Labels; // Etiquetas (Labels) de la interfaz gráfica para mostrar información del CPU 2.
+    private CpuLabels cpu3Labels; // Etiquetas (Labels) de la interfaz gráfica para mostrar información del CPU 3.
+    private DefaultTableModel modeloTablaFinalizadoSistema; // Modelo de la tabla para mostrar procesos finalizados en el sistema.
+    private DefaultTableModel modeloTablaListos; // Modelo de la tabla para mostrar procesos en estado "Listo" (Ready).
+    private DefaultTableModel modeloTablaBloqueados; // Modelo de la tabla para mostrar procesos en estado "Bloqueado" (Blocked).
+    private DefaultTableModel modeloTablaFinalizadoSistemaCP1; // Modelo de la tabla para mostrar procesos finalizados en el CPU 1.
+    private DefaultTableModel modeloTablaFinalizadoSistemaCP2; // Modelo de la tabla para mostrar procesos finalizados en el CPU 2.
+    private DefaultTableModel modeloTablaFinalizadoSistemaCP3; // Modelo de la tabla para mostrar procesos finalizados en el CPU 3.
+    private int utilizacionSistema = 0; // Porcentaje de utilización del sistema (puede ser un promedio o valor actual).
+    ListaSimple listaListos = new ListaSimple(); // Lista de procesos en estado "Listo" (Ready).
+    ListaSimple listaBloqueados = new ListaSimple(); // Lista de procesos en estado "Bloqueado" (Blocked).
+    ListaSimple listaTotalProcesos = new ListaSimple(); // Lista de todos los procesos creados en el sistema.
+    Semaphore semaphoreList = new Semaphore(1); // Semáforo para controlar el acceso a las listas de procesos.
+    int cantidadCpus = 2; // Cantidad de CPUs en el sistema.
+    int velocidadReloj = 1000; // Velocidad del reloj de la CPU (en milisegundos).
+    int procesosCreados = 1; // Contador del número total de procesos creados en el sistema.
+    int contadorGlobal = 0; // Contador global del sistema (Ciclos de reloj).
+    String planificadorEscogido = "FCFS"; // Algoritmo de planificación de procesos seleccionado (en este caso, FCFS - First-Come, First-Served).
+    Semaphore semaphoreCpu1 = new Semaphore(1); // Semáforo para controlar el acceso al CPU 1.
+    Semaphore semaphoreCpu2 = new Semaphore(1); // Semáforo para controlar el acceso al CPU 2.
+    Semaphore semaphoreCpu3 = new Semaphore(1); // Semáforo para controlar el acceso al CPU 3.
+    Cpu cpu1 = new Cpu(1, listaListos, semaphoreList, semaphoreCpu1, velocidadReloj, this); // Objeto CPU que representa el CPU 1.
+    Cpu cpu2 = new Cpu(2, listaListos, semaphoreList, semaphoreCpu2, velocidadReloj, this); // Objeto CPU que representa el CPU 2.
+    Cpu cpu3 = new Cpu(3, listaListos, semaphoreList, semaphoreCpu3, velocidadReloj, this); // Objeto CPU que representa el CPU 3.
+    DefaultCategoryDataset dataset = new DefaultCategoryDataset(); // Conjunto de datos para el gráfico
     private ChartPanel frame;
 
+    // Getters and Setters
     public int getUtilizacionSistema() {
         return utilizacionSistema;
     }
@@ -90,17 +89,6 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     public void setDataset(DefaultCategoryDataset dataset) {
         this.dataset = dataset;
     }
-
-    JFreeChart chart = ChartFactory.createLineChart(
-            "Progreso del Proceso", // Título del gráfico
-            "Ciclos", // Etiqueta del eje X
-            "Valor", // Etiqueta del eje Y
-            dataset, // Dataset
-            PlotOrientation.VERTICAL, // Orientación del gráfico
-            true, // Incluir leyenda
-            true, // Incluir tooltips
-            false // Incluir URLs
-    );
 
     public String getPlanificadorEscogido() {
         return planificadorEscogido;
@@ -141,30 +129,13 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     public void setModeloTablaBloqueados(DefaultTableModel modeloTablaBloqueados) {
         this.modeloTablaBloqueados = modeloTablaBloqueados;
     }
+
     public DefaultTableModel getModeloTablaFinalizadoSistema() {
         return modeloTablaFinalizadoSistema;
     }
 
     public void setModeloTablaFinalizadoSistema(DefaultTableModel modeloTablaFinalizadoSistema) {
         this.modeloTablaFinalizadoSistema = modeloTablaFinalizadoSistema;
-    }
-
-    public void AgregarListaFinalizadosCpu(int cpu, int procesosCreados, String nombreProceso, int programCounter, String status, int totalInstructions) {
-
-        if (cpu == 1) {
-
-            actualizarTablasAñadir(modeloTablaFinalizadoSistemaCP1, procesosCreados, nombreProceso, programCounter, status, totalInstructions);
-
-        }
-        if (cpu == 2) {
-            actualizarTablasAñadir(modeloTablaFinalizadoSistemaCP2, procesosCreados, nombreProceso, programCounter, status, totalInstructions);
-
-        }
-        if (cpu == 3) {
-            actualizarTablasAñadir(modeloTablaFinalizadoSistemaCP3, procesosCreados, nombreProceso, programCounter, status, totalInstructions);
-
-        }
-
     }
 
     public DefaultTableModel getModeloTablaListos() {
@@ -175,60 +146,161 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         this.modeloTablaListos = modeloTablaListos;
     }
 
+    JFreeChart chart = ChartFactory.createLineChart(
+            "Progreso del Proceso", // Título del gráfico
+            "Ciclos", // Etiqueta del eje X
+            "Valor", // Etiqueta del eje Y
+            dataset, // Dataset
+            PlotOrientation.VERTICAL, // Orientación del gráfico
+            true, // Incluir leyenda
+            true, // Incluir tooltips
+            false // Incluir URLs
+    );
+
     // FUNCIONES AUXILIARES // 
+    /**
+     * Agrega información sobre un proceso finalizado a la tabla correspondiente
+     * según el número de CPU.
+     *
+     * @param cpu El número de CPU (1, 2 o 3) al que se asignó el proceso.
+     * @param procesosCreados El número total de procesos creados hasta el
+     * momento.
+     * @param nombreProceso El nombre del proceso finalizado.
+     * @param programCounter El valor final del contador de programa (PC) del
+     * proceso.
+     * @param status El estado final del proceso (por ejemplo, "Finalizado").
+     * @param totalInstructions El número total de instrucciones ejecutadas por
+     * el proceso.
+     */
+    public void AgregarListaFinalizadosCpu(int cpu, int procesosCreados, String nombreProceso, int programCounter, String status, int totalInstructions, int mar, String tipo) {
+        // Verifica a qué CPU se le asignó el proceso y actualiza la tabla correspondiente.
+        if (cpu == 1) {
+            // Actualiza la tabla de procesos finalizados para el CPU 1.
+            actualizarTablasAñadir(modeloTablaFinalizadoSistemaCP1, procesosCreados, nombreProceso, programCounter, mar, tipo, status, totalInstructions);
+        }
+        if (cpu == 2) {
+            // Actualiza la tabla de procesos finalizados para el CPU 2.
+            actualizarTablasAñadir(modeloTablaFinalizadoSistemaCP2, procesosCreados, nombreProceso, programCounter, mar, tipo, status, totalInstructions);
+        }
+        if (cpu == 3) {
+            // Actualiza la tabla de procesos finalizados para el CPU 3.
+            actualizarTablasAñadir(modeloTablaFinalizadoSistemaCP3, procesosCreados, nombreProceso, programCounter, mar, tipo, status, totalInstructions);
+        }
+    }
+
+    /**
+     * Elimina un proceso de la tabla de procesos listos por su ID.
+     *
+     * @param modeloTablaListos La tabla (modelo) de procesos listos de la cual
+     * se va a eliminar el proceso.
+     * @param procesosCreados El ID del proceso que se va a eliminar.
+     */
     public void actualizarTablasBorrar(DefaultTableModel modeloTablaListos, int procesosCreados) {
+        // Itera sobre las filas de la tabla de procesos listos.
         for (int i = 0; i < modeloTablaListos.getRowCount(); i++) {
+            // Obtiene el ID del proceso de la fila actual.
             int idProceso = (int) modeloTablaListos.getValueAt(i, 0);
 
+            // Compara el ID del proceso actual con el ID del proceso que se va a eliminar.
             if (idProceso == procesosCreados) {
+                // Se encontró el proceso. Elimina la fila correspondiente de la tabla.
                 modeloTablaListos.removeRow(i);
-                return; // Importante: Salir después de borrar
+                return; // Importante: Salir del método después de eliminar la fila.
             }
         }
     }
 
-    public void actualizarTablasAñadir(DefaultTableModel modeloTablaListos, int procesosCreados, String nombreProceso, int programCounter, String status, int totalInstructions) {
+    /**
+     * Actualiza la tabla de procesos finalizados con la información del
+     * proceso. Este método se encarga de añadir una nueva fila a la tabla con
+     * los datos del proceso finalizado.
+     *
+     * @param modeloTabla La tabla (modelo) que se va a actualizar.
+     * @param procesosCreados El número total de procesos creados hasta el
+     * momento.
+     * @param nombreProceso El nombre del proceso finalizado.
+     * @param programCounter El valor final del contador de programa (PC) del
+     * proceso.
+     * @param status El estado final del proceso (por ejemplo, "Finalizado").
+     * @param totalInstructions El número total de instrucciones ejecutadas por
+     * el proceso.
+     */
+    public void actualizarTablasAñadir(DefaultTableModel modeloTabla, int procesosCreados, String nombreProceso, int programCounter, int mar, String tipo, String status, int totalInstructions) {
         // No necesitas buscar si ya existe, simplemente añade la nueva fila
         Object[] nuevaFila = new Object[]{
             procesosCreados,
             nombreProceso,
             programCounter,
+            mar,
+            tipo,
             status,
             totalInstructions
         };
-        modeloTablaListos.addRow(nuevaFila);
+        modeloTabla.addRow(nuevaFila);
     }
 
-    public void actualizarIntefaz(DefaultTableModel modeloTablaListos, int procesosCreados, String nombreProceso, int programCounter, String status, int totalInstructions) {
-
+    /**
+     * Actualiza la información de un proceso en la tabla de procesos listos.
+     * Busca el proceso por su ID y actualiza su contador de programa (PC),
+     * estado y número total de instrucciones.
+     *
+     * @param modeloTablaListos La tabla (modelo) de procesos listos que se va a
+     * actualizar.
+     * @param procesosCreados El ID del proceso que se va a actualizar.
+     * @param nombreProceso El nombre del proceso (actualmente no se utiliza,
+     * pero se incluye por consistencia).
+     * @param programCounter El nuevo valor del contador de programa (PC) del
+     * proceso.
+     * @param status El nuevo estado del proceso (por ejemplo, "Listo",
+     * "Ejecutando", "Bloqueado").
+     * @param totalInstructions El nuevo número total de instrucciones
+     * ejecutadas por el proceso.
+     */
+    public void actualizarInterfaz(DefaultTableModel modeloTablaListos, int procesosCreados, String nombreProceso, int programCounter, String status, int totalInstructions) {
+        // Itera sobre las filas de la tabla de procesos listos.
         for (int i = 0; i < modeloTablaListos.getRowCount(); i++) {
+            // Obtiene el ID del proceso de la fila actual.
             int idProceso = (int) modeloTablaListos.getValueAt(i, 0);
 
+            // Compara el ID del proceso actual con el ID del proceso que se va a actualizar.
             if (idProceso == procesosCreados) {
-                System.out.println("actualizar");
+                // Actualiza el contador de programa (PC).
                 modeloTablaListos.setValueAt(programCounter, i, 2);
+                // Actualiza el estado del proceso.
                 modeloTablaListos.setValueAt(status, i, 3);
+                // Actualiza el número total de instrucciones.
                 modeloTablaListos.setValueAt(totalInstructions, i, 4);
-                return;
+                return; // Sale del método una vez que se ha actualizado el proceso.
             }
         }
-
     }
 
-    public void actualizarInterfazCPU(int cpuId, String id, String estado, String pc, String name, String longitud) {
-        CpuLabels labels = null;
-        switch (cpuId) {
-            case 1:
-                labels = cpu1Labels;
-                break;
-            case 2:
-                labels = cpu2Labels;
-                break;
-            case 3:
-                labels = cpu3Labels;
-                break;
-        }
-
+    /**
+     * Actualiza la información mostrada en la interfaz gráfica para un CPU
+     * específico. Este método se ejecuta en el hilo de eventos de Swing para
+     * garantizar la correcta actualización de los componentes de la interfaz.
+     *
+     * @param cpuId El ID del CPU (1, 2 o 3).
+     * @param id El ID del proceso que se está ejecutando en el CPU.
+     * @param estado El estado del proceso.
+     * @param pc El valor actual del contador de programa (PC).
+     * @param name El nombre del proceso.
+     * @param longitud La longitud o duración del proceso (puede ser en
+     * instrucciones o tiempo).
+     */
+    public void actualizarInterfazCPU(int cpuId, String id, String estado, String pc, String mar, String name, String longitud) {
+        // Obtiene las etiquetas correspondientes al CPU.
+        CpuLabels labels = switch (cpuId) {
+            case 1 ->
+                cpu1Labels;
+            case 2 ->
+                cpu2Labels;
+            case 3 ->
+                cpu3Labels;
+            default ->
+                null; // Manejo de ID de CPU inválido.
+        };
+        // Actualiza las etiquetas en el hilo de eventos de Swing.
         if (labels != null) {
             CpuLabels finalLabels = labels;
             SwingUtilities.invokeLater(() -> {
@@ -236,21 +308,20 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                 finalLabels.nameLabel.setText(name);
                 finalLabels.estateLabel.setText(estado);
                 finalLabels.pcLabel.setText(pc);
+                finalLabels.marLabel.setText(mar);
                 finalLabels.longitud.setText(longitud);
 
-                if (finalLabels.nameLabel.getText().equalsIgnoreCase("OS") || finalLabels.nameLabel.getText().equalsIgnoreCase("system32")) {
-                    finalLabels.idLabel.setForeground(Color.CYAN);
-                    finalLabels.nameLabel.setForeground(Color.CYAN);
-                    finalLabels.estateLabel.setForeground(Color.CYAN);
-                    finalLabels.pcLabel.setForeground(Color.CYAN);
-                    finalLabels.longitud.setForeground(Color.CYAN);
-                } else {
-                    finalLabels.idLabel.setForeground(Color.BLACK);
-                    finalLabels.nameLabel.setForeground(Color.BLACK);
-                    finalLabels.estateLabel.setForeground(Color.BLACK);
-                    finalLabels.pcLabel.setForeground(Color.BLACK);
-                    finalLabels.longitud.setForeground(Color.BLACK);
-                }
+                // Establece el color del texto según el nombre del proceso.
+                Color color = (finalLabels.nameLabel.getText().equalsIgnoreCase("OS")
+                        || finalLabels.nameLabel.getText().equalsIgnoreCase("system32"))
+                        ? Color.CYAN : Color.BLACK;
+
+                finalLabels.idLabel.setForeground(color);
+                finalLabels.nameLabel.setForeground(color);
+                finalLabels.estateLabel.setForeground(color);
+                finalLabels.pcLabel.setForeground(color);
+                finalLabels.marLabel.setForeground(color);
+                finalLabels.longitud.setForeground(color);
             });
         } else {
             System.err.println("ID de CPU inválido: " + cpuId);
@@ -307,32 +378,20 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         modeloTablaFinalizadoSistemaCP1 = (DefaultTableModel) EndedProcessesCPU1.getModel();
         modeloTablaFinalizadoSistemaCP2 = (DefaultTableModel) EndedProcessesCPU2.getModel();
         modeloTablaFinalizadoSistemaCP3 = (DefaultTableModel) EndedProcessesCPU3.getModel();
-        cpu1Labels = new CpuLabels(IDProcessCPU1, NameProcessCPU1, EstateProcessCPU1, PcCPU1, LongitudProcessCPU1);
-        cpu2Labels = new CpuLabels(IDProcessCPU2, NameProcessCPU2, EstateProcessCPU2, PcCPU2, LongitudProcessCPU2);
-        cpu3Labels = new CpuLabels(IDProcessCPU3, NameProcessCPU3, EstateProcessCPU3, PcCPU3, LongitudProcessCPU3);
+        cpu1Labels = new CpuLabels(IDProcessCPU1, NameProcessCPU1, EstateProcessCPU1, PcCPU1, MarProcessCPU1, LongitudProcessCPU1);
+        cpu2Labels = new CpuLabels(IDProcessCPU2, NameProcessCPU2, EstateProcessCPU2, PcCPU2, MarProcessCPU2, LongitudProcessCPU2);
+        cpu3Labels = new CpuLabels(IDProcessCPU3, NameProcessCPU3, EstateProcessCPU3, PcCPU3, MarProcessCPU3, LongitudProcessCPU3);
 
         // Setear labels al inicializar el JFrame
         CurrentCpus.setText(Integer.toString(cantidadCpus));
         CurrentCycle.setText(Integer.toString(velocidadReloj));
         GlobalCounter.setText(Integer.toString(contadorGlobal));
         CurrentPolicy.setText(planificadorEscogido);
-        
-        
+
         frame = new ChartPanel(chart);
-        
-        
-         jPanel5.setLayout(new BorderLayout());
+
+        jPanel5.setLayout(new BorderLayout());
         jPanel5.add(frame, BorderLayout.NORTH);
-
-        
-
-
-
-        
-        
-        
-        
-        
 
         Thread t = new Thread(this);
         t.start();
@@ -819,30 +878,30 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
         IDProcessCPU1.setForeground(new java.awt.Color(0, 0, 0));
         IDProcessCPU1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        IDProcessCPU1.setText("jLabel15");
+        IDProcessCPU1.setText("NULL");
 
         NameProcessCPU1.setForeground(new java.awt.Color(0, 0, 0));
         NameProcessCPU1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        NameProcessCPU1.setText("jLabel15");
+        NameProcessCPU1.setText("NULL");
 
         EstateProcessCPU1.setForeground(new java.awt.Color(0, 0, 0));
         EstateProcessCPU1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        EstateProcessCPU1.setText("jLabel15");
+        EstateProcessCPU1.setText("NULL");
 
         MarProcessCPU1.setForeground(new java.awt.Color(0, 0, 0));
         MarProcessCPU1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        MarProcessCPU1.setText("jLabel15");
+        MarProcessCPU1.setText("NULL");
 
         PcCPU1.setForeground(new java.awt.Color(0, 0, 0));
         PcCPU1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        PcCPU1.setText("jLabel15");
+        PcCPU1.setText("NULL");
 
         Longitud1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         Longitud1.setText("LONGITUD:");
 
         LongitudProcessCPU1.setForeground(new java.awt.Color(0, 0, 0));
         LongitudProcessCPU1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        LongitudProcessCPU1.setText("jLabel15");
+        LongitudProcessCPU1.setText("NULL");
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -875,7 +934,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                         .addComponent(Longitud1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(LongitudProcessCPU1)))
-                .addContainerGap(105, Short.MAX_VALUE))
+                .addContainerGap(119, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -955,30 +1014,30 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
         IDProcessCPU2.setForeground(new java.awt.Color(0, 0, 0));
         IDProcessCPU2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        IDProcessCPU2.setText("jLabel15");
+        IDProcessCPU2.setText("NULL");
 
         NameProcessCPU2.setForeground(new java.awt.Color(0, 0, 0));
         NameProcessCPU2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        NameProcessCPU2.setText("jLabel15");
+        NameProcessCPU2.setText("NULL");
 
         EstateProcessCPU2.setForeground(new java.awt.Color(0, 0, 0));
         EstateProcessCPU2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        EstateProcessCPU2.setText("jLabel15");
+        EstateProcessCPU2.setText("NULL");
 
         MarProcessCPU2.setForeground(new java.awt.Color(0, 0, 0));
         MarProcessCPU2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        MarProcessCPU2.setText("jLabel15");
+        MarProcessCPU2.setText("NULL");
 
         PcCPU2.setForeground(new java.awt.Color(0, 0, 0));
         PcCPU2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        PcCPU2.setText("jLabel15");
+        PcCPU2.setText("NULL");
 
         Longitud2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         Longitud2.setText("LONGITUD:");
 
         LongitudProcessCPU2.setForeground(new java.awt.Color(0, 0, 0));
         LongitudProcessCPU2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        LongitudProcessCPU2.setText("jLabel15");
+        LongitudProcessCPU2.setText("NULL");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -1011,7 +1070,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                         .addComponent(Longitud2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(LongitudProcessCPU2)))
-                .addContainerGap(105, Short.MAX_VALUE))
+                .addContainerGap(119, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1091,30 +1150,30 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
         MarProcessCPU3.setForeground(new java.awt.Color(0, 0, 0));
         MarProcessCPU3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        MarProcessCPU3.setText("jLabel15");
+        MarProcessCPU3.setText("NULL");
 
         EstateProcessCPU3.setForeground(new java.awt.Color(0, 0, 0));
         EstateProcessCPU3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        EstateProcessCPU3.setText("jLabel15");
+        EstateProcessCPU3.setText("NULL");
 
         NameProcessCPU3.setForeground(new java.awt.Color(0, 0, 0));
         NameProcessCPU3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        NameProcessCPU3.setText("jLabel15");
+        NameProcessCPU3.setText("NULL");
 
         IDProcessCPU3.setForeground(new java.awt.Color(0, 0, 0));
         IDProcessCPU3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        IDProcessCPU3.setText("jLabel15");
+        IDProcessCPU3.setText("NULL");
 
         PcCPU3.setForeground(new java.awt.Color(0, 0, 0));
         PcCPU3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        PcCPU3.setText("jLabel15");
+        PcCPU3.setText("NULL");
 
         Longitud3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         Longitud3.setText("LONGITUD:");
 
         LongitudProcessCPU3.setForeground(new java.awt.Color(0, 0, 0));
         LongitudProcessCPU3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        LongitudProcessCPU3.setText("jLabel15");
+        LongitudProcessCPU3.setText("NULL");
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -1147,7 +1206,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                         .addComponent(Longitud3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(LongitudProcessCPU3)))
-                .addContainerGap(105, Short.MAX_VALUE))
+                .addContainerGap(119, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1242,14 +1301,14 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
             },
             new String [] {
-                "ID", "Nombre", "PC", "Estado", "Longitud"
+                "ID", "Nombre", "PC", "MAR", "Tipo", "Estado", "Longitud"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -1302,14 +1361,14 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
             },
             new String [] {
-                "ID", "Nombre", "PC", "Estado", "Longitud"
+                "ID", "Nombre", "PC", "MAR", "Tipo", "Estado", "Longitud"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, true
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -1365,14 +1424,14 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
             },
             new String [] {
-                "ID", "Nombre", "PC", "Estado", "Longitud"
+                "ID", "Nombre", "PC", "MAR", "Tipo", "Estado", "Longitud"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -1412,14 +1471,14 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
             },
             new String [] {
-                "ID", "Nombre", "PC", "Estado"
+                "ID", "Nombre", "PC", "MAR", "Tipo", "Estado", "Longitud"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -1459,14 +1518,14 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
             },
             new String [] {
-                "ID", "Nombre", "PC", "Estado"
+                "ID", "Nombre", "PC", "MAR", "Tipo", "Estado", "Longitud"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, true, true
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -1506,15 +1565,22 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
             },
             new String [] {
-                "ID", "Nombre", "PC", "Estado"
+                "ID", "Nombre", "PC", "MAR", "Tipo", "Estado", "Longitud"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         EndedProcessesCPU3.getTableHeader().setReorderingAllowed(false);
@@ -1699,8 +1765,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         JFileChooser fileChooser = new JFileChooser();
         String projectRoot = System.getProperty("user.dir");
         fileChooser.setCurrentDirectory(new File(projectRoot));
-        
-        
+
         fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // Si quieres permitir seleccionar directorios
 
         FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("JSON Files", "json");
@@ -1737,6 +1802,10 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                         cpu1.setPlanificador(new PlanificadorSRT());
                         cpu2.setPlanificador(new PlanificadorSRT());
                         cpu3.setPlanificador(new PlanificadorSRT());
+                    } else if ("HRRN".equals(planificadorEscogido)) {
+                        cpu1.setPlanificador(new PlanificadorHrrn());
+                        cpu2.setPlanificador(new PlanificadorHrrn());
+                        cpu3.setPlanificador(new PlanificadorHrrn());
                     }
 
                     JsonArray procesosArray = json.get("procesos_listos").getAsJsonArray();
@@ -1748,19 +1817,23 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                         int id = procesoJson.get("id").getAsInt();
                         String nombre = procesoJson.get("nombre").getAsString();
                         int totalInstructions = procesoJson.get("totalInstructions").getAsInt();
-                        String status = procesoJson.get("status").getAsString();
                         int programCounter = procesoJson.get("programCounter").getAsInt();
+                        int mar = procesoJson.get("mar").getAsInt();
                         boolean cpuBound = procesoJson.get("cpuBound").getAsBoolean();
                         boolean ioBound = procesoJson.get("ioBound").getAsBoolean();
                         int ciclosExcepcion = procesoJson.get("ciclosExcepcion").getAsInt();
                         int ciclosIO = procesoJson.get("ciclosIO").getAsInt();
 
-                        Process proceso = new Process(id, nombre, totalInstructions, programCounter, cpuBound, ioBound, ciclosExcepcion, listaListos, listaBloqueados,
+                        Process proceso = new Process(id, nombre, totalInstructions, programCounter, mar, cpuBound, ioBound, ciclosExcepcion, listaListos, listaBloqueados,
                                 listaTotalProcesos, velocidadReloj, ciclosIO, this, 0, 1, 0);
                         listaListos.addProcess(proceso);
 
-                        actualizarTablasAñadir(modeloTablaListos, id, nombre, programCounter, status, totalInstructions);
-
+                        if (proceso.isCpuBound()) {
+                            actualizarTablasAñadir(modeloTablaListos, id, nombre, programCounter, mar, "CPU Bound", "READY", totalInstructions);
+                        } else {
+                            actualizarTablasAñadir(modeloTablaListos, id, nombre, programCounter, mar, "IO Bound", "READY", totalInstructions);
+                        }
+                        
                     }
 
                     CurrentCpus.setText(Integer.toString(cantidadCpus));
@@ -1787,14 +1860,15 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
             json.addProperty("planificador", planificadorEscogido);
 
             JsonArray procesosArray = new JsonArray();
-            for (Nodo nodo = listaListos.getpFirst(); nodo != null; nodo = nodo.getpNext()) {
+            for (Nodo nodo = listaTotalProcesos.getpFirst(); nodo != null; nodo = nodo.getpNext()) {
                 Process proceso = (Process) nodo.getInfo();
                 JsonObject procesoJson = new JsonObject();
 
                 procesoJson.addProperty("id", proceso.getIdProcess());
                 procesoJson.addProperty("nombre", proceso.getNameProcess());
                 procesoJson.addProperty("totalInstructions", proceso.getTotalInstructions());
-                procesoJson.addProperty("status", proceso.getStatus().name());
+                procesoJson.addProperty("mar", proceso.getMar());
+                procesoJson.addProperty("status", "READY");
                 procesoJson.addProperty("programCounter", proceso.getProgramCounter());
                 procesoJson.addProperty("cpuBound", proceso.isCpuBound());
                 procesoJson.addProperty("ioBound", proceso.isIoBound());
@@ -1803,17 +1877,17 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                 procesosArray.add(procesoJson);
 
             }
-            
+
             json.add("procesos_listos", procesosArray);
-            
-            Gson gson = new GsonBuilder().setPrettyPrinting().create(); 
+
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
             String jsonString = gson.toJson(json);
-            
+
             try (FileWriter writer = new FileWriter("Configuracion.json")) {
-            gson.toJson(json, writer); // Directly write to the file using Gson
-            //writer.write(jsonString);  No need to write the string manually
-            JOptionPane.showMessageDialog(null, "Configuración guardada con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-        }
+                gson.toJson(json, writer); // Directly write to the file using Gson
+                //writer.write(jsonString);  No need to write the string manually
+                JOptionPane.showMessageDialog(null, "Configuración guardada con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Hubo un error de E/S", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
@@ -1858,6 +1932,8 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                     procesosCreados,
                     nombreProceso,
                     process.getProgramCounter(),
+                    process.getMar(),
+                    (process.isIoBound() ? "IO Bound" : "CPU Bound"), 
                     process.getStatus().name(),
                     process.getTotalInstructions()
 
@@ -1880,6 +1956,8 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                     procesosCreados,
                     nombreProceso,
                     process.getProgramCounter(),
+                    process.getMar(),
+                    (process.isIoBound() ? "IO Bound" : "CPU Bound"), 
                     process.getStatus().name(),
                     process.getTotalInstructions(),};
 
@@ -1939,8 +2017,6 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                 cpu2.setPlanificador(new PlanificadorHrrn());
                 cpu3.setPlanificador(new PlanificadorHrrn());
 
-            } else {
-
             }
 
         }
@@ -1976,11 +2052,8 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
     private void jPanel5ComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_jPanel5ComponentAdded
         // TODO add your handling code here:
-        
-        
 
-        
-        
+
     }//GEN-LAST:event_jPanel5ComponentAdded
 
     private void jPanel5ComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jPanel5ComponentShown
