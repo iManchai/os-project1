@@ -198,11 +198,13 @@ public class Process extends Thread {
                 listaListos.printlist("listos");
                 listaBloqueados.printlist("bloqueados");
                 System.out.println("siguiente iteración-------------->");
-                Thread.sleep(velocidadReloj);
 
-                tiempoEnCPU++;
-                programCounter++;
-                mar++;
+                while (duracion > 0) {
+                    Thread.sleep(velocidadReloj); // Simular un ciclo de reloj
+                    tiempoEnCPU++;
+                    programCounter++;
+                    mar++;
+                }
 
                 semaphore.release(); // Liberar el semáforo
 
@@ -222,8 +224,6 @@ public class Process extends Thread {
 
                     os.start();
 
-                    
-                    // Arreglar esta logica, no funciona correctamente.
                     Thread ioThread = new Thread(() -> { // Hilo para E/S
                         try {
                             Thread.sleep(velocidadReloj * ciclosES);
@@ -232,18 +232,17 @@ public class Process extends Thread {
                             listaBloqueados.RemoveProcess(this);
                             interfaz.actualizarTablasBorrar(interfaz.getModeloTablaBloqueados(), id);
                             listaListos.addProcess(this);
-                            status = ProcessStatus.READY;
                             interfaz.actualizarTablasAñadir(interfaz.getModeloTablaListos(), id, name, programCounter, mar, (ioBound ? "IO Bound" : "CPU Bound"), status.name(), totalInstructions);
+                            status = ProcessStatus.READY;
                             semaphore.release();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     });
 
-                    os.join();
-
                     ioThread.start();
 
+                    os.join();
                     return; // Salir del método run()
                 }
             }
