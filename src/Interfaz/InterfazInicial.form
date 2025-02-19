@@ -68,7 +68,7 @@
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Component id="FinalizarSimulacionButton" min="-2" pref="172" max="-2" attributes="0"/>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="IniciarBoton1" min="-2" pref="172" max="-2" attributes="0"/>
+                                      <Component id="GuardarConfigButton" min="-2" pref="172" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="jSeparator12" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
@@ -115,7 +115,7 @@
                           <Group type="103" alignment="1" groupAlignment="3" attributes="0">
                               <Component id="CargarButton" alignment="3" max="32767" attributes="0"/>
                               <Component id="IniciarButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="IniciarBoton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="GuardarConfigButton" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="FinalizarSimulacionButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Component id="jSeparator12" max="32767" attributes="0"/>
@@ -208,7 +208,7 @@
                 <Property name="orientation" type="int" value="1"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="IniciarBoton1">
+            <Component class="javax.swing.JButton" name="GuardarConfigButton">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="fc" green="8b" red="0" type="rgb"/>
@@ -222,7 +222,7 @@
                 <Property name="text" type="java.lang.String" value="GUARDAR CONFIGURACI&#xd3;N"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="IniciarBoton1ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="GuardarConfigButtonActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="FinalizarSimulacionButton">
@@ -832,7 +832,7 @@
                                           <Component id="LongitudProcessCPU1" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <EmptySpace pref="105" max="32767" attributes="0"/>
+                                  <EmptySpace pref="119" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -869,7 +869,7 @@
                                       <Component id="Longitud1" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="LongitudProcessCPU1" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace pref="120" max="32767" attributes="0"/>
+                                  <EmptySpace pref="105" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -921,7 +921,7 @@
                               <Color blue="0" green="0" red="0" type="rgb"/>
                             </Property>
                             <Property name="horizontalAlignment" type="int" value="2"/>
-                            <Property name="text" type="java.lang.String" value="jLabel15"/>
+                            <Property name="text" type="java.lang.String" value="NULL"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="NameProcessCPU1">
@@ -930,7 +930,7 @@
                               <Color blue="0" green="0" red="0" type="rgb"/>
                             </Property>
                             <Property name="horizontalAlignment" type="int" value="2"/>
-                            <Property name="text" type="java.lang.String" value="jLabel15"/>
+                            <Property name="text" type="java.lang.String" value="NULL"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="EstateProcessCPU1">
@@ -939,7 +939,7 @@
                               <Color blue="0" green="0" red="0" type="rgb"/>
                             </Property>
                             <Property name="horizontalAlignment" type="int" value="2"/>
-                            <Property name="text" type="java.lang.String" value="jLabel15"/>
+                            <Property name="text" type="java.lang.String" value="NULL"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="MarProcessCPU1">
@@ -948,7 +948,7 @@
                               <Color blue="0" green="0" red="0" type="rgb"/>
                             </Property>
                             <Property name="horizontalAlignment" type="int" value="2"/>
-                            <Property name="text" type="java.lang.String" value="jLabel15"/>
+                            <Property name="text" type="java.lang.String" value="NULL"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="PcCPU1">
@@ -957,7 +957,7 @@
                               <Color blue="0" green="0" red="0" type="rgb"/>
                             </Property>
                             <Property name="horizontalAlignment" type="int" value="2"/>
-                            <Property name="text" type="java.lang.String" value="jLabel15"/>
+                            <Property name="text" type="java.lang.String" value="NULL"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="Longitud1">
@@ -974,7 +974,7 @@
                               <Color blue="0" green="0" red="0" type="rgb"/>
                             </Property>
                             <Property name="horizontalAlignment" type="int" value="2"/>
-                            <Property name="text" type="java.lang.String" value="jLabel15"/>
+                            <Property name="text" type="java.lang.String" value="NULL"/>
                           </Properties>
                         </Component>
                       </SubComponents>
@@ -1071,7 +1071,7 @@
                                           <Component id="LongitudProcessCPU2" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <EmptySpace pref="105" max="32767" attributes="0"/>
+                                  <EmptySpace pref="119" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1108,7 +1108,7 @@
                                       <Component id="Longitud2" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="LongitudProcessCPU2" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace pref="111" max="32767" attributes="0"/>
+                                  <EmptySpace pref="96" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1160,7 +1160,7 @@
                               <Color blue="0" green="0" red="0" type="rgb"/>
                             </Property>
                             <Property name="horizontalAlignment" type="int" value="2"/>
-                            <Property name="text" type="java.lang.String" value="jLabel15"/>
+                            <Property name="text" type="java.lang.String" value="NULL"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="NameProcessCPU2">
@@ -1169,7 +1169,7 @@
                               <Color blue="0" green="0" red="0" type="rgb"/>
                             </Property>
                             <Property name="horizontalAlignment" type="int" value="2"/>
-                            <Property name="text" type="java.lang.String" value="jLabel15"/>
+                            <Property name="text" type="java.lang.String" value="NULL"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="EstateProcessCPU2">
@@ -1178,7 +1178,7 @@
                               <Color blue="0" green="0" red="0" type="rgb"/>
                             </Property>
                             <Property name="horizontalAlignment" type="int" value="2"/>
-                            <Property name="text" type="java.lang.String" value="jLabel15"/>
+                            <Property name="text" type="java.lang.String" value="NULL"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="MarProcessCPU2">
@@ -1187,7 +1187,7 @@
                               <Color blue="0" green="0" red="0" type="rgb"/>
                             </Property>
                             <Property name="horizontalAlignment" type="int" value="2"/>
-                            <Property name="text" type="java.lang.String" value="jLabel15"/>
+                            <Property name="text" type="java.lang.String" value="NULL"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="PcCPU2">
@@ -1196,7 +1196,7 @@
                               <Color blue="0" green="0" red="0" type="rgb"/>
                             </Property>
                             <Property name="horizontalAlignment" type="int" value="2"/>
-                            <Property name="text" type="java.lang.String" value="jLabel15"/>
+                            <Property name="text" type="java.lang.String" value="NULL"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="Longitud2">
@@ -1213,7 +1213,7 @@
                               <Color blue="0" green="0" red="0" type="rgb"/>
                             </Property>
                             <Property name="horizontalAlignment" type="int" value="2"/>
-                            <Property name="text" type="java.lang.String" value="jLabel15"/>
+                            <Property name="text" type="java.lang.String" value="NULL"/>
                           </Properties>
                         </Component>
                       </SubComponents>
@@ -1311,7 +1311,7 @@
                                           <Component id="LongitudProcessCPU3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <EmptySpace pref="105" max="32767" attributes="0"/>
+                                  <EmptySpace pref="119" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1348,7 +1348,7 @@
                                       <Component id="Longitud3" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="LongitudProcessCPU3" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace pref="120" max="32767" attributes="0"/>
+                                  <EmptySpace pref="105" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1400,7 +1400,7 @@
                               <Color blue="0" green="0" red="0" type="rgb"/>
                             </Property>
                             <Property name="horizontalAlignment" type="int" value="2"/>
-                            <Property name="text" type="java.lang.String" value="jLabel15"/>
+                            <Property name="text" type="java.lang.String" value="NULL"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="EstateProcessCPU3">
@@ -1409,7 +1409,7 @@
                               <Color blue="0" green="0" red="0" type="rgb"/>
                             </Property>
                             <Property name="horizontalAlignment" type="int" value="2"/>
-                            <Property name="text" type="java.lang.String" value="jLabel15"/>
+                            <Property name="text" type="java.lang.String" value="NULL"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="NameProcessCPU3">
@@ -1418,7 +1418,7 @@
                               <Color blue="0" green="0" red="0" type="rgb"/>
                             </Property>
                             <Property name="horizontalAlignment" type="int" value="2"/>
-                            <Property name="text" type="java.lang.String" value="jLabel15"/>
+                            <Property name="text" type="java.lang.String" value="NULL"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="IDProcessCPU3">
@@ -1427,7 +1427,7 @@
                               <Color blue="0" green="0" red="0" type="rgb"/>
                             </Property>
                             <Property name="horizontalAlignment" type="int" value="2"/>
-                            <Property name="text" type="java.lang.String" value="jLabel15"/>
+                            <Property name="text" type="java.lang.String" value="NULL"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="PcCPU3">
@@ -1436,7 +1436,7 @@
                               <Color blue="0" green="0" red="0" type="rgb"/>
                             </Property>
                             <Property name="horizontalAlignment" type="int" value="2"/>
-                            <Property name="text" type="java.lang.String" value="jLabel15"/>
+                            <Property name="text" type="java.lang.String" value="NULL"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JLabel" name="Longitud3">
@@ -1453,7 +1453,7 @@
                               <Color blue="0" green="0" red="0" type="rgb"/>
                             </Property>
                             <Property name="horizontalAlignment" type="int" value="2"/>
-                            <Property name="text" type="java.lang.String" value="jLabel15"/>
+                            <Property name="text" type="java.lang.String" value="NULL"/>
                           </Properties>
                         </Component>
                       </SubComponents>
@@ -1530,16 +1530,33 @@
                     <Component class="javax.swing.JTable" name="TablaListaDeListos">
                       <Properties>
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                          <Table columnCount="5" rowCount="0">
+                          <Table columnCount="7" rowCount="0">
                             <Column editable="false" title="ID" type="java.lang.Integer"/>
                             <Column editable="false" title="Nombre" type="java.lang.String"/>
                             <Column editable="false" title="PC" type="java.lang.Integer"/>
+                            <Column editable="false" title="MAR" type="java.lang.Integer"/>
+                            <Column editable="false" title="Tipo" type="java.lang.String"/>
                             <Column editable="false" title="Estado" type="java.lang.String"/>
                             <Column editable="false" title="Longitud" type="java.lang.Integer"/>
                           </Table>
                         </Property>
                         <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                           <TableColumnModel selectionModel="0">
+                            <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                              <Title/>
+                              <Editor/>
+                              <Renderer/>
+                            </Column>
+                            <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                              <Title/>
+                              <Editor/>
+                              <Renderer/>
+                            </Column>
+                            <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                              <Title/>
+                              <Editor/>
+                              <Renderer/>
+                            </Column>
                             <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                               <Title/>
                               <Editor/>
@@ -1607,7 +1624,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jSeparator11" min="-2" pref="3" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jScrollPane8" pref="201" max="32767" attributes="0"/>
+                          <Component id="jScrollPane8" pref="198" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -1637,16 +1654,33 @@
                     <Component class="javax.swing.JTable" name="TablaBloqueados">
                       <Properties>
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                          <Table columnCount="5" rowCount="0">
+                          <Table columnCount="7" rowCount="0">
                             <Column editable="false" title="ID" type="java.lang.Integer"/>
                             <Column editable="false" title="Nombre" type="java.lang.String"/>
                             <Column editable="false" title="PC" type="java.lang.Integer"/>
+                            <Column editable="false" title="MAR" type="java.lang.Integer"/>
+                            <Column editable="false" title="Tipo" type="java.lang.String"/>
                             <Column editable="false" title="Estado" type="java.lang.String"/>
-                            <Column editable="true" title="Longitud" type="java.lang.Integer"/>
+                            <Column editable="false" title="Longitud" type="java.lang.Integer"/>
                           </Table>
                         </Property>
                         <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                           <TableColumnModel selectionModel="0">
+                            <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                              <Title/>
+                              <Editor/>
+                              <Renderer/>
+                            </Column>
+                            <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                              <Title/>
+                              <Editor/>
+                              <Renderer/>
+                            </Column>
+                            <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                              <Title/>
+                              <Editor/>
+                              <Renderer/>
+                            </Column>
                             <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                               <Title/>
                               <Editor/>
@@ -1748,16 +1782,33 @@
                         <Component class="javax.swing.JTable" name="EndedProcessesSystem">
                           <Properties>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="5" rowCount="0">
+                              <Table columnCount="7" rowCount="0">
                                 <Column editable="false" title="ID" type="java.lang.Integer"/>
                                 <Column editable="false" title="Nombre" type="java.lang.String"/>
                                 <Column editable="false" title="PC" type="java.lang.Integer"/>
+                                <Column editable="false" title="MAR" type="java.lang.Integer"/>
+                                <Column editable="false" title="Tipo" type="java.lang.String"/>
                                 <Column editable="false" title="Estado" type="java.lang.String"/>
                                 <Column editable="false" title="Longitud" type="java.lang.Integer"/>
                               </Table>
                             </Property>
                             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                               <TableColumnModel selectionModel="0">
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
                                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                                   <Title/>
                                   <Editor/>
@@ -1834,15 +1885,33 @@
                         <Component class="javax.swing.JTable" name="EndedProcessesCPU1">
                           <Properties>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="4" rowCount="0">
+                              <Table columnCount="7" rowCount="0">
                                 <Column editable="false" title="ID" type="java.lang.Integer"/>
                                 <Column editable="false" title="Nombre" type="java.lang.String"/>
                                 <Column editable="false" title="PC" type="java.lang.Integer"/>
+                                <Column editable="false" title="MAR" type="java.lang.Integer"/>
+                                <Column editable="false" title="Tipo" type="java.lang.String"/>
                                 <Column editable="false" title="Estado" type="java.lang.String"/>
+                                <Column editable="false" title="Longitud" type="java.lang.Object"/>
                               </Table>
                             </Property>
                             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                               <TableColumnModel selectionModel="0">
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
                                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                                   <Title/>
                                   <Editor/>
@@ -1919,15 +1988,33 @@
                         <Component class="javax.swing.JTable" name="EndedProcessesCPU2">
                           <Properties>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="4" rowCount="0">
+                              <Table columnCount="7" rowCount="0">
                                 <Column editable="false" title="ID" type="java.lang.Integer"/>
-                                <Column editable="true" title="Nombre" type="java.lang.String"/>
-                                <Column editable="true" title="PC" type="java.lang.Integer"/>
-                                <Column editable="true" title="Estado" type="java.lang.String"/>
+                                <Column editable="false" title="Nombre" type="java.lang.String"/>
+                                <Column editable="false" title="PC" type="java.lang.Integer"/>
+                                <Column editable="false" title="MAR" type="java.lang.Integer"/>
+                                <Column editable="false" title="Tipo" type="java.lang.String"/>
+                                <Column editable="false" title="Estado" type="java.lang.String"/>
+                                <Column editable="false" title="Longitud" type="java.lang.Integer"/>
                               </Table>
                             </Property>
                             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                               <TableColumnModel selectionModel="0">
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
                                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                                   <Title/>
                                   <Editor/>
@@ -2004,15 +2091,33 @@
                         <Component class="javax.swing.JTable" name="EndedProcessesCPU3">
                           <Properties>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="4" rowCount="0">
-                                <Column editable="true" title="ID" type="java.lang.Integer"/>
-                                <Column editable="true" title="Nombre" type="java.lang.String"/>
-                                <Column editable="true" title="PC" type="java.lang.Integer"/>
-                                <Column editable="true" title="Estado" type="java.lang.String"/>
+                              <Table columnCount="7" rowCount="0">
+                                <Column editable="false" title="ID" type="java.lang.Integer"/>
+                                <Column editable="false" title="Nombre" type="java.lang.String"/>
+                                <Column editable="false" title="PC" type="java.lang.Integer"/>
+                                <Column editable="false" title="MAR" type="java.lang.Integer"/>
+                                <Column editable="false" title="Tipo" type="java.lang.String"/>
+                                <Column editable="false" title="Estado" type="java.lang.String"/>
+                                <Column editable="false" title="Longitud" type="java.lang.String"/>
                               </Table>
                             </Property>
                             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                               <TableColumnModel selectionModel="0">
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
                                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                                   <Title/>
                                   <Editor/>

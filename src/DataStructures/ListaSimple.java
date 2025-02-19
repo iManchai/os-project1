@@ -114,6 +114,13 @@ public class ListaSimple {
         this.pFirst = null;
         this.pLast = null;
         this.size = 0;
+        
+        Nodo actual = pFirst;
+        while (actual != null) {
+            Nodo siguiente = actual.getpNext();
+            actual.setpNext(null); // Desconecta el nodo actual
+            actual = siguiente;
+        }
     }
 
     public Nodo getpFirst() {

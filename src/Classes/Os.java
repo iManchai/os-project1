@@ -17,6 +17,7 @@ public class Os extends Thread {
     private int id;
     private String name;
     private int programCounter;
+    private int mar;
     private int totalInstructions;
     private Semaphore semaphore; // Semáforo para sincronización
     private String cpuName;
@@ -29,6 +30,7 @@ public class Os extends Thread {
         this.id = id;
         this.name = name;
         this.programCounter = 0;
+        this.mar = 0;
         this.totalInstructions = totalInstructions;
         this.semaphore = semaphore; // Semáforo compartido
         this.cpuName = cpuName;
@@ -45,14 +47,13 @@ public class Os extends Thread {
 
                 semaphore.acquire();
 
-                interfaz.actualizarInterfazCPU(cpu, String.valueOf(id), name, "RUNNING", String.valueOf(programCounter), String.valueOf(totalInstructions));
+                interfaz.actualizarInterfazCPU(cpu, String.valueOf(id), "RUNNING", String.valueOf(programCounter), String.valueOf(mar), name, String.valueOf(totalInstructions));
 
                 System.out.println(name + " ejecutando instrucción " + programCounter + " en el cpu:" + cpuName);
                 System.out.println("siguiente iteración-------------->");
                 Thread.sleep(velocidadReloj);
 
                 programCounter++;
-
                 semaphore.release();
 
             }

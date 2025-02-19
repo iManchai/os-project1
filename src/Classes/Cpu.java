@@ -43,10 +43,9 @@ public class Cpu extends Thread {  // Extiende Thread para manejar concurrencia
 
                 System.out.println("CPU:" + id + " adquirió el semáforo");
 
-                System.out.println("Ejecutando el bucle de nuevo");
-
-                listaProcesos.printlist("hola");
-                interfaz.actualizarInterfazCPU(id, "0", "system32", "Running", "0", "none");
+                System.out.println("Ejecutando el bucle de nuevo");           
+                
+                interfaz.actualizarInterfazCPU(id, "0", "Running", "0", "0", "system32", "none");
                 if (!listaProcesos.isEmpty()) {
 
                     Process proceso = planificador.seleccionarProceso(listaProcesos);
