@@ -869,7 +869,7 @@
                                       <Component id="Longitud1" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="LongitudProcessCPU1" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace pref="105" max="32767" attributes="0"/>
+                                  <EmptySpace pref="120" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1108,7 +1108,7 @@
                                       <Component id="Longitud2" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="LongitudProcessCPU2" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace pref="96" max="32767" attributes="0"/>
+                                  <EmptySpace pref="111" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1348,7 +1348,7 @@
                                       <Component id="Longitud3" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="LongitudProcessCPU3" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace pref="105" max="32767" attributes="0"/>
+                                  <EmptySpace pref="120" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1624,7 +1624,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jSeparator11" min="-2" pref="3" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jScrollPane8" pref="198" max="32767" attributes="0"/>
+                          <Component id="jScrollPane8" pref="201" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>

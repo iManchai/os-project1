@@ -121,10 +121,11 @@ public class Process extends Thread {
             /////Actulizar la grafica
                 if (programCounter >= 0) {
 
-                int utlizacionSistema = interfaz.getUtilizacionSistema();
-                utlizacionSistema++;
-                interfaz.setUtilizacionSistema(utlizacionSistema);
-                interfaz.getDataset().addValue(utlizacionSistema, "Ejecutando proceso", String.valueOf(interfaz.getContadorGlobal()));
+//                int utlizacionSistema = interfaz.getUtilizacionSistema();
+//                utlizacionSistema++;
+//                interfaz.setUtilizacionSistema(utlizacionSistema);
+//                interfaz.getDataset().addValue(utlizacionSistema, "Ejecutando proceso", String.valueOf(interfaz.getContadorGlobal()));
+                  interfaz.addValueProcessor(cpu);
 
             }
 
@@ -157,10 +158,11 @@ public class Process extends Thread {
                         interfaz.actualizarTablasAñadir(interfaz.getModeloTablaListos(), id, name, programCounter, mar, (ioBound ? "IO Bound" : "CPU Bound"), status.name(), totalInstructions);
 
                         ///actualizar grafica
-                        int utlizacionSistema = interfaz.getUtilizacionSistema();
-                        utlizacionSistema--;
-                        interfaz.setUtilizacionSistema(utlizacionSistema);
-                        interfaz.getDataset().addValue(utlizacionSistema, "Ejecutando proceso", String.valueOf(interfaz.getContadorGlobal()));
+//                        int utlizacionSistema = interfaz.getUtilizacionSistema();
+//                        utlizacionSistema--;
+//                        interfaz.setUtilizacionSistema(utlizacionSistema);
+//                        interfaz.getDataset().addValue(utlizacionSistema, "Ejecutando proceso", String.valueOf(interfaz.getContadorGlobal()));
+                          interfaz.restValueprocessor(cpu);
 
                         return;
 
@@ -181,10 +183,11 @@ public class Process extends Thread {
                     semaphore.release();
 
                     ///actualizar grafica
-                    int utlizacionSistema = interfaz.getUtilizacionSistema();
-                    utlizacionSistema--;
-                    interfaz.setUtilizacionSistema(utlizacionSistema);
-                    interfaz.getDataset().addValue(utlizacionSistema, "Ejecutando proceso", String.valueOf(interfaz.getContadorGlobal()));
+//                    int utlizacionSistema = interfaz.getUtilizacionSistema();
+//                    utlizacionSistema--;
+//                    interfaz.setUtilizacionSistema(utlizacionSistema);
+//                    interfaz.getDataset().addValue(utlizacionSistema, "Ejecutando proceso", String.valueOf(interfaz.getContadorGlobal()));
+                      interfaz.restValueprocessor(cpu);
 
                     os.start();
                     os.join();
@@ -199,12 +202,10 @@ public class Process extends Thread {
                 listaBloqueados.printlist("bloqueados");
                 System.out.println("siguiente iteración-------------->");
 
-                while (duracion > 0) {
-                    Thread.sleep(velocidadReloj); // Simular un ciclo de reloj
-                    tiempoEnCPU++;
-                    programCounter++;
-                    mar++;
-                }
+                Thread.sleep(velocidadReloj); // Simular un ciclo de reloj
+                tiempoEnCPU++;
+                programCounter++;
+                mar++;
 
                 semaphore.release(); // Liberar el semáforo
 
@@ -212,10 +213,11 @@ public class Process extends Thread {
                     status = ProcessStatus.BLOCKED;
 
                     ///actualizar grafica
-                    int utlizacionSistema = interfaz.getUtilizacionSistema();
-                    utlizacionSistema--;
-                    interfaz.setUtilizacionSistema(utlizacionSistema);
-                    interfaz.getDataset().addValue(utlizacionSistema, "Ejecutando proceso", String.valueOf(interfaz.getContadorGlobal()));
+//                    int utlizacionSistema = interfaz.getUtilizacionSistema();
+//                    utlizacionSistema--;
+//                    interfaz.setUtilizacionSistema(utlizacionSistema);
+//                    interfaz.getDataset().addValue(utlizacionSistema, "Ejecutando proceso", String.valueOf(interfaz.getContadorGlobal()));
+                        interfaz.restValueprocessor(cpu);
 
                     tiempoEnCPU = 0;
                     listaBloqueados.addProcess(this);
@@ -253,10 +255,11 @@ public class Process extends Thread {
                 interfaz.AgregarListaFinalizadosCpu(cpu, id, name, programCounter, status.name(), totalInstructions, mar, (ioBound ? "IO Bound" : "CPU Bound"));
 
                 ///actualizar grafica
-                int utlizacionSistema = interfaz.getUtilizacionSistema();
-                utlizacionSistema--;
-                interfaz.setUtilizacionSistema(utlizacionSistema);
-                interfaz.getDataset().addValue(utlizacionSistema, "Ejecutando proceso", String.valueOf(interfaz.getContadorGlobal()));
+//                int utlizacionSistema = interfaz.getUtilizacionSistema();
+//                utlizacionSistema--;
+//                interfaz.setUtilizacionSistema(utlizacionSistema);
+//                interfaz.getDataset().addValue(utlizacionSistema, "Ejecutando proceso", String.valueOf(interfaz.getContadorGlobal()));
+                    interfaz.restValueprocessor(cpu);
 
                 listaListos.RemoveProcess(this);
                 listaTotalProcesos.RemoveProcess(this);

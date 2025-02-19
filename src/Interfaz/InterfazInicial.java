@@ -28,7 +28,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.util.concurrent.Semaphore;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -55,6 +55,9 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     private DefaultTableModel modeloTablaFinalizadoSistemaCP2; // Modelo de la tabla para mostrar procesos finalizados en el CPU 2.
     private DefaultTableModel modeloTablaFinalizadoSistemaCP3; // Modelo de la tabla para mostrar procesos finalizados en el CPU 3.
     private int utilizacionSistema = 0; // Porcentaje de utilización del sistema (puede ser un promedio o valor actual).
+    private int utilizacionCpu1 = 0; // Porcentaje de utilización del sistema (puede ser un promedio o valor actual).
+    private int utilizacionCpu2 = 0; // Porcentaje de utilización del sistema (puede ser un promedio o valor actual).
+    private int utilizacionCpu3 = 0; // Porcentaje de utilización del sistema (puede ser un promedio o valor actual).
     ListaSimple listaListos = new ListaSimple(); // Lista de procesos en estado "Listo" (Ready).
     ListaSimple listaBloqueados = new ListaSimple(); // Lista de procesos en estado "Bloqueado" (Blocked).
     ListaSimple listaTotalProcesos = new ListaSimple(); // Lista de todos los procesos creados en el sistema.
@@ -71,7 +74,84 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     Cpu cpu2 = new Cpu(2, listaListos, semaphoreList, semaphoreCpu2, velocidadReloj, this); // Objeto CPU que representa el CPU 2.
     Cpu cpu3 = new Cpu(3, listaListos, semaphoreList, semaphoreCpu3, velocidadReloj, this); // Objeto CPU que representa el CPU 3.
     DefaultCategoryDataset dataset = new DefaultCategoryDataset(); // Conjunto de datos para el gráfico
+    DefaultCategoryDataset datasetCpu1 = new DefaultCategoryDataset(); // Conjunto de datos para el gráfico
+
+    DefaultCategoryDataset datasetCpu2 = new DefaultCategoryDataset(); // Conjunto de datos para el gráfico
+
+    DefaultCategoryDataset datasetCpu3 = new DefaultCategoryDataset(); // Conjunto de datos para el gráfico
+
     private ChartPanel frame;
+    private ChartPanel framecpu1;
+    private ChartPanel framecpu2;
+    private ChartPanel framecpu3;
+
+    public DefaultCategoryDataset getDatasetCpu1() {
+        return datasetCpu1;
+    }
+
+    public DefaultCategoryDataset getDatasetCpu2() {
+        return datasetCpu2;
+    }
+
+    public DefaultCategoryDataset getDatasetCpu3() {
+        return datasetCpu3;
+    }
+
+    public void addValueProcessor(int procesador) {
+
+        utilizacionSistema++;
+        dataset.addValue(utilizacionSistema, "simulacion", String.valueOf(contadorGlobal));
+
+        if (procesador == 1) {
+            
+            utilizacionCpu1 ++;
+
+            datasetCpu1.addValue(utilizacionCpu1, "cpu1", String.valueOf(contadorGlobal));
+
+        }
+        if (procesador == 2) {
+            
+            utilizacionCpu2 ++;
+            datasetCpu2.addValue(utilizacionCpu2, "cpu2", String.valueOf(contadorGlobal));
+
+        } if(procesador == 3) {
+            
+            utilizacionCpu3 ++;
+
+            datasetCpu3.addValue(utilizacionCpu3, "cpu3", String.valueOf(contadorGlobal));
+
+        }
+
+    }
+
+    public void restValueprocessor(int procesador) {
+
+        utilizacionSistema--;
+        dataset.addValue(utilizacionSistema, "simulacion", String.valueOf(contadorGlobal));
+
+        if (procesador == 1) {
+            
+            utilizacionCpu1 --;
+
+            datasetCpu1.addValue(utilizacionCpu1, "cpu1", String.valueOf(contadorGlobal));
+
+        }
+        if (procesador == 2) {
+            
+            utilizacionCpu2--;
+            datasetCpu2.addValue(utilizacionCpu2, "cpu2", String.valueOf(contadorGlobal));
+
+        }
+        if (procesador == 3) {
+            
+            utilizacionCpu3 -- ;
+
+            datasetCpu3.addValue(utilizacionCpu3, "cpu2", String.valueOf(contadorGlobal));
+
+        }
+
+
+    }
 
     // Getters and Setters
     public int getUtilizacionSistema() {
@@ -147,10 +227,41 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     }
 
     JFreeChart chart = ChartFactory.createLineChart(
-            "Progreso del Proceso", // Título del gráfico
+            "simulacion", // Título del gráfico
             "Ciclos", // Etiqueta del eje X
             "Valor", // Etiqueta del eje Y
             dataset, // Dataset
+            PlotOrientation.VERTICAL, // Orientación del gráfico
+            true, // Incluir leyenda
+            true, // Incluir tooltips
+            false // Incluir URLs
+    );
+
+    JFreeChart chartcpu1 = ChartFactory.createLineChart(
+            "cpu1", // Título del gráfico
+            "Ciclos", // Etiqueta del eje X
+            "Valor", // Etiqueta del eje Y
+            datasetCpu1, // Dataset
+            PlotOrientation.VERTICAL, // Orientación del gráfico
+            true, // Incluir leyenda
+            true, // Incluir tooltips
+            false // Incluir URLs
+    );
+    JFreeChart chartcpu2 = ChartFactory.createLineChart(
+            "cpu2", // Título del gráfico
+            "Ciclos", // Etiqueta del eje X
+            "Valor", // Etiqueta del eje Y
+            datasetCpu2, // Dataset
+            PlotOrientation.VERTICAL, // Orientación del gráfico
+            true, // Incluir leyenda
+            true, // Incluir tooltips
+            false // Incluir URLs
+    );
+    JFreeChart chartcpu3 = ChartFactory.createLineChart(
+            "cpu3", // Título del gráfico
+            "Ciclos", // Etiqueta del eje X
+            "Valor", // Etiqueta del eje Y
+            datasetCpu3, // Dataset
             PlotOrientation.VERTICAL, // Orientación del gráfico
             true, // Incluir leyenda
             true, // Incluir tooltips
@@ -389,9 +500,15 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         CurrentPolicy.setText(planificadorEscogido);
 
         frame = new ChartPanel(chart);
+        framecpu1 = new ChartPanel(chartcpu1);
+        framecpu2 = new ChartPanel(chartcpu2);
+        framecpu3 = new ChartPanel(chartcpu3);
 
-        jPanel5.setLayout(new BorderLayout());
-        jPanel5.add(frame, BorderLayout.NORTH);
+        jPanel5.setLayout(new GridLayout(4, 1)); // 4 rows, 1 column
+        jPanel5.add(frame);
+        jPanel5.add(framecpu1);
+        jPanel5.add(framecpu2);
+        jPanel5.add(framecpu3);
 
         Thread t = new Thread(this);
         t.start();
@@ -1833,7 +1950,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                         } else {
                             actualizarTablasAñadir(modeloTablaListos, id, nombre, programCounter, mar, "IO Bound", "READY", totalInstructions);
                         }
-                        
+
                     }
 
                     CurrentCpus.setText(Integer.toString(cantidadCpus));
@@ -1933,7 +2050,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                     nombreProceso,
                     process.getProgramCounter(),
                     process.getMar(),
-                    (process.isIoBound() ? "IO Bound" : "CPU Bound"), 
+                    (process.isIoBound() ? "IO Bound" : "CPU Bound"),
                     process.getStatus().name(),
                     process.getTotalInstructions()
 
@@ -1957,7 +2074,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                     nombreProceso,
                     process.getProgramCounter(),
                     process.getMar(),
-                    (process.isIoBound() ? "IO Bound" : "CPU Bound"), 
+                    (process.isIoBound() ? "IO Bound" : "CPU Bound"),
                     process.getStatus().name(),
                     process.getTotalInstructions(),};
 
@@ -2193,7 +2310,11 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
         while (true) {
             if (isRunning) {
-                this.getDataset().addValue(utilizacionSistema, "Ejecutando proceso", String.valueOf(this.getContadorGlobal()));
+                this.getDataset().addValue(utilizacionSistema, "simulacion", String.valueOf(this.getContadorGlobal()));
+                this.getDatasetCpu1().addValue(utilizacionCpu1, "cpu1", String.valueOf(this.getContadorGlobal()));
+                this.getDatasetCpu2().addValue(utilizacionCpu2, "cpu2", String.valueOf(this.getContadorGlobal()));
+                this.getDatasetCpu3().addValue(utilizacionCpu3, "cpu3", String.valueOf(this.getContadorGlobal()));
+
                 CantidadCpuSelect.setEnabled(false);
                 FinalizarSimulacionButton.setEnabled(true);
                 IniciarButton.setEnabled(false);
