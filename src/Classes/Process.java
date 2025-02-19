@@ -121,11 +121,7 @@ public class Process extends Thread {
             /////Actulizar la grafica
                 if (programCounter >= 0) {
 
-//                int utlizacionSistema = interfaz.getUtilizacionSistema();
-//                utlizacionSistema++;
-//                interfaz.setUtilizacionSistema(utlizacionSistema);
-//                interfaz.getDataset().addValue(utlizacionSistema, "Ejecutando proceso", String.valueOf(interfaz.getContadorGlobal()));
-                  interfaz.addValueProcessor(cpu);
+                interfaz.addValueProcessor(cpu);
 
             }
 
@@ -157,12 +153,7 @@ public class Process extends Thread {
                         listaListos.addProcess(this);
                         interfaz.actualizarTablasAñadir(interfaz.getModeloTablaListos(), id, name, programCounter, mar, (ioBound ? "IO Bound" : "CPU Bound"), status.name(), totalInstructions);
 
-                        ///actualizar grafica
-//                        int utlizacionSistema = interfaz.getUtilizacionSistema();
-//                        utlizacionSistema--;
-//                        interfaz.setUtilizacionSistema(utlizacionSistema);
-//                        interfaz.getDataset().addValue(utlizacionSistema, "Ejecutando proceso", String.valueOf(interfaz.getContadorGlobal()));
-                          interfaz.restValueprocessor(cpu);
+                        interfaz.restValueprocessor(cpu);
 
                         return;
 
@@ -228,15 +219,23 @@ public class Process extends Thread {
 
                     Thread ioThread = new Thread(() -> { // Hilo para E/S
                         try {
-                            Thread.sleep(velocidadReloj * ciclosES);
+                            
+                            int i = 0;
+                            
+                            while (i < ciclosES) {
+                                Thread.sleep((velocidadReloj ));
+                                i ++;
+                                
+                            }
+                            
                             System.out.println("E/S del proceso " + name + " listo");
-                            semaphore.acquire();
+//                           
                             listaBloqueados.RemoveProcess(this);
                             interfaz.actualizarTablasBorrar(interfaz.getModeloTablaBloqueados(), id);
                             listaListos.addProcess(this);
                             interfaz.actualizarTablasAñadir(interfaz.getModeloTablaListos(), id, name, programCounter, mar, (ioBound ? "IO Bound" : "CPU Bound"), status.name(), totalInstructions);
                             status = ProcessStatus.READY;
-                            semaphore.release();
+//                           
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -245,6 +244,7 @@ public class Process extends Thread {
                     ioThread.start();
 
                     os.join();
+
                     return; // Salir del método run()
                 }
             }
@@ -254,12 +254,7 @@ public class Process extends Thread {
                 interfaz.actualizarTablasAñadir(interfaz.getModeloTablaFinalizadoSistema(), id, name, programCounter, mar, (ioBound ? "IO Bound" : "CPU Bound"), status.name(), totalInstructions);
                 interfaz.AgregarListaFinalizadosCpu(cpu, id, name, programCounter, status.name(), totalInstructions, mar, (ioBound ? "IO Bound" : "CPU Bound"));
 
-                ///actualizar grafica
-//                int utlizacionSistema = interfaz.getUtilizacionSistema();
-//                utlizacionSistema--;
-//                interfaz.setUtilizacionSistema(utlizacionSistema);
-//                interfaz.getDataset().addValue(utlizacionSistema, "Ejecutando proceso", String.valueOf(interfaz.getContadorGlobal()));
-                    interfaz.restValueprocessor(cpu);
+                interfaz.restValueprocessor(cpu);
 
                 listaListos.RemoveProcess(this);
                 listaTotalProcesos.RemoveProcess(this);
@@ -276,7 +271,14 @@ public class Process extends Thread {
         }
     }
 
-    // Getters y setters
+    // Getters y setters\
+
+    public void setVelocidadReloj(int velocidadReloj) {
+        this.velocidadReloj = velocidadReloj;
+    }
+    
+    
+    
     public int getTiempoEspera() {
         return tiempoEspera;
     }

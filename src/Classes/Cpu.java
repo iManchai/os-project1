@@ -35,11 +35,7 @@ public class Cpu extends Thread {  // Extiende Thread para manejar concurrencia
                 
                 int utlizacionSistema= interfaz.getUtilizacionSistema();
                 
-//                if(utlizacionSistema == 1){
-//                utlizacionSistema--;}
-//
-//                interfaz.getDataset().addValue(utlizacionSistema, "Ejecutando proceso", String.valueOf(interfaz.getContadorGlobal()));
-//               
+         
 
                 System.out.println("CPU:" + id + " adquirió el semáforo");
 
@@ -49,10 +45,7 @@ public class Cpu extends Thread {  // Extiende Thread para manejar concurrencia
                 if (!listaProcesos.isEmpty()) {
 
                     Process proceso = planificador.seleccionarProceso(listaProcesos);
-//                    
-//                    utlizacionSistema++;
-//                    interfaz.getDataset().addValue(utlizacionSistema, "Ejecutando proceso", String.valueOf(interfaz.getContadorGlobal()));
-//                    ////
+
 
 
                     listaSemaphore.release();

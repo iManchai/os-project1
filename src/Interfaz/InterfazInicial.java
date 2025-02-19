@@ -103,20 +103,21 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         dataset.addValue(utilizacionSistema, "simulacion", String.valueOf(contadorGlobal));
 
         if (procesador == 1) {
-            
-            utilizacionCpu1 ++;
+
+            utilizacionCpu1++;
 
             datasetCpu1.addValue(utilizacionCpu1, "cpu1", String.valueOf(contadorGlobal));
 
         }
         if (procesador == 2) {
-            
-            utilizacionCpu2 ++;
+
+            utilizacionCpu2++;
             datasetCpu2.addValue(utilizacionCpu2, "cpu2", String.valueOf(contadorGlobal));
 
-        } if(procesador == 3) {
-            
-            utilizacionCpu3 ++;
+        }
+        if (procesador == 3) {
+
+            utilizacionCpu3++;
 
             datasetCpu3.addValue(utilizacionCpu3, "cpu3", String.valueOf(contadorGlobal));
 
@@ -130,26 +131,25 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         dataset.addValue(utilizacionSistema, "simulacion", String.valueOf(contadorGlobal));
 
         if (procesador == 1) {
-            
-            utilizacionCpu1 --;
+
+            utilizacionCpu1--;
 
             datasetCpu1.addValue(utilizacionCpu1, "cpu1", String.valueOf(contadorGlobal));
 
         }
         if (procesador == 2) {
-            
+
             utilizacionCpu2--;
             datasetCpu2.addValue(utilizacionCpu2, "cpu2", String.valueOf(contadorGlobal));
 
         }
         if (procesador == 3) {
-            
-            utilizacionCpu3 -- ;
+
+            utilizacionCpu3--;
 
             datasetCpu3.addValue(utilizacionCpu3, "cpu2", String.valueOf(contadorGlobal));
 
         }
-
 
     }
 
@@ -2134,6 +2134,17 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                 cpu2.setPlanificador(new PlanificadorHrrn());
                 cpu3.setPlanificador(new PlanificadorHrrn());
 
+            }
+
+            Nodo nodoActual = listaTotalProcesos.getpFirst();
+
+            while (nodoActual != null) {
+
+                Process proceso = (Process) nodoActual.getInfo();
+
+                proceso.setVelocidadReloj(velocidadReloj);
+
+                nodoActual = nodoActual.getpNext();
             }
 
         }
