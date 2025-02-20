@@ -232,9 +232,10 @@ public class Process extends Thread {
 //                           
                             listaBloqueados.RemoveProcess(this);
                             interfaz.actualizarTablasBorrar(interfaz.getModeloTablaBloqueados(), id);
+                            status = ProcessStatus.READY;
                             listaListos.addProcess(this);
                             interfaz.actualizarTablasAñadir(interfaz.getModeloTablaListos(), id, name, programCounter, mar, (ioBound ? "IO Bound" : "CPU Bound"), status.name(), totalInstructions);
-                            status = ProcessStatus.READY;
+                           
 //                           
                         } catch (InterruptedException e) {
                             e.printStackTrace();
