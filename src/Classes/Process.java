@@ -113,10 +113,37 @@ public class Process extends Thread {
 
         interfaz.actualizarTablasBorrar(interfaz.getModeloTablaListos(), id);
 
-        try {
+        Thread ioThread = new Thread(() -> { // Hilo para E/S
+            try {
 
-            Os os = new Os(0, "Os", 3, velocidadReloj, interfaz, cpu);
-            os.setSemaphore(semaphore);
+                int i = 0;
+
+                while (i < ciclosES) {
+                    Thread.sleep((velocidadReloj));
+                    i++;
+
+                }
+
+                System.out.println("E/S del proceso " + name + " listo");
+//                           
+                listaBloqueados.RemoveProcess(this);
+                interfaz.actualizarTablasBorrar(interfaz.getModeloTablaBloqueados(), id);
+                status = ProcessStatus.READY;
+                listaListos.addProcess(this);
+                interfaz.actualizarTablasAñadir(interfaz.getModeloTablaListos(), id, name, programCounter, mar, (ioBound ? "IO Bound" : "CPU Bound"), status.name(), totalInstructions);
+
+//                           
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        
+        
+
+        Os os = new Os(0, "Os", 3, velocidadReloj, interfaz, cpu);
+        os.setSemaphore(semaphore);
+
+        try {
 
             /////Actulizar la grafica
                 if (programCounter >= 0) {
@@ -217,31 +244,6 @@ public class Process extends Thread {
 
                     os.start();
 
-                    Thread ioThread = new Thread(() -> { // Hilo para E/S
-                        try {
-                            
-                            int i = 0;
-                            
-                            while (i < ciclosES) {
-                                Thread.sleep((velocidadReloj ));
-                                i ++;
-                                
-                            }
-                            
-                            System.out.println("E/S del proceso " + name + " listo");
-//                           
-                            listaBloqueados.RemoveProcess(this);
-                            interfaz.actualizarTablasBorrar(interfaz.getModeloTablaBloqueados(), id);
-                            status = ProcessStatus.READY;
-                            listaListos.addProcess(this);
-                            interfaz.actualizarTablasAñadir(interfaz.getModeloTablaListos(), id, name, programCounter, mar, (ioBound ? "IO Bound" : "CPU Bound"), status.name(), totalInstructions);
-                           
-//                           
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    });
-
                     ioThread.start();
 
                     os.join();
@@ -268,18 +270,18 @@ public class Process extends Thread {
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
+            ioThread.interrupt();
+            os.interrupt();
+            
         } finally {
         }
     }
 
     // Getters y setters\
-
     public void setVelocidadReloj(int velocidadReloj) {
         this.velocidadReloj = velocidadReloj;
     }
-    
-    
-    
+
     public int getTiempoEspera() {
         return tiempoEspera;
     }

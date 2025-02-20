@@ -2099,6 +2099,12 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         // TODO add your handling code here:
         isRunning = false;
         procesosCreados = 0;
+        
+        
+        for (Nodo nodo = listaTotalProcesos.getpFirst(); nodo != null; nodo = nodo.getpNext()) {
+            Process proceso = (Process) nodo.getInfo();
+            proceso.interrupt();
+        }
 
         listaTotalProcesos.vaciar();
         listaListos.vaciar();
@@ -2106,10 +2112,6 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         limpiarTabla(modeloTablaListos);
         limpiarTabla(modeloTablaBloqueados);
 
-        for (Nodo nodo = listaTotalProcesos.getpFirst(); nodo != null; nodo = nodo.getpNext()) {
-            Process proceso = (Process) nodo.getInfo();
-            proceso.interrupt();
-        }
         cpu1.interrupt();
         cpu2.interrupt();
         cpu3.interrupt();
