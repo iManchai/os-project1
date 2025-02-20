@@ -154,6 +154,16 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     }
 
     // Getters and Setters
+
+    public static boolean isIsRunning() {
+        return isRunning;
+    }
+
+    public static void setIsRunning(boolean isRunning) {
+        InterfazInicial.isRunning = isRunning;
+    }
+    
+    
     public int getUtilizacionSistema() {
         return utilizacionSistema;
     }
@@ -1861,25 +1871,30 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     private void IniciarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IniciarButtonActionPerformed
         // TODO add your handling code here:
 
-        try {
-            isRunning = true;
-            
-            cpu1 = new Cpu(1, listaListos, semaphoreList, semaphoreCpu1, velocidadReloj, this); // Objeto CPU que representa el CPU 1.
-            cpu2 = new Cpu(2, listaListos, semaphoreList, semaphoreCpu2, velocidadReloj, this); // Objeto CPU que representa el CPU 1.
-            cpu3 = new Cpu(3, listaListos, semaphoreList, semaphoreCpu3, velocidadReloj, this); // Objeto CPU que representa el CPU 1.
+        isRunning = true;
 
-            if (cantidadCpus == 3) {
+        try {
+            if (cpu1 == null || !cpu1.isAlive()) {
+                cpu1 = new Cpu(1, listaListos, semaphoreList, semaphoreCpu1, velocidadReloj, this);
+                cpu1.setIsRunning(isRunning);
                 cpu1.start();
-                cpu2.start();
-                cpu3.start();
-            } else {
-                cpu1.start();
+            }
+
+            if (cpu2 == null || !cpu2.isAlive()) {
+                cpu2 = new Cpu(2, listaListos, semaphoreList, semaphoreCpu2, velocidadReloj, this);
+                cpu2.setIsRunning(isRunning);
                 cpu2.start();
             }
-        } catch (NumberFormatException ex) {
-            System.out.println("Error");
-        }
 
+            if (cantidadCpus == 3 && (cpu3 == null || !cpu3.isAlive())) {
+                cpu3 = new Cpu(3, listaListos, semaphoreList, semaphoreCpu3, velocidadReloj, this);
+                cpu3.setIsRunning(isRunning);
+                cpu3.start();
+            }
+        } catch (Exception e) {
+            System.out.println("Error inesperado:");
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_IniciarButtonActionPerformed
 
     private void CargarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CargarButtonActionPerformed
@@ -2099,11 +2114,11 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         // TODO add your handling code here:
         isRunning = false;
         procesosCreados = 0;
-        
-        
+
         for (Nodo nodo = listaTotalProcesos.getpFirst(); nodo != null; nodo = nodo.getpNext()) {
             Process proceso = (Process) nodo.getInfo();
-            proceso.interrupt();
+            proceso.setIsRunning(isRunning);
+         
         }
 
         listaTotalProcesos.vaciar();
@@ -2111,10 +2126,13 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         listaBloqueados.vaciar();
         limpiarTabla(modeloTablaListos);
         limpiarTabla(modeloTablaBloqueados);
+        
+        cpu1.setIsRunning(isRunning);
+        cpu2.setIsRunning(isRunning);
+        cpu3.setIsRunning(isRunning);
+               
 
-        cpu1.interrupt();
-        cpu2.interrupt();
-        cpu3.interrupt();
+
 
         actualizarInterfazCPU(1, "NULL", "NULL", "NULL", "NULL", "NULL", "NULL");
         actualizarInterfazCPU(2, "NULL", "NULL", "NULL", "NULL", "NULL", "NULL");
@@ -2366,7 +2384,6 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                     int valorTiempoActual = procesoActual.getTiempoEspera();
                     procesoActual.setTiempoEspera(valorTiempoActual + 1);
 
-                    System.out.println(valorTiempoActual + " del proceso" + procesoActual.getNameProcess());
 
                 }
                 try {
@@ -2386,7 +2403,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                 contadorGlobal = 0;
                 GlobalCounter.setText(Integer.toString(contadorGlobal));
                 CargarButton.setEnabled(true);
-                GuardarConfigButton.setEnabled(false);                
+                GuardarConfigButton.setEnabled(false);
             }
         }
     }

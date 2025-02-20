@@ -29,6 +29,7 @@ public class Process extends Thread {
     private int tiempoEjecucionRR;
     private int tiempoEnCPU;
     private int tiempoEspera;
+    private boolean isRunning;
 
     // IO bound constructor
     public Process(int id, String name, int totalInstructions, boolean cpuBound, boolean ioBound, int ciclosExcepcion,
@@ -55,6 +56,7 @@ public class Process extends Thread {
         this.tiempoEjecucionRR = tiempoEjecucionRR;
         this.tiempoEnCPU = tiempoEnCPU;
         this.tiempoEspera = tiempoEspera;
+        this.isRunning = isRunning;
     }
 
     // Cpu bound constructor
@@ -80,6 +82,8 @@ public class Process extends Thread {
         this.tiempoEjecucionRR = tiempoEjecucionRR;
         this.tiempoEnCPU = tiempoEnCPU;
         this.tiempoEspera = tiempoEspera;
+        this.isRunning = isRunning;
+
     }
 
     // Cargar proceso de configuracion constructor
@@ -106,10 +110,23 @@ public class Process extends Thread {
         this.cpu = cpu;
         this.tiempoEjecucionRR = tiempoEjecucionRR;
         this.tiempoEnCPU = tiempoEnCPU;
+        this.isRunning = isRunning;
+
     }
+    
+    
+ 
+
+    
+    
+    
 
     @Override
     public void run() {
+        
+        
+
+        isRunning = true;
 
         interfaz.actualizarTablasBorrar(interfaz.getModeloTablaListos(), id);
 
@@ -119,165 +136,165 @@ public class Process extends Thread {
                 int i = 0;
 
                 while (i < ciclosES) {
+                    if (!isRunning) {
+                        return;
+                        
+                    }
                     Thread.sleep((velocidadReloj));
                     i++;
 
                 }
 
                 System.out.println("E/S del proceso " + name + " listo");
-//                           
                 listaBloqueados.RemoveProcess(this);
                 interfaz.actualizarTablasBorrar(interfaz.getModeloTablaBloqueados(), id);
                 status = ProcessStatus.READY;
                 listaListos.addProcess(this);
                 interfaz.actualizarTablasAñadir(interfaz.getModeloTablaListos(), id, name, programCounter, mar, (ioBound ? "IO Bound" : "CPU Bound"), status.name(), totalInstructions);
 
-//                           
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         });
-        
-        
 
-        Os os = new Os(0, "Os", 3, velocidadReloj, interfaz, cpu);
+        Os os = new Os(0, "Os", 3, velocidadReloj, interfaz, cpu, isRunning);
         os.setSemaphore(semaphore);
 
         try {
 
-            /////Actulizar la grafica
-                if (programCounter >= 0) {
+            if (programCounter >= 0) {
 
                 interfaz.addValueProcessor(cpu);
 
             }
 
-            while (programCounter < totalInstructions && status != ProcessStatus.BLOCKED) {
+            while (programCounter < totalInstructions && status != ProcessStatus.BLOCKED && isRunning ) {
 
-                //////crear metodo para SRT
-               
-                if (interfaz.getPlanificadorEscogido() == "SRT" && !listaListos.isEmpty()) {
+                try {
 
-                    Process procesoMasCorto = null;
-                    Nodo nodoActual = listaListos.getpFirst();
+                    if (interfaz.getPlanificadorEscogido() == "SRT" && !listaListos.isEmpty()) {
 
-                    while (nodoActual != null) {
+                        Process procesoMasCorto = null;
+                        Nodo nodoActual = listaListos.getpFirst();
 
-                        Process procesoActual = (Process) nodoActual.getInfo();
+                        while (nodoActual != null) {
 
-                        if (procesoActual.getStatus() == Process.ProcessStatus.READY) {
-                            if (procesoMasCorto == null || procesoActual.getDuracion() - procesoActual.getProgramCounter() < procesoMasCorto.getDuracion() - procesoMasCorto.getProgramCounter()) {
-                                procesoMasCorto = procesoActual;
+                            Process procesoActual = (Process) nodoActual.getInfo();
+
+                            if (procesoActual.getStatus() == Process.ProcessStatus.READY) {
+                                if (procesoMasCorto == null || procesoActual.getDuracion() - procesoActual.getProgramCounter() < procesoMasCorto.getDuracion() - procesoMasCorto.getProgramCounter()) {
+                                    procesoMasCorto = procesoActual;
+                                }
                             }
+                            nodoActual = nodoActual.getpNext();
                         }
-                        nodoActual = nodoActual.getpNext();
+
+                        if (this.duracion - this.programCounter > procesoMasCorto.getDuracion() - procesoMasCorto.getProgramCounter()) {
+
+                            status = ProcessStatus.READY;
+                            tiempoEnCPU = 0;
+                            listaListos.addProcess(this);
+                            interfaz.actualizarTablasAñadir(interfaz.getModeloTablaListos(), id, name, programCounter, mar, (ioBound ? "IO Bound" : "CPU Bound"), status.name(), totalInstructions);
+
+                            interfaz.restValueprocessor(cpu);
+
+                            return;
+
+                        }
+
                     }
 
-                    if (this.duracion - this.programCounter > procesoMasCorto.getDuracion() - procesoMasCorto.getProgramCounter()) {
+                    semaphore.acquire();
 
+                    interfaz.actualizarInterfaz(interfaz.getModeloTablaListos(), id, name, programCounter, status.name(), totalInstructions);
+
+                    if (tiempoEjecucionRR == 5 && tiempoEnCPU == 5) {
                         status = ProcessStatus.READY;
                         tiempoEnCPU = 0;
                         listaListos.addProcess(this);
+                        System.out.println("Proceso " + name + " sale del CPU (Round Robin)" + cpuName);
                         interfaz.actualizarTablasAñadir(interfaz.getModeloTablaListos(), id, name, programCounter, mar, (ioBound ? "IO Bound" : "CPU Bound"), status.name(), totalInstructions);
+                        semaphore.release();
 
                         interfaz.restValueprocessor(cpu);
+
+                        os.start();
+                        os.join();
 
                         return;
-
                     }
 
-                }
+                    interfaz.actualizarInterfazCPU(cpu, String.valueOf(id), status.name(), String.valueOf(programCounter), String.valueOf(mar), name, String.valueOf(totalInstructions));
 
-                semaphore.acquire();
+                    System.out.println(name + " ejecutando instrucción " + programCounter + " en el cpu:" + cpuName);
+                    listaListos.printlist("listos");
+                    listaBloqueados.printlist("bloqueados");
+                    System.out.println("siguiente iteración-------------->");
 
-                interfaz.actualizarInterfaz(interfaz.getModeloTablaListos(), id, name, programCounter, status.name(), totalInstructions);
+                    Thread.sleep(velocidadReloj); // Simular un ciclo de reloj
+                    tiempoEnCPU++;
+                    programCounter++;
+                    mar++;
 
-                if (tiempoEjecucionRR == 5 && tiempoEnCPU == 5) {
-                    status = ProcessStatus.READY;
-                    tiempoEnCPU = 0;
-                    listaListos.addProcess(this);
-                    System.out.println("Proceso " + name + " sale del CPU (Round Robin)" + cpuName);
-                    interfaz.actualizarTablasAñadir(interfaz.getModeloTablaListos(), id, name, programCounter, mar, (ioBound ? "IO Bound" : "CPU Bound"), status.name(), totalInstructions);
-                    semaphore.release();
+                    semaphore.release(); // Liberar el semáforo
 
-                    ///actualizar grafica
-//                    int utlizacionSistema = interfaz.getUtilizacionSistema();
-//                    utlizacionSistema--;
-//                    interfaz.setUtilizacionSistema(utlizacionSistema);
-//                    interfaz.getDataset().addValue(utlizacionSistema, "Ejecutando proceso", String.valueOf(interfaz.getContadorGlobal()));
-                      interfaz.restValueprocessor(cpu);
+                    if (ioBound && programCounter % ciclosExcepcion == 0) {
+                        status = ProcessStatus.BLOCKED;
 
-                    os.start();
-                    os.join();
-
-                    return;
-                }
-
-                interfaz.actualizarInterfazCPU(cpu, String.valueOf(id), status.name(), String.valueOf(programCounter), String.valueOf(mar), name, String.valueOf(totalInstructions));
-
-                System.out.println(name + " ejecutando instrucción " + programCounter + " en el cpu:" + cpuName);
-                listaListos.printlist("listos");
-                listaBloqueados.printlist("bloqueados");
-                System.out.println("siguiente iteración-------------->");
-
-                Thread.sleep(velocidadReloj); // Simular un ciclo de reloj
-                tiempoEnCPU++;
-                programCounter++;
-                mar++;
-
-                semaphore.release(); // Liberar el semáforo
-
-                if (ioBound && programCounter % ciclosExcepcion == 0) {
-                    status = ProcessStatus.BLOCKED;
-
-                    ///actualizar grafica
-//                    int utlizacionSistema = interfaz.getUtilizacionSistema();
-//                    utlizacionSistema--;
-//                    interfaz.setUtilizacionSistema(utlizacionSistema);
-//                    interfaz.getDataset().addValue(utlizacionSistema, "Ejecutando proceso", String.valueOf(interfaz.getContadorGlobal()));
                         interfaz.restValueprocessor(cpu);
 
-                    tiempoEnCPU = 0;
-                    listaBloqueados.addProcess(this);
-                    interfaz.actualizarTablasAñadir(interfaz.getModeloTablaBloqueados(), id, name, programCounter, mar, (ioBound ? "IO Bound" : "CPU Bound"), status.name(), totalInstructions);
-                    System.out.println("Proceso " + name + " en espera de E/S");
+                        tiempoEnCPU = 0;
+                        listaBloqueados.addProcess(this);
+                        interfaz.actualizarTablasAñadir(interfaz.getModeloTablaBloqueados(), id, name, programCounter, mar, (ioBound ? "IO Bound" : "CPU Bound"), status.name(), totalInstructions);
+                        System.out.println("Proceso " + name + " en espera de E/S");
 
-                    os.start();
+                        os.start();
 
-                    ioThread.start();
+                        ioThread.start();
 
-                    os.join();
+                        os.join();
 
-                    return; // Salir del método run()
+                        return; // Salir del método run()
+                    }
+
+                    if (programCounter == totalInstructions) {
+                        status = ProcessStatus.FINISHED;
+                        interfaz.actualizarTablasAñadir(interfaz.getModeloTablaFinalizadoSistema(), id, name, programCounter, mar, (ioBound ? "IO Bound" : "CPU Bound"), status.name(), totalInstructions);
+                        interfaz.AgregarListaFinalizadosCpu(cpu, id, name, programCounter, status.name(), totalInstructions, mar, (ioBound ? "IO Bound" : "CPU Bound"));
+
+                        interfaz.restValueprocessor(cpu);
+
+                        listaListos.RemoveProcess(this);
+                        listaTotalProcesos.RemoveProcess(this);
+
+                        System.out.println("Proceso " + name + " finalizado.");
+                        os.start();
+                        os.join();
+
+                        return;
+                    }
+                } catch (InterruptedException e) {
+                    System.out.println("Proceso " + name + " fue interrumpido.");
+                    Thread.currentThread().interrupt(); // Restablece la bandera de interrupción
+                    isRunning = false; // Asegúrate de que el bucle se detenga
+                    ioThread.interrupt(); // Interrumpe el hilo de E/S
+                    os.interrupt(); // Interrumpe el hilo del sistema operativo
+                    break; // Sale del bucle
                 }
             }
-
-            if (programCounter == totalInstructions) {
-                status = ProcessStatus.FINISHED;
-                interfaz.actualizarTablasAñadir(interfaz.getModeloTablaFinalizadoSistema(), id, name, programCounter, mar, (ioBound ? "IO Bound" : "CPU Bound"), status.name(), totalInstructions);
-                interfaz.AgregarListaFinalizadosCpu(cpu, id, name, programCounter, status.name(), totalInstructions, mar, (ioBound ? "IO Bound" : "CPU Bound"));
-
-                interfaz.restValueprocessor(cpu);
-
-                listaListos.RemoveProcess(this);
-                listaTotalProcesos.RemoveProcess(this);
-
-                System.out.println("Proceso " + name + " finalizado.");
-                os.start();
-                os.join();
-
-                return;
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            ioThread.interrupt();
-            os.interrupt();
-            
         } finally {
         }
     }
 
     // Getters y setters\
+    public boolean isIsRunning() {
+        return isRunning;
+    }
+
+    public void setIsRunning(boolean isRunning) {
+        this.isRunning = isRunning;
+    }
+
     public void setVelocidadReloj(int velocidadReloj) {
         this.velocidadReloj = velocidadReloj;
     }

@@ -24,9 +24,10 @@ public class Os extends Thread {
     private int velocidadReloj;
     private InterfazInicial interfaz;
     private int cpu;
+    private boolean isRunning;
 
     public Os(int id, String name, int totalInstructions,
-            int velocidadReloj, InterfazInicial interfaz, int cpu) {
+            int velocidadReloj, InterfazInicial interfaz, int cpu, boolean isRunning) {
         this.id = id;
         this.name = name;
         this.programCounter = 0;
@@ -37,13 +38,22 @@ public class Os extends Thread {
         this.velocidadReloj = velocidadReloj;
         this.interfaz = interfaz;
         this.cpu = cpu;
+        this.isRunning = isRunning;
 
     }
 
     public void run() {
 
         try {
-            while (programCounter < totalInstructions) {
+            while (programCounter < totalInstructions ) {
+                
+                
+                isRunning = interfaz.isIsRunning();
+                
+                if (!isRunning) {
+                    return;
+                    
+                }
 
                 semaphore.acquire();
 
