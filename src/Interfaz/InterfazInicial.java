@@ -70,9 +70,9 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     Semaphore semaphoreCpu1 = new Semaphore(1); // Semáforo para controlar el acceso al CPU 1.
     Semaphore semaphoreCpu2 = new Semaphore(1); // Semáforo para controlar el acceso al CPU 2.
     Semaphore semaphoreCpu3 = new Semaphore(1); // Semáforo para controlar el acceso al CPU 3.
-    Cpu cpu1 = new Cpu(1, listaListos, semaphoreList, semaphoreCpu1, velocidadReloj, this); // Objeto CPU que representa el CPU 1.
-    Cpu cpu2 = new Cpu(2, listaListos, semaphoreList, semaphoreCpu2, velocidadReloj, this); // Objeto CPU que representa el CPU 2.
-    Cpu cpu3 = new Cpu(3, listaListos, semaphoreList, semaphoreCpu3, velocidadReloj, this); // Objeto CPU que representa el CPU 3.
+    Cpu cpu1;
+    Cpu cpu2;
+    Cpu cpu3;
     DefaultCategoryDataset dataset = new DefaultCategoryDataset(); // Conjunto de datos para el gráfico
     DefaultCategoryDataset datasetCpu1 = new DefaultCategoryDataset(); // Conjunto de datos para el gráfico
 
@@ -1863,6 +1863,10 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
         try {
             isRunning = true;
+            
+            cpu1 = new Cpu(1, listaListos, semaphoreList, semaphoreCpu1, velocidadReloj, this); // Objeto CPU que representa el CPU 1.
+            cpu2 = new Cpu(2, listaListos, semaphoreList, semaphoreCpu2, velocidadReloj, this); // Objeto CPU que representa el CPU 1.
+            cpu3 = new Cpu(3, listaListos, semaphoreList, semaphoreCpu3, velocidadReloj, this); // Objeto CPU que representa el CPU 1.
 
             if (cantidadCpus == 3) {
                 cpu1.start();
