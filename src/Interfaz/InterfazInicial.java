@@ -299,6 +299,10 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         }
     }
 
+    public static void limpiarTabla(DefaultTableModel modelo) {
+        modelo.setRowCount(0);
+    }
+
     /**
      * Elimina un proceso de la tabla de procesos listos por su ID.
      *
@@ -2090,8 +2094,26 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     private void FinalizarSimulacionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FinalizarSimulacionButtonActionPerformed
         // TODO add your handling code here:
         isRunning = false;
-        contadorGlobal = 0;
         procesosCreados = 0;
+
+        listaTotalProcesos.vaciar();
+        listaListos.vaciar();
+        listaBloqueados.vaciar();
+        limpiarTabla(modeloTablaListos);
+        limpiarTabla(modeloTablaBloqueados);
+
+        for (Nodo nodo = listaTotalProcesos.getpFirst(); nodo != null; nodo = nodo.getpNext()) {
+            Process proceso = (Process) nodo.getInfo();
+            proceso.interrupt();
+        }
+        cpu1.interrupt();
+        cpu2.interrupt();
+        cpu3.interrupt();
+
+        actualizarInterfazCPU(1, "NULL", "NULL", "NULL", "NULL", "NULL", "NULL");
+        actualizarInterfazCPU(2, "NULL", "NULL", "NULL", "NULL", "NULL", "NULL");
+        actualizarInterfazCPU(3, "NULL", "NULL", "NULL", "NULL", "NULL", "NULL");
+
     }//GEN-LAST:event_FinalizarSimulacionButtonActionPerformed
 
     private void AplicarConfiguraciónButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AplicarConfiguraciónButtonActionPerformed
@@ -2358,7 +2380,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                 contadorGlobal = 0;
                 GlobalCounter.setText(Integer.toString(contadorGlobal));
                 CargarButton.setEnabled(true);
-                GuardarConfigButton.setEnabled(false);
+                GuardarConfigButton.setEnabled(false);                
             }
         }
     }

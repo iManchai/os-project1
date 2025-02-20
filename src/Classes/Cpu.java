@@ -66,7 +66,7 @@ public class Cpu extends Thread {  // Extiende Thread para manejar concurrencia
                     System.out.println("CPU:" + id + " solto el semáforo");
                     listaSemaphore.release();
 
-                    Thread.sleep(1000);
+                    Thread.sleep(velocidadReloj);
 
                     System.out.println("lista vacia");
 
