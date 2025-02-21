@@ -166,7 +166,7 @@ public class Process extends Thread {
                 try {
 
                     if (interfaz.getPlanificadorEscogido() == "SRT" && !listaListos.isEmpty()) {
-
+                        
                         Process procesoMasCorto = null;
                         Nodo nodoActual = listaListos.getpFirst();
 
@@ -205,7 +205,6 @@ public class Process extends Thread {
                         status = ProcessStatus.READY;
                         tiempoEnCPU = 0;
                         listaListos.addProcess(this);
-                        System.out.println("Proceso " + name + " sale del CPU (Round Robin)" + cpuName);
                         interfaz.actualizarTablasAñadir(interfaz.getModeloTablaListos(), id, name, programCounter, mar, (ioBound ? "IO Bound" : "CPU Bound"), status.name(), totalInstructions);
                         semaphore.release();
 
@@ -219,9 +218,6 @@ public class Process extends Thread {
 
                     interfaz.actualizarInterfazCPU(cpu, String.valueOf(id), status.name(), String.valueOf(programCounter), String.valueOf(mar), name, String.valueOf(totalInstructions));
 
-                    System.out.println(name + " ejecutando instrucción " + programCounter + " en el cpu:" + cpuName);
-                    listaListos.printlist("listos");
-                    listaBloqueados.printlist("bloqueados");
                     System.out.println("siguiente iteración-------------->");
 
                     Thread.sleep(velocidadReloj); // Simular un ciclo de reloj
@@ -239,7 +235,7 @@ public class Process extends Thread {
                         tiempoEnCPU = 0;
                         listaBloqueados.addProcess(this);
                         interfaz.actualizarTablasAñadir(interfaz.getModeloTablaBloqueados(), id, name, programCounter, mar, (ioBound ? "IO Bound" : "CPU Bound"), status.name(), totalInstructions);
-                        System.out.println("Proceso " + name + " en espera de E/S");
+//                        System.out.println("Proceso " + name + " en espera de E/S");
 
                         os.start();
 
@@ -260,7 +256,6 @@ public class Process extends Thread {
                         listaListos.RemoveProcess(this);
                         listaTotalProcesos.RemoveProcess(this);
 
-                        System.out.println("Proceso " + name + " finalizado.");
                         os.start();
                         os.join();
 

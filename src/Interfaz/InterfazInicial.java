@@ -70,6 +70,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     Semaphore semaphoreCpu1 = new Semaphore(1); // Semáforo para controlar el acceso al CPU 1.
     Semaphore semaphoreCpu2 = new Semaphore(1); // Semáforo para controlar el acceso al CPU 2.
     Semaphore semaphoreCpu3 = new Semaphore(1); // Semáforo para controlar el acceso al CPU 3.
+    private Semaphore tablaSemaphore = new Semaphore(1);
     Cpu cpu1 = new Cpu(1, listaListos, semaphoreList, semaphoreCpu1, velocidadReloj, this);
     Cpu cpu2 = new Cpu(2, listaListos, semaphoreList, semaphoreCpu2, velocidadReloj, this);
     Cpu cpu3 = new Cpu(3, listaListos, semaphoreList, semaphoreCpu3, velocidadReloj, this);
@@ -330,8 +331,11 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
      * @param procesosCreados El ID del proceso que se va a eliminar.
      */
     public void actualizarTablasBorrar(DefaultTableModel modeloTablaListos, int procesosCreados) {
+    try {
+        tablaSemaphore.acquire(); // Adquirir el semáforo
+
         // Itera sobre las filas de la tabla de procesos listos.
-        for (int i = 0; i < modeloTablaListos.getRowCount(); i++) {
+        for (int i = modeloTablaListos.getRowCount() - 1; i >= 0; i--) {
             // Obtiene el ID del proceso de la fila actual.
             int idProceso = (int) modeloTablaListos.getValueAt(i, 0);
 
@@ -339,10 +343,15 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
             if (idProceso == procesosCreados) {
                 // Se encontró el proceso. Elimina la fila correspondiente de la tabla.
                 modeloTablaListos.removeRow(i);
-                return; // Importante: Salir del método después de eliminar la fila.
+                break; // Importante: Salir del bucle después de eliminar la fila.
             }
         }
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    } finally {
+        tablaSemaphore.release(); // Liberar el semáforo
     }
+}
 
     /**
      * Actualiza la tabla de procesos finalizados con la información del
@@ -2107,8 +2116,6 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                         listaTotalProcesos, velocidadReloj, this, 0, 1, 0);
                 listaListos.addProcess(process);
                 listaTotalProcesos.addProcess(process);
-
-                System.out.println(process.getCiclosExcepcion());
 
                 Object[] nuevaFila = new Object[]{
                     procesosCreados,

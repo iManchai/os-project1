@@ -39,8 +39,6 @@ public class Cpu extends Thread {  // Extiende Thread para manejar concurrencia
 
                     int utilizacionSistema = interfaz.getUtilizacionSistema();
 
-                    System.out.println("CPU:" + id + " adquirió el semáforo");
-                    System.out.println("Ejecutando el bucle de nuevo");
 
                     interfaz.actualizarInterfazCPU(id, "0", "Running", "0", "0", "system32", "none");
 
@@ -54,19 +52,14 @@ public class Cpu extends Thread {  // Extiende Thread para manejar concurrencia
                         proceso.setCpu(id);
                         proceso.setStatus(Process.ProcessStatus.RUNNING);
 
-                        System.out.println("CPU " + id + " ejecutando: " + proceso.getNameProcess());
-
                         proceso.run();
                         proceso.join(); // Esperar a que el proceso termine
                     }
 
                     if (listaProcesos.isEmpty()) {
-                        System.out.println("CPU:" + id + " soltó el semáforo");
                         listaSemaphore.release();
 
                         Thread.sleep(velocidadReloj);
-
-                        System.out.println("Lista vacía");
                         continue;
                     }
                 } catch (InterruptedException e) {
