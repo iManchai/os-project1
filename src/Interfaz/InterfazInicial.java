@@ -70,9 +70,12 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     Semaphore semaphoreCpu1 = new Semaphore(1); // Semáforo para controlar el acceso al CPU 1.
     Semaphore semaphoreCpu2 = new Semaphore(1); // Semáforo para controlar el acceso al CPU 2.
     Semaphore semaphoreCpu3 = new Semaphore(1); // Semáforo para controlar el acceso al CPU 3.
-    Cpu cpu1;
-    Cpu cpu2;
-    Cpu cpu3;
+    Cpu cpu1 = new Cpu(1, listaListos, semaphoreList, semaphoreCpu1, velocidadReloj, this);
+    Cpu cpu2 = new Cpu(2, listaListos, semaphoreList, semaphoreCpu2, velocidadReloj, this);
+    Cpu cpu3 = new Cpu(3, listaListos, semaphoreList, semaphoreCpu3, velocidadReloj, this);
+    boolean cpu1Initialized = true;
+    boolean cpu2Initialized = true;
+    boolean cpu3Initialized = true;
     DefaultCategoryDataset dataset = new DefaultCategoryDataset(); // Conjunto de datos para el gráfico
     DefaultCategoryDataset datasetCpu1 = new DefaultCategoryDataset(); // Conjunto de datos para el gráfico
 
@@ -154,6 +157,13 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     }
 
     // Getters and Setters
+    public int getVelocidadReloj() {
+        return velocidadReloj;
+    }
+
+    public void setVelocidadReloj(int velocidadReloj) {
+        this.velocidadReloj = velocidadReloj;
+    }
 
     public static boolean isIsRunning() {
         return isRunning;
@@ -162,8 +172,7 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     public static void setIsRunning(boolean isRunning) {
         InterfazInicial.isRunning = isRunning;
     }
-    
-    
+
     public int getUtilizacionSistema() {
         return utilizacionSistema;
     }
@@ -1874,22 +1883,31 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         isRunning = true;
 
         try {
-            if (cpu1 == null || !cpu1.isAlive()) {
-                cpu1 = new Cpu(1, listaListos, semaphoreList, semaphoreCpu1, velocidadReloj, this);
+            if (cpu1Initialized) {
                 cpu1.setIsRunning(isRunning);
                 cpu1.start();
+                cpu1Initialized = false;
+            } else {
+                cpu1.setIsRunning(isRunning);
             }
 
-            if (cpu2 == null || !cpu2.isAlive()) {
-                cpu2 = new Cpu(2, listaListos, semaphoreList, semaphoreCpu2, velocidadReloj, this);
+            if (cpu2Initialized) {
                 cpu2.setIsRunning(isRunning);
                 cpu2.start();
+                cpu2Initialized = false;
+            } else {
+                cpu2.setIsRunning(isRunning);
             }
 
-            if (cantidadCpus == 3 && (cpu3 == null || !cpu3.isAlive())) {
-                cpu3 = new Cpu(3, listaListos, semaphoreList, semaphoreCpu3, velocidadReloj, this);
-                cpu3.setIsRunning(isRunning);
-                cpu3.start();
+            if (cantidadCpus == 3) {
+                if (cpu3Initialized) {
+                    cpu3.setIsRunning(isRunning);
+                    cpu3.start();
+                    cpu3Initialized = false;
+                } else {
+                    cpu3.setIsRunning(isRunning);
+                }
+
             }
         } catch (Exception e) {
             System.out.println("Error inesperado:");
@@ -2115,10 +2133,14 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         isRunning = false;
         procesosCreados = 0;
 
+        cpu1.setIsRunning(isRunning);
+        cpu2.setIsRunning(isRunning);
+        cpu3.setIsRunning(isRunning);
+
         for (Nodo nodo = listaTotalProcesos.getpFirst(); nodo != null; nodo = nodo.getpNext()) {
             Process proceso = (Process) nodo.getInfo();
             proceso.setIsRunning(isRunning);
-         
+
         }
 
         listaTotalProcesos.vaciar();
@@ -2126,17 +2148,16 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
         listaBloqueados.vaciar();
         limpiarTabla(modeloTablaListos);
         limpiarTabla(modeloTablaBloqueados);
-        
-        cpu1.setIsRunning(isRunning);
-        cpu2.setIsRunning(isRunning);
-        cpu3.setIsRunning(isRunning);
-               
 
+        try {
+            actualizarInterfazCPU(1, "NULL", "NULL", "NULL", "NULL", "NULL", "NULL");
+            actualizarInterfazCPU(2, "NULL", "NULL", "NULL", "NULL", "NULL", "NULL");
+            actualizarInterfazCPU(3, "NULL", "NULL", "NULL", "NULL", "NULL", "NULL");
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            System.out.println("El hilo fue interrumpido durante la espera");
+        }
 
-
-        actualizarInterfazCPU(1, "NULL", "NULL", "NULL", "NULL", "NULL", "NULL");
-        actualizarInterfazCPU(2, "NULL", "NULL", "NULL", "NULL", "NULL", "NULL");
-        actualizarInterfazCPU(3, "NULL", "NULL", "NULL", "NULL", "NULL", "NULL");
 
     }//GEN-LAST:event_FinalizarSimulacionButtonActionPerformed
 
@@ -2152,29 +2173,29 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
             CurrentCycle.setText(CicloTextField.getText());
             CurrentPolicy.setText(planificadorEscogido);
 
-            if (planificadorEscogido == "FCFS") {
+            if ("FCFS".equals(planificadorEscogido)) {
                 cpu1.setPlanificador(new PlanificadorFCFS());
                 cpu2.setPlanificador(new PlanificadorFCFS());
                 cpu3.setPlanificador(new PlanificadorFCFS());
 
             }
-            if (planificadorEscogido == "SJF") {
+            if ("SJF".equals(planificadorEscogido)) {
                 cpu1.setPlanificador(new PlanificadorSJF());
                 cpu2.setPlanificador(new PlanificadorSJF());
                 cpu3.setPlanificador(new PlanificadorSJF());
             }
-            if (planificadorEscogido == "RR") {
+            if ("RR".equals(planificadorEscogido)) {
 
                 cpu1.setPlanificador(new PlanificadorRR());
                 cpu2.setPlanificador(new PlanificadorRR());
                 cpu3.setPlanificador(new PlanificadorRR());
             }
-            if (planificadorEscogido == "SRT") {
+            if ("SRT".equals(planificadorEscogido)) {
                 cpu1.setPlanificador(new PlanificadorSRT());
                 cpu2.setPlanificador(new PlanificadorSRT());
                 cpu3.setPlanificador(new PlanificadorSRT());
             }
-            if (planificadorEscogido == "HRRN") {
+            if ("HRRN".equals(planificadorEscogido)) {
 
                 cpu1.setPlanificador(new PlanificadorHrrn());
                 cpu2.setPlanificador(new PlanificadorHrrn());
@@ -2383,7 +2404,6 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
 
                     int valorTiempoActual = procesoActual.getTiempoEspera();
                     procesoActual.setTiempoEspera(valorTiempoActual + 1);
-
 
                 }
                 try {

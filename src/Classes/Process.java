@@ -113,13 +113,6 @@ public class Process extends Thread {
         this.isRunning = isRunning;
 
     }
-    
-    
- 
-
-    
-    
-    
 
     @Override
     public void run() {

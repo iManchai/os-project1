@@ -31,47 +31,58 @@ public class Cpu extends Thread {  // Extiende Thread para manejar concurrencia
 
     @Override
     public void run() {
-        while (isRunning) { // Bucle principal
-            try {
-                listaSemaphore.acquire();
 
-                int utilizacionSistema = interfaz.getUtilizacionSistema();
+        while (true) { // Bucle principal
+            if (isRunning) {
+                try {
+                    listaSemaphore.acquire();
 
-                System.out.println("CPU:" + id + " adquirió el semáforo");
-                System.out.println("Ejecutando el bucle de nuevo");
+                    int utilizacionSistema = interfaz.getUtilizacionSistema();
 
-                interfaz.actualizarInterfazCPU(id, "0", "Running", "0", "0", "system32", "none");
+                    System.out.println("CPU:" + id + " adquirió el semáforo");
+                    System.out.println("Ejecutando el bucle de nuevo");
 
-                if (!listaProcesos.isEmpty()) {
-                    Process proceso = planificador.seleccionarProceso(listaProcesos);
+                    interfaz.actualizarInterfazCPU(id, "0", "Running", "0", "0", "system32", "none");
 
-                    listaSemaphore.release();
+                    if (!listaProcesos.isEmpty()) {
+                        Process proceso = planificador.seleccionarProceso(listaProcesos);
 
-                    proceso.setCpuSemaphore(semaphoreCpu);
-                    proceso.setCpuName("CPU" + id);
-                    proceso.setCpu(id);
-                    proceso.setStatus(Process.ProcessStatus.RUNNING);
+                        listaSemaphore.release();
 
-                    System.out.println("CPU " + id + " ejecutando: " + proceso.getNameProcess());
+                        proceso.setCpuSemaphore(semaphoreCpu);
+                        proceso.setCpuName("CPU" + id);
+                        proceso.setCpu(id);
+                        proceso.setStatus(Process.ProcessStatus.RUNNING);
 
-                    proceso.run();
-                    proceso.join(); // Esperar a que el proceso termine
+                        System.out.println("CPU " + id + " ejecutando: " + proceso.getNameProcess());
+
+                        proceso.run();
+                        proceso.join(); // Esperar a que el proceso termine
+                    }
+
+                    if (listaProcesos.isEmpty()) {
+                        System.out.println("CPU:" + id + " soltó el semáforo");
+                        listaSemaphore.release();
+
+                        Thread.sleep(velocidadReloj);
+
+                        System.out.println("Lista vacía");
+                        continue;
+                    }
+                } catch (InterruptedException e) {
+                    // Captura la excepción y sale del bucle
+                    System.out.println("CPU " + id + " fue interrumpido. Finalizando ejecución...");
+                    e.printStackTrace();
+
                 }
-
-                if (listaProcesos.isEmpty()) {
-                    System.out.println("CPU:" + id + " soltó el semáforo");
-                    listaSemaphore.release();
-
-                    Thread.sleep(velocidadReloj);
-
-                    System.out.println("Lista vacía");
-                    continue;
-                }
+            } else {
+                 try {
+                Thread.sleep(100); // Espera pasiva (100 ms)
             } catch (InterruptedException e) {
-                // Captura la excepción y sale del bucle
-                System.out.println("CPU " + id + " fue interrumpido. Finalizando ejecución...");
+                System.out.println("CPU " + id + " fue interrumpido mientras esperaba. Finalizando.");
                 e.printStackTrace();
-                
+                break;
+            }
             }
         }
     }

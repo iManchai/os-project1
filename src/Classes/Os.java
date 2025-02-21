@@ -49,6 +49,7 @@ public class Os extends Thread {
                 
                 
                 isRunning = interfaz.isIsRunning();
+                velocidadReloj = interfaz.getVelocidadReloj();
                 
                 if (!isRunning) {
                     return;
