@@ -36,6 +36,7 @@ public class Cpu extends Thread {  // Extiende Thread para manejar concurrencia
             if (isRunning) {
                 try {
                     listaSemaphore.acquire();
+                    System.out.println(id + " ENTRE AL SEMAFORO");
 
                     int utilizacionSistema = interfaz.getUtilizacionSistema();
 
@@ -58,6 +59,7 @@ public class Cpu extends Thread {  // Extiende Thread para manejar concurrencia
 
                     if (listaProcesos.isEmpty()) {
                         listaSemaphore.release();
+                        System.out.println(id + " SOLTE SEMAFORO");
 
                         Thread.sleep(velocidadReloj);
                         continue;

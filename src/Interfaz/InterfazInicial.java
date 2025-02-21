@@ -70,7 +70,8 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
     Semaphore semaphoreCpu1 = new Semaphore(1); // Semáforo para controlar el acceso al CPU 1.
     Semaphore semaphoreCpu2 = new Semaphore(1); // Semáforo para controlar el acceso al CPU 2.
     Semaphore semaphoreCpu3 = new Semaphore(1); // Semáforo para controlar el acceso al CPU 3.
-    private Semaphore tablaSemaphore = new Semaphore(1);
+    private Semaphore tablaBorrarSemaphore = new Semaphore(1);
+    private Semaphore tablaAñadirSemaphore = new Semaphore(1);
     Cpu cpu1 = new Cpu(1, listaListos, semaphoreList, semaphoreCpu1, velocidadReloj, this);
     Cpu cpu2 = new Cpu(2, listaListos, semaphoreList, semaphoreCpu2, velocidadReloj, this);
     Cpu cpu3 = new Cpu(3, listaListos, semaphoreList, semaphoreCpu3, velocidadReloj, this);
@@ -331,27 +332,27 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
      * @param procesosCreados El ID del proceso que se va a eliminar.
      */
     public void actualizarTablasBorrar(DefaultTableModel modeloTablaListos, int procesosCreados) {
-    try {
-        tablaSemaphore.acquire(); // Adquirir el semáforo
+        try {
+            tablaBorrarSemaphore.acquire(); // Adquirir el semáforo
 
-        // Itera sobre las filas de la tabla de procesos listos.
-        for (int i = modeloTablaListos.getRowCount() - 1; i >= 0; i--) {
-            // Obtiene el ID del proceso de la fila actual.
-            int idProceso = (int) modeloTablaListos.getValueAt(i, 0);
+            // Itera sobre las filas de la tabla de procesos listos.
+            for (int i = modeloTablaListos.getRowCount() - 1; i >= 0; i--) {
+                // Obtiene el ID del proceso de la fila actual.
+                int idProceso = (int) modeloTablaListos.getValueAt(i, 0);
 
-            // Compara el ID del proceso actual con el ID del proceso que se va a eliminar.
-            if (idProceso == procesosCreados) {
-                // Se encontró el proceso. Elimina la fila correspondiente de la tabla.
-                modeloTablaListos.removeRow(i);
-                break; // Importante: Salir del bucle después de eliminar la fila.
+                // Compara el ID del proceso actual con el ID del proceso que se va a eliminar.
+                if (idProceso == procesosCreados) {
+                    // Se encontró el proceso. Elimina la fila correspondiente de la tabla.
+                    modeloTablaListos.removeRow(i);
+                    break; // Importante: Salir del bucle después de eliminar la fila.
+                }
             }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            tablaBorrarSemaphore.release(); // Liberar el semáforo
         }
-    } catch (InterruptedException e) {
-        e.printStackTrace();
-    } finally {
-        tablaSemaphore.release(); // Liberar el semáforo
     }
-}
 
     /**
      * Actualiza la tabla de procesos finalizados con la información del
@@ -369,6 +370,9 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
      * el proceso.
      */
     public void actualizarTablasAñadir(DefaultTableModel modeloTabla, int procesosCreados, String nombreProceso, int programCounter, int mar, String tipo, String status, int totalInstructions) {
+    try {
+        tablaAñadirSemaphore.acquire(); // Adquirir el semáforo
+
         // No necesitas buscar si ya existe, simplemente añade la nueva fila
         Object[] nuevaFila = new Object[]{
             procesosCreados,
@@ -380,7 +384,13 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
             totalInstructions
         };
         modeloTabla.addRow(nuevaFila);
+
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    } finally {
+        tablaAñadirSemaphore.release(); // Liberar el semáforo
     }
+}
 
     /**
      * Actualiza la información de un proceso en la tabla de procesos listos.
@@ -2413,6 +2423,15 @@ public class InterfazInicial extends javax.swing.JFrame implements Runnable {
                     procesoActual.setTiempoEspera(valorTiempoActual + 1);
 
                 }
+
+                if ("RR".equals(planificadorEscogido)) {
+                    for (Nodo process = listaTotalProcesos.getpFirst(); process != null; process = process.getpNext()) {
+                        Process procesoActual = (Process) process.getInfo();
+
+                        procesoActual.setTiempoEjecucionRR(5);
+                    }
+                }
+
                 try {
                     // MANEJO DEL CONTADOR GLOBAL EN LA INTERFAZ
                     Thread.sleep(velocidadReloj);

@@ -41,7 +41,8 @@ public class PlanificadorHrrn implements Planificador {
             lista.RemoveProcess(procesoSeleccionado); 
             procesoSeleccionado.setTiempoEspera(0);
         }
-
+        
+        procesoSeleccionado.setTiempoEjecucionRR(1);
         return procesoSeleccionado;
     }
 

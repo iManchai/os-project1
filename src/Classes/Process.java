@@ -201,10 +201,10 @@ public class Process extends Thread {
 
                     interfaz.actualizarInterfaz(interfaz.getModeloTablaListos(), id, name, programCounter, status.name(), totalInstructions);
 
-                    if (tiempoEjecucionRR == 5 && tiempoEnCPU == 5) {
+                    if (tiempoEjecucionRR == 5 && tiempoEnCPU != 0 && tiempoEnCPU % 5 == 0) {
                         status = ProcessStatus.READY;
                         tiempoEnCPU = 0;
-                        listaListos.addProcess(this);
+                        listaListos.addProcess(this);   
                         interfaz.actualizarTablasAñadir(interfaz.getModeloTablaListos(), id, name, programCounter, mar, (ioBound ? "IO Bound" : "CPU Bound"), status.name(), totalInstructions);
                         semaphore.release();
 
@@ -262,7 +262,7 @@ public class Process extends Thread {
                         return;
                     }
                 } catch (InterruptedException e) {
-                    System.out.println("Proceso " + name + " fue interrumpido.");
+//                    System.out.println("Proceso " + name + " fue interrumpido.");
                     Thread.currentThread().interrupt(); // Restablece la bandera de interrupción
                     isRunning = false; // Asegúrate de que el bucle se detenga
                     ioThread.interrupt(); // Interrumpe el hilo de E/S
